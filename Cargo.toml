@@ -1,6 +1,11 @@
 [package]
 name = "WebParserRust"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["rummolprod999 <rummolprod999@gmail.com>"]
 
 [dependencies]
+clap = "*"
+reqwest = "*"
+chrono = "*"
+log4rs = "*"
+log = "*"
