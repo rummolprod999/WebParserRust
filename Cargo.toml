@@ -1,0 +1,6 @@
+[package]
+name = "WebParserRust"
+version = "0.1.0"
+authors = ["rummolprod999 <rummolprod999@gmail.com>"]
+
+[dependencies]
