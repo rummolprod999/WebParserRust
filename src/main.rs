@@ -1,10 +1,48 @@
-extern crate WebParserRust;
+extern crate web_parser_rust;
 #[macro_use]
 extern crate log;
 extern crate log4rs;
-use WebParserRust::settings::settings::create_settings;
+
+use web_parser_rust::settings::settings::{create_settings, FullSettingsParser, get_argument, Args};
+use web_parser_rust::parsers::{parser_mts::ParserMts};
+use std::process;
+use web_parser_rust::parsers::parsers::WebParserTenders;
 
 fn main() {
-    create_settings();
+    let set = parser_initialise();
+    parser_executor(&set);
+    parser_end();
+}
+
+fn parser_executor(set: &FullSettingsParser) {
+    let arg = get_argument().unwrap();
+    match arg {
+        Args::Mts => {
+            parser_mts(set);
+        }
+        _ => {
+            warn!("Bad enum type!");
+            process::exit(0x0100);
+        }
+    }
+}
+
+fn parser_initialise() -> FullSettingsParser {
+    let set = create_settings();
     info!("Start parsing");
+    set
+}
+
+fn parser_end() {
+    info!("End parsing");
+}
+
+fn parser_mts(set: &FullSettingsParser) {
+    let mut p = ParserMts{
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
 }

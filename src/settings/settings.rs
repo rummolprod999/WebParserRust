@@ -1,5 +1,7 @@
 extern crate clap;
 extern crate chrono;
+extern crate serde_json;
+
 use self::clap::{Arg, App};
 use std::process;
 use std::path::PathBuf;
@@ -8,17 +10,36 @@ use std::clone::Clone;
 use std::option::Option;
 use std::fs;
 use self::chrono::Local;
-use log::LevelFilter;
 use log4rs::append::file::FileAppender;
 use log4rs::encode::pattern::PatternEncoder;
 use log4rs::config::{Appender, Config, Root};
+use log::LevelFilter;
+use std::fs::File;
 
-#[derive(Debug)]
 #[derive(Clone)]
 pub enum Args {
     None,
     Mts,
     Beeline,
+}
+
+#[derive(Deserialize, Debug)]
+struct SettingsParser {
+    database: String,
+    userdb: String,
+    passdb: String,
+    server: String,
+    port: String,
+}
+
+pub struct FullSettingsParser {
+    pub database: String,
+    pub userdb: String,
+    pub passdb: String,
+    pub server: String,
+    pub port: String,
+    pub temp: PathBuf,
+    pub log: PathBuf,
 }
 
 impl fmt::Display for Args {
@@ -34,12 +55,22 @@ impl fmt::Display for Args {
 const SETTINGS_FILE: &str = "settings.json";
 static mut ARGUMENT: Option<Args> = Some(Args::None);
 
-pub fn create_settings() {
+pub fn create_settings() -> FullSettingsParser {
     create_argument();
     let execute_path = get_execute_path();
-    get_file_settings(&execute_path);
     let (log, temp) = create_dirs(&execute_path);
     create_log_file(&log);
+    let set = get_file_settings(&execute_path);
+    let s = FullSettingsParser {
+        database: set.database,
+        userdb: set.userdb,
+        passdb: set.passdb,
+        server: set.server,
+        port: set.port,
+        temp,
+        log,
+    };
+    s
 }
 
 fn create_log_file(pb: &PathBuf) {
@@ -47,7 +78,7 @@ fn create_log_file(pb: &PathBuf) {
     let arg = get_argument().unwrap();
     let log_file_name = format!("log_parsing_{}_{}.log", arg, local_date);
     let file_log = pb.join(log_file_name);
-    if !&file_log.exists(){
+    if !&file_log.exists() {
         fs::File::create(&file_log.as_path()).unwrap();
     }
     let logfile = FileAppender::builder()
@@ -61,8 +92,13 @@ fn create_log_file(pb: &PathBuf) {
     log4rs::init_config(config).unwrap();
 }
 
-fn get_file_settings(pb: &PathBuf) {
-    let file = pb.join(SETTINGS_FILE);
+fn get_file_settings(pb: &PathBuf) -> SettingsParser {
+    let fb = pb.parent().unwrap();
+    let filepb = fb.join(SETTINGS_FILE);
+    let path = filepb.as_path();
+    let file = File::open(path).unwrap();
+    let v: SettingsParser = serde_json::from_reader(file).unwrap();
+    v
 }
 
 fn create_dirs(pb: &PathBuf) -> (PathBuf, PathBuf) {
@@ -98,7 +134,7 @@ fn create_argument() -> () {
     }
 }
 
-fn get_argument() -> Option<Args> {
+pub fn get_argument() -> Option<Args> {
     unsafe {
         let k = ARGUMENT.clone();
         k
@@ -107,10 +143,10 @@ fn get_argument() -> Option<Args> {
 
 pub fn check_args() -> Args {
     let arguments = "Please, use this arguments: mts, beeline";
-    let matches = App::new("WebParserRust")
+    let matches = App::new("web_parser_rust")
         .version("1.0.0")
         .author("rummolprod999")
-        .about("WebParserRust")
+        .about("web_parser_rust")
         .arg(Arg::with_name("argument")
             .short("-a")
             .long("argument")

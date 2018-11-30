@@ -1,5 +1,5 @@
 [package]
-name = "WebParserRust"
+name = "web_parser_rust"
 version = "1.0.0"
 authors = ["rummolprod999 <rummolprod999@gmail.com>"]
 
@@ -9,3 +9,11 @@ reqwest = "*"
 chrono = "*"
 log4rs = "*"
 log = "*"
+serde = "*"
+serde_json = "*"
+serde_derive = "*"
+select = "*"
+regex = "*"
+mysql = "*"
+mysql_common = "*"
+uuid = { version = "0.6.5", features = ["serde", "v4"] }
