@@ -26,7 +26,7 @@ pub trait WebTender {
                     warn!("{}", e);
                     return Err(::std::convert::From::from(e));
                 }
-                Ok(res) => {
+                Ok(mut res) => {
                     upd = true;
                     let id_tender: i64 = match res.get_opt::<Value, usize>(0) {
                         None => return Err(::std::convert::From::from("no result id_tender")),
@@ -86,7 +86,7 @@ pub trait WebTender {
         let mut s = "".to_string();
         let res_po = (pool.prep_exec("SELECT DISTINCT po.name, po.okpd_name FROM purchase_object AS po LEFT JOIN lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = :id_tender", params! {"id_tender" => id_tender}))?;
         for r_po in res_po.into_iter() {
-            let r_p = &(r_po)?;
+            let mut r_p = (r_po)?;
             let name = r_p.get_opt::<Value, usize>(0).ok_or("None name in po.name")?.and_then(|x| my::from_value_opt::<String>(x)).unwrap_or_default();
             let okpd_name = r_p.get_opt::<Value, usize>(1).ok_or("None name in po.okpd_name")?.and_then(|x| my::from_value_opt::<String>(x)).unwrap_or_default();
             if name != String::new() {
@@ -108,7 +108,7 @@ pub trait WebTender {
         }
         let res_ten = (pool.prep_exec("SELECT purchase_object_info, id_organizer FROM tender WHERE id_tender = :id_tender", params! {"id_tender" => id_tender}))?;
         for r_ten in res_ten.into_iter() {
-            let r_p = &(r_ten)?;
+            let mut r_p = (r_ten)?;
             let t_name = r_p.get_opt::<Value, usize>(0).ok_or("None purchase_object_info in tender")?.and_then(|x| my::from_value_opt::<String>(x)).unwrap_or_default();
             if t_name != String::new() {
                 s.push_str(" ");
@@ -118,7 +118,7 @@ pub trait WebTender {
             if id_org != 0 {
                 let res_org = (pool.prep_exec("SELECT full_name, inn FROM organizer WHERE id_organizer = :id_organizer", params! {"id_organizer" => &id_org}))?;
                 for r_org in res_org.into_iter() {
-                    let r_o = &(r_org)?;
+                    let mut r_o = (r_org)?;
                     let org_name = r_o.get_opt::<Value, usize>(0).ok_or("None org_name in organizer")?.and_then(|x| my::from_value_opt::<String>(x)).unwrap_or_default();
                     let org_inn = r_o.get_opt::<Value, usize>(1).ok_or("None org_inn in organizer")?.and_then(|x| my::from_value_opt::<String>(x)).unwrap_or_default();
                     if org_name != String::new() {
@@ -134,7 +134,7 @@ pub trait WebTender {
         }
         let res_cus = (pool.prep_exec("SELECT DISTINCT cus.inn, cus.full_name FROM customer AS cus LEFT JOIN purchase_object AS po ON cus.id_customer = po.id_customer LEFT JOIN lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = :id_tender", params! {"id_tender" => &id_tender}))?;
         for r_cus in res_cus.into_iter() {
-            let r_c = &(r_cus)?;
+            let mut r_c = (r_cus)?;
             let cus_inn = r_c.get_opt::<Value, usize>(0).ok_or("None cus_inn in customer")?.and_then(|x| my::from_value_opt::<String>(x)).unwrap_or_default();
             let cus_name = r_c.get_opt::<Value, usize>(1).ok_or("None cus_name in customer")?.and_then(|x| my::from_value_opt::<String>(x)).unwrap_or_default();
             if cus_inn != String::new() {

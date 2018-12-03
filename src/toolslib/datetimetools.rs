@@ -1,6 +1,6 @@
 extern crate chrono;
 
-use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime};
+use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime, UTC};
 use chrono::Duration;
 use chrono::prelude::*;
 
@@ -35,7 +35,7 @@ impl DateTimeTools {
     }
 
     pub fn return_datetime_now() -> DateTime<FixedOffset> {
-        let d = Utc::now();
+        let d = UTC::now();
         let dt = d.with_timezone(&FixedOffset::east(3 * 3600));
         dt
     }
