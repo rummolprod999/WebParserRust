@@ -4,7 +4,7 @@ extern crate log;
 extern crate log4rs;
 
 use web_parser_rust::settings::settings::{create_settings, FullSettingsParser, get_argument, Args};
-use web_parser_rust::parsers::{parser_mts::ParserMts};
+use web_parser_rust::parsers::{parser_mts::ParserMts, parser_nefaz::ParserNefaz};
 use std::process;
 use web_parser_rust::parsers::parsers::WebParserTenders;
 
@@ -19,7 +19,10 @@ fn parser_executor(set: &FullSettingsParser) {
     match arg {
         Args::Mts => {
             parser_mts(set);
-        }
+        },
+        Args::Nefaz => {
+            parser_nefaz(set);
+        },
         _ => {
             warn!("Bad enum type!");
             process::exit(0x0100);
@@ -39,6 +42,16 @@ fn parser_end() {
 
 fn parser_mts(set: &FullSettingsParser) {
     let mut p = ParserMts{
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_nefaz(set: &FullSettingsParser) {
+    let mut p = ParserNefaz{
         add_tender: 0,
         upd_tender: 0,
         settings: set,
