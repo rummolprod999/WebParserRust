@@ -42,7 +42,7 @@ impl<'a> WebTender for TenderNefaz<'a> {
         let pool = (my::Pool::new(self.connect_string))?;
         let mut query_res = (pool.prep_exec(r"SELECT id_tender FROM tender WHERE purchase_number = :purchase_number AND type_fz = :type_fz AND doc_publish_date = :doc_publish_date", params! {"purchase_number" => &self.pur_num, "type_fz" => &self.type_fz, "doc_publish_date" => &self.date_pub.naive_local()}))?;
         if let Some(_) = query_res.next() {
-            info!("this tender exist in base, pur_num {}", &self.pur_num);
+            //info!("this tender exist in base, pur_num {}", &self.pur_num);
             return Ok((0, 0));
         };
         let (cancel_status, update) = (self.ret_cancel_status(&pool, self.type_fz, &self.pur_num, &date_upd))?;
@@ -57,6 +57,7 @@ impl<'a> WebTender for TenderNefaz<'a> {
         }
         let id_customer = (self.get_cus_id(&pool))?;
         let id_lot = (self.get_lot_id(&pool, &id_tender))?;
+        (self.insert_attachment(&pool, &id_tender))?;
         (self.insert_purchase_object(&pool, &id_lot, &id_customer))?;
         (self.add_version_num(&pool, self.type_fz, &self.pur_num))?;
         (self.add_tender_keywords(&pool, &id_tender))?;
@@ -102,6 +103,11 @@ impl<'a> TenderNefaz<'a> {
     }
     fn insert_purchase_object(&self, pool: &my::Pool, id_lot: &u64, id_customer: &u64) -> Result<(), Box<error::Error>> {
         (pool.prep_exec("INSERT INTO purchase_object SET id_lot = :id_lot, id_customer = :id_customer, name = :name", params! {"id_lot" => id_lot, "id_customer" => id_customer, "name" => &self.pur_name}))?;
+        Ok(())
+    }
+
+    fn insert_attachment(&self, pool: &my::Pool, id_tender: &u64) -> Result<(), Box<error::Error>> {
+        (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => "Документация", "url" => &self.href}))?;
         Ok(())
     }
 }

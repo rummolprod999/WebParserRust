@@ -42,7 +42,7 @@ impl<'a> WebTender for TenderMts<'a> {
         let pool = (my::Pool::new(self.connect_string))?;
         let mut query_res = (pool.prep_exec(r"SELECT id_tender FROM tender WHERE purchase_number = :purchase_number AND type_fz = :type_fz AND doc_publish_date = :doc_publish_date", params! {"purchase_number" => &self.pur_num, "type_fz" => &self.type_fz, "doc_publish_date" => &self.date_pub.naive_local()}))?;
         if let Some(_) = query_res.next() {
-            info!("this tender exist in base, pur_num {}", &self.pur_num);
+            //info!("this tender exist in base, pur_num {}", &self.pur_num);
             return Ok((0, 0));
         };
         let (cancel_status, update) = (self.ret_cancel_status(&pool, self.type_fz, &self.pur_num, &date_upd))?;
