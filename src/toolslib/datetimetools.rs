@@ -3,6 +3,7 @@ extern crate chrono;
 use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime, UTC};
 use chrono::Duration;
 use chrono::prelude::*;
+use toolslib::regextools::RegexTools;
 
 pub struct DateTimeTools {}
 
@@ -38,5 +39,25 @@ impl DateTimeTools {
         let d = UTC::now();
         let dt = d.with_timezone(&FixedOffset::east(3 * 3600));
         dt
+    }
+
+    pub fn replace_str_months(st: &str) -> Option<String> {
+        let res = match st {
+            x if x.contains("января") => x.replace("января", ".01."),
+            x if x.contains("февраля") => x.replace("февраля", ".02."),
+            x if x.contains("марта") => x.replace("марта", ".03."),
+            x if x.contains("апреля") => x.replace("апреля", ".04."),
+            x if x.contains("мая") => x.replace("мая", ".05."),
+            x if x.contains("июня") => x.replace("июня", ".06."),
+            x if x.contains("июля") => x.replace("июля", ".07."),
+            x if x.contains("августа") => x.replace("августа", ".08."),
+            x if x.contains("сентября") => x.replace("сентября", ".09."),
+            x if x.contains("октября") => x.replace("октября", ".10."),
+            x if x.contains("ноября") => x.replace("ноября", ".11."),
+            x if x.contains("декабря") => x.replace("декабря", ".12."),
+            _ => String::new(),
+        };
+        let m = RegexTools::del_all_ws(&res);
+        m
     }
 }

@@ -40,4 +40,18 @@ impl RegexTools {
         let res_string = result.replace_all(s, " ");
         Some(res_string.to_string())
     }
+
+    pub fn del_all_ws(s: &String) -> Option<String> {
+        let pat = r"\s+";
+        let re = Regex::new(pat);
+        let result = match re {
+            Ok(r) => r,
+            Err(e) => {
+                warn!("{}", e);
+                return None;
+            }
+        };
+        let res_string = result.replace_all(s, "");
+        Some(res_string.to_string())
+    }
 }

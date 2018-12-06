@@ -10,21 +10,23 @@ use chrono::DateTime;
 use self::mysql as my;
 use self::my::Value;
 use self::uuid::Uuid;
+use parsers::parsers::Attachment;
 
-pub struct TenderNefaz<'a> {
+pub struct TenderKamgb<'a> {
     pub type_fz: i32,
     pub etp_name: String,
     pub etp_url: String,
     pub href: String,
     pub pur_num: String,
     pub pur_name: String,
-    pub org_name: String,
+    pub cus_name: String,
     pub date_pub: DateTime<FixedOffset>,
     pub date_end: DateTime<FixedOffset>,
+    pub attachments: Vec<Attachment>,
     pub connect_string: &'a String,
 }
 
-impl<'a> WebTender for TenderNefaz<'a> {
+impl<'a> WebTender for TenderKamgb<'a> {
     fn parser(&self) -> (i32, i32) {
         let res = match self.parser_unwrap() {
             Ok(v) => v,
@@ -40,7 +42,7 @@ impl<'a> WebTender for TenderNefaz<'a> {
         let mut add_t = 0;
         let mut upd_t = 0;
         let pool = (my::Pool::new(self.connect_string))?;
-        let mut query_res = (pool.prep_exec(r"SELECT id_tender FROM tender WHERE purchase_number = :purchase_number AND type_fz = :type_fz AND doc_publish_date = :doc_publish_date", params! {"purchase_number" => &self.pur_num, "type_fz" => &self.type_fz, "doc_publish_date" => &self.date_pub.naive_local()}))?;
+        let mut query_res = (pool.prep_exec(r"SELECT id_tender FROM tender WHERE purchase_number = :purchase_number AND type_fz = :type_fz AND doc_publish_date = :doc_publish_date AND end_date = :end_date", params! {"purchase_number" => &self.pur_num, "type_fz" => &self.type_fz, "doc_publish_date" => &self.date_pub.naive_local(), "end_date" => &self.date_end.naive_local()}))?;
         if let Some(_) = query_res.next() {
             //info!("this tender exist in base, pur_num {}", &self.pur_num);
             return Ok((0, 0));
@@ -65,35 +67,37 @@ impl<'a> WebTender for TenderNefaz<'a> {
     }
 }
 
-impl<'a> TenderNefaz<'a> {
+impl<'a> TenderKamgb<'a> {
     fn get_org_id(&self, pool: &my::Pool) -> Result<u64, Box<error::Error>> {
-        let mut res = (pool.prep_exec("SELECT id_organizer FROM organizer WHERE full_name = :full_name", params! {"full_name" => &self.org_name}))?;
+        let mut res = (pool.prep_exec("SELECT id_organizer FROM organizer WHERE full_name = :full_name", params! {"full_name" => &self.etp_name}))?;
         if let Some(org_row_t) = res.next() {
             let id_org: u64 = (org_row_t)?.get_opt::<Value, usize>(0).ok_or("bad id_organizer")?.and_then(|x| my::from_value_opt::<u64>(x))?;
             return Ok(id_org);
         } else {
-            let phone = "";
-            let email = "";
-            let inn = "";
-            let post_address = "";
+            let phone = "+7 (8552) 39 65 69";
+            let email = "bildanova@kamgb.ru";
+            let inn = "1650032058";
+            let post_address = "423810, Республика Татарстан, Набережные Челны, ул. Академика Рубаненко, дом 6";
             let cont_person = "";
-            let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.org_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
+            let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());
         }
     }
+
     fn get_tender_id(&self, pool: &my::Pool, id_organizer: &u64, id_placing_way: &u64, id_etp: &u64, date_upd: &DateTime<FixedOffset>, cancel_status: &i32) -> Result<u64, Box<error::Error>> {
         let res_insert = (pool.prep_exec("INSERT INTO tender SET id_xml = :id_xml, purchase_number = :purchase_number, doc_publish_date = :doc_publish_date, href = :href, purchase_object_info = :purchase_object_info, type_fz = :type_fz, id_organizer = :id_organizer, id_placing_way = :id_placing_way, id_etp = :id_etp, end_date = :end_date, cancel = :cancel, date_version = :date_version, num_version = :num_version, xml = :xml, print_form = :print_form, id_region = :id_region, notice_version = :notice_version", params! {"id_xml" => &self.pur_num, "purchase_number" => &self.pur_num, "doc_publish_date" => &self.date_pub.naive_local(), "href" => &self.href, "purchase_object_info" => &self.pur_name, "type_fz" => &self.type_fz, "id_organizer" => id_organizer, "id_placing_way" => id_placing_way, "id_etp" => id_etp, "end_date" => &self.date_end.naive_local(), "cancel" => cancel_status, "date_version" => &date_upd.naive_local(), "num_version" => 1, "xml" => &self.href, "print_form" => &self.href, "id_region" => 0, "notice_version" => ""}))?;
         return Ok(res_insert.last_insert_id());
     }
     fn get_cus_id(&self, pool: &my::Pool) -> Result<u64, Box<error::Error>> {
-        let mut res = (pool.prep_exec("SELECT id_customer FROM customer WHERE full_name = :full_name", params! {"full_name" => &self.org_name}))?;
+        let cus_name = format!("{} {}", &self.etp_name, &self.cus_name);
+        let mut res = (pool.prep_exec("SELECT id_customer FROM customer WHERE full_name = :full_name", params! {"full_name" => &cus_name}))?;
         if let Some(id_cus_row) = res.next() {
             let id_cus = (id_cus_row)?.get_opt::<Value, usize>(0).ok_or("None id_customer")?.and_then(|x| my::from_value_opt::<u64>(x))?;
             return Ok(id_cus);
         } else {
-            let inn = "";
+            let inn = "1650032058";
             let reg_num = Uuid::new_v4().hyphenated().to_string();
-            let res_insert = (pool.prep_exec("INSERT INTO customer SET full_name = :full_name, reg_num = :reg_num, is223=1, inn = :inn", params! {"full_name" => &self.org_name, "reg_num" => reg_num, "inn" => inn}))?;
+            let res_insert = (pool.prep_exec("INSERT INTO customer SET full_name = :full_name, reg_num = :reg_num, is223=1, inn = :inn", params! {"full_name" => &cus_name, "reg_num" => reg_num, "inn" => inn}))?;
             return Ok(res_insert.last_insert_id());
         }
     }
@@ -105,9 +109,10 @@ impl<'a> TenderNefaz<'a> {
         (pool.prep_exec("INSERT INTO purchase_object SET id_lot = :id_lot, id_customer = :id_customer, name = :name", params! {"id_lot" => id_lot, "id_customer" => id_customer, "name" => &self.pur_name}))?;
         Ok(())
     }
-
     fn insert_attachment(&self, pool: &my::Pool, id_tender: &u64) -> Result<(), Box<error::Error>> {
-        (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => "Документация", "url" => &self.href}))?;
+        for att in &self.attachments {
+            (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => &att.name_file, "url" => &att.url_file}))?;
+        }
         Ok(())
     }
 }

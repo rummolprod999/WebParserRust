@@ -10,4 +10,9 @@ pub trait WebParserTenders {
 
 }
 
+pub struct Attachment{
+    pub name_file: String,
+    pub url_file: String,
+}
+
 

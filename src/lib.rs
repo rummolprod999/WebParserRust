@@ -6,6 +6,8 @@ extern crate mysql;
 #[macro_use]
 extern crate serde_derive;
 extern crate chrono;
+extern crate select;
+extern crate core;
 
 pub mod settings;
 pub mod parsers;
