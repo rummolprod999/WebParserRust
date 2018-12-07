@@ -88,7 +88,7 @@ impl<'a> ParserKamgb<'a> {
         let end_date_str = datetimetools::DateTimeTools::replace_str_months(&end_date_t).ok_or("can not replace end_date_str")?;
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_str, "%d.%m.%Y").ok_or("can not find date_pub on tender")?;
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&end_date_str, "%d.%m.%Y").ok_or("can not find date_end on tender")?;
-        let tn: TenderKamgb = TenderKamgb { type_fz: 133, etp_name: "ПАО «КАМАЗ»".to_string(), etp_url: "http://www.kamgb.ru/".to_string(), href, pur_num, pur_name: pur_name.to_string(), cus_name, date_pub, date_end, attachments, connect_string: &self.connect_string };
+        let tn: TenderKamgb = TenderKamgb { type_fz: 133, etp_name: "OOO «КАМАЗжилбыт»".to_string(), etp_url: "http://www.kamgb.ru/".to_string(), href, pur_num, pur_name: pur_name.to_string(), cus_name, date_pub, date_end, attachments, connect_string: &self.connect_string };
         let (addt, updt) = tn.parser();
         self.add_tender += addt;
         self.upd_tender += updt;

@@ -76,7 +76,7 @@ impl<'a> TenderKamgb<'a> {
         } else {
             let phone = "+7 (8552) 39 65 69";
             let email = "bildanova@kamgb.ru";
-            let inn = "1650032058";
+            let inn = "1650297664";
             let post_address = "423810, Республика Татарстан, Набережные Челны, ул. Академика Рубаненко, дом 6";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
@@ -95,7 +95,7 @@ impl<'a> TenderKamgb<'a> {
             let id_cus = (id_cus_row)?.get_opt::<Value, usize>(0).ok_or("None id_customer")?.and_then(|x| my::from_value_opt::<u64>(x))?;
             return Ok(id_cus);
         } else {
-            let inn = "1650032058";
+            let inn = "1650297664";
             let reg_num = Uuid::new_v4().hyphenated().to_string();
             let res_insert = (pool.prep_exec("INSERT INTO customer SET full_name = :full_name, reg_num = :reg_num, is223=1, inn = :inn", params! {"full_name" => &cus_name, "reg_num" => reg_num, "inn" => inn}))?;
             return Ok(res_insert.last_insert_id());
