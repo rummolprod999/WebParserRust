@@ -3,10 +3,14 @@ extern crate web_parser_rust;
 extern crate log;
 extern crate log4rs;
 
-use web_parser_rust::settings::settings::{create_settings, FullSettingsParser, get_argument, Args};
-use web_parser_rust::parsers::{parser_mts::ParserMts, parser_nefaz::ParserNefaz, parser_kam_gb::ParserKamgb};
 use std::process;
 use web_parser_rust::parsers::parsers::WebParserTenders;
+use web_parser_rust::parsers::{
+    parser_kam_gb::ParserKamgb, parser_mts::ParserMts, parser_nefaz::ParserNefaz,
+};
+use web_parser_rust::settings::settings::{
+    create_settings, get_argument, Args, FullSettingsParser,
+};
 
 fn main() {
     let set = parser_initialise();

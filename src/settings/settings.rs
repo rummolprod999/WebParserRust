@@ -1,20 +1,20 @@
-extern crate clap;
 extern crate chrono;
+extern crate clap;
 extern crate serde_json;
 
-use self::clap::{Arg, App};
-use std::process;
-use std::path::PathBuf;
-use std::fmt;
-use std::clone::Clone;
-use std::option::Option;
-use std::fs;
 use self::chrono::Local;
-use log4rs::append::file::FileAppender;
-use log4rs::encode::pattern::PatternEncoder;
-use log4rs::config::{Appender, Config, Root};
+use self::clap::{App, Arg};
 use log::LevelFilter;
+use log4rs::append::file::FileAppender;
+use log4rs::config::{Appender, Config, Root};
+use log4rs::encode::pattern::PatternEncoder;
+use std::clone::Clone;
+use std::fmt;
+use std::fs;
 use std::fs::File;
+use std::option::Option;
+use std::path::PathBuf;
+use std::process;
 
 #[derive(Clone)]
 pub enum Args {
@@ -87,12 +87,12 @@ fn create_log_file(pb: &PathBuf) {
     }
     let logfile = FileAppender::builder()
         .encoder(Box::new(PatternEncoder::new("{d} - {l} - {m}\n")))
-        .build(&file_log.as_path()).unwrap();
+        .build(&file_log.as_path())
+        .unwrap();
     let config = Config::builder()
         .appender(Appender::builder().build("logfile", Box::new(logfile)))
-        .build(Root::builder()
-            .appender("logfile")
-            .build(LevelFilter::Info)).unwrap();
+        .build(Root::builder().appender("logfile").build(LevelFilter::Info))
+        .unwrap();
     log4rs::init_config(config).unwrap();
 }
 
@@ -151,11 +151,13 @@ pub fn check_args() -> Args {
         .version("1.0.0")
         .author("rummolprod999")
         .about("web_parser_rust")
-        .arg(Arg::with_name("argument")
-            .short("-a")
-            .long("argument")
-            .takes_value(true)
-            .help(arguments))
+        .arg(
+            Arg::with_name("argument")
+                .short("-a")
+                .long("argument")
+                .takes_value(true)
+                .help(arguments),
+        )
         .get_matches();
     let a = match matches.value_of("argument") {
         None => {
@@ -171,7 +173,7 @@ pub fn check_args() -> Args {
                 println!("bad argument, use -h for help");
                 process::exit(0x0100);
             }
-        }
+        },
     };
     a
 }

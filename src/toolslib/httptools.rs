@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::error::Error;
+use std::io::Read;
 use std::option::Option;
 
 pub struct HttpTools {}

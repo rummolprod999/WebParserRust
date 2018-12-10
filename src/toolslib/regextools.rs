@@ -16,7 +16,7 @@ impl RegexTools {
         };
         let cap = match result.captures(s) {
             Some(t) => t,
-            None => return None
+            None => return None,
         };
         let rz = if cap.len() > 1 {
             let r = &cap[1];

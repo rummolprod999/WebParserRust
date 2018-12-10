@@ -1,4 +1,3 @@
-
 pub trait WebParserTenders {
     fn parser(&mut self) -> () {}
     fn end_parsing(&self, add: &i32, upd: &i32) {
@@ -7,12 +6,9 @@ pub trait WebParserTenders {
         info!("{}", add_count);
         info!("{}", upd_count);
     }
-
 }
 
-pub struct Attachment{
+pub struct Attachment {
     pub name_file: String,
     pub url_file: String,
 }
-
-
