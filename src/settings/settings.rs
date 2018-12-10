@@ -23,6 +23,7 @@ pub enum Args {
     Beeline,
     Nefaz,
     Kamgb,
+    Uds,
 }
 
 #[derive(Deserialize, Debug)]
@@ -52,6 +53,7 @@ impl fmt::Display for Args {
             Args::Mts => write!(f, "mts"),
             Args::Nefaz => write!(f, "nefaz"),
             Args::Kamgb => write!(f, "kamgb"),
+            Args::Uds => write!(f, "uds"),
         }
     }
 }
@@ -169,6 +171,7 @@ pub fn check_args() -> Args {
             "beeline" => Args::Beeline,
             "nefaz" => Args::Nefaz,
             "kamgb" => Args::Kamgb,
+            "uds" => Args::Uds,
             _ => {
                 println!("bad argument, use -h for help");
                 process::exit(0x0100);
