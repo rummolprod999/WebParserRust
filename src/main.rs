@@ -6,8 +6,8 @@ extern crate log4rs;
 use std::process;
 use web_parser_rust::parsers::parsers::WebParserTenders;
 use web_parser_rust::parsers::{
-    parser_beeline::ParserBeeline, parser_kam_gb::ParserKamgb, parser_mts::ParserMts,
-    parser_nefaz::ParserNefaz, parser_uds::ParserUds,
+    parser_beeline::ParserBeeline, parser_kam_gb::ParserKamgb, parser_megafon::ParserMegafon,
+    parser_mts::ParserMts, parser_nefaz::ParserNefaz, parser_uds::ParserUds,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -36,6 +36,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Beeline => {
             parser_beeline(set);
+        }
+        Args::Megafon => {
+            parser_megafon(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -96,6 +99,16 @@ fn parser_uds(set: &FullSettingsParser) {
 
 fn parser_beeline(set: &FullSettingsParser) {
     let mut p = ParserBeeline {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_megafon(set: &FullSettingsParser) {
+    let mut p = ParserMegafon {
         add_tender: 0,
         upd_tender: 0,
         settings: set,

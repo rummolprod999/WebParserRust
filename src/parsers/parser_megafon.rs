@@ -6,27 +6,27 @@ use self::select::node::Node;
 use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
-use crate::tenders::tender_uds::TenderUds;
+use crate::tenders::tender_megafon::TenderMegafon;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::datetimetools;
 use crate::toolslib::httptools;
 use std::error;
 
-pub struct ParserUds<'a> {
+pub struct ParserMegafon<'a> {
     pub add_tender: i32,
     pub upd_tender: i32,
     pub settings: &'a FullSettingsParser,
     pub connect_string: String,
 }
 
-impl<'a> WebParserTenders for ParserUds<'a> {
+impl<'a> WebParserTenders for ParserMegafon<'a> {
     fn parser(&mut self) {
         self.try_parsing();
         self.end_parsing(&self.add_tender, &self.upd_tender);
     }
 }
 
-impl<'a> ParserUds<'a> {
+impl<'a> ParserMegafon<'a> {
     pub fn try_parsing(&mut self) {
         let c_s = format!(
             "mysql://{}:{}@{}:{}/{}",
@@ -37,7 +37,7 @@ impl<'a> ParserUds<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "http://uds-group.ru/tenders";
+        let url = "http://corp.megafon.ru/about/purchase/oao_megafon_retail/";
         let page = httptools::HttpTools::get_page_text(url);
         match page {
             Some(p) => {
@@ -52,13 +52,8 @@ impl<'a> ParserUds<'a> {
 
     fn get_tenders_from_page(&mut self, page_text: String) {
         let document = Document::from(&*page_text);
-        for ten in document.find(
-            Class("table-responsive")
-                .and(Name("div"))
-                .child(Name("table").and(Class("table")))
-                .child(Name("tbody"))
-                .child(Name("tr")),
-        ) {
+        for ten in document.find(Name("div").and(Class("b-adaptive-table-row").and(Class("i-bem"))))
+        {
             match self.parser_tender(ten) {
                 Ok(_) => (),
                 Err(e) => {
@@ -70,38 +65,31 @@ impl<'a> ParserUds<'a> {
 
     fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
         let a_t = tender
-            .find(Name("td").child(Name("a")))
+            .find(Name("div").child(Name("a")))
             .next()
             .ok_or("can not find a tag on tender")?;
         let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
-        let href = format!("http://uds-group.ru{}", href_t);
+        let href = format!(
+            "http://corp.megafon.ru/about/purchase/oao_megafon_retail/{}",
+            href_t
+        );
         let pur_name = tender
-            .find(Name("td"))
-            .nth(1)
+            .find(Name("div").child(Name("a")))
+            .next()
             .ok_or("can not find pur_name on tender")?
             .text()
             .trim()
             .to_string();
-        let mut pur_obj = tender
-            .find(Name("td"))
-            .nth(2)
-            .ok_or("can not find pur_obj on tender")?
-            .text()
-            .trim()
-            .to_string();
-        if pur_obj == "" {
-            pur_obj = pur_name.clone();
-        }
         let pur_num = tender
-            .find(Name("td"))
+            .find(Name("div"))
             .nth(0)
             .ok_or("can not find pur_num on tender")?
             .text()
             .trim()
             .to_string();
         let pub_date_t = tender
-            .find(Name("td"))
-            .nth(3)
+            .find(Name("div").and(Class("b-adaptive-table-row__data")))
+            .nth(2)
             .ok_or("can not find pub_date_t on tender")?
             .text()
             .trim()
@@ -109,27 +97,29 @@ impl<'a> ParserUds<'a> {
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y")
             .ok_or("can not find date_pub on tender")?;
         let end_date_t = tender
-            .find(Name("td"))
-            .nth(4)
-            .map(|x| x.text().trim().to_string())
-            .and_then(|x| {
-                if x == "" {
-                    Some("01.01.1970".to_string())
-                } else {
-                    Some(x)
-                }
-            })
-            .unwrap_or("01.01.1970".to_string());
+            .find(Name("div").and(Class("b-adaptive-table-row__data")))
+            .nth(3)
+            .ok_or("can not find end_date_t on tender")?
+            .text()
+            .trim()
+            .to_string();
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&end_date_t, "%d.%m.%Y")
             .ok_or("can not find date_end on tender")?;
-        let tn: TenderUds = TenderUds {
-            type_fz: 134,
-            etp_name: "Холдинг UDS group".to_string(),
-            etp_url: "http://uds-group.ru/".to_string(),
+        let status = tender
+            .find(Name("div").and(Class("b-adaptive-table-row__data")))
+            .nth(4)
+            .ok_or("can not find status on tender")?
+            .text()
+            .trim()
+            .to_string();
+        let tn: TenderMegafon = TenderMegafon {
+            type_fz: 136,
+            etp_name: "ПАО «МегаФон»".to_string(),
+            etp_url: "http://corp.megafon.ru/".to_string(),
             href,
             pur_num,
             pur_name: pur_name.to_string(),
-            pur_obj,
+            status,
             date_pub,
             date_end,
             connect_string: &self.connect_string,
