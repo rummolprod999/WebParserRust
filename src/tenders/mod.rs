@@ -1,3 +1,4 @@
+pub mod tender_ahstep;
 pub mod tender_beeline;
 pub mod tender_kamgb;
 pub mod tender_megafon;

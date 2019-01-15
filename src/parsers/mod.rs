@@ -1,3 +1,4 @@
+pub mod parser_ahstep;
 pub mod parser_beeline;
 pub mod parser_kam_gb;
 pub mod parser_megafon;
