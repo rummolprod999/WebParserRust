@@ -8,7 +8,7 @@ use web_parser_rust::parsers::parsers::WebParserTenders;
 use web_parser_rust::parsers::{
     parser_ahstep::ParserAhstep, parser_beeline::ParserBeeline, parser_kam_gb::ParserKamgb,
     parser_megafon::ParserMegafon, parser_mts::ParserMts, parser_nefaz::ParserNefaz,
-    parser_uds::ParserUds,
+    parser_salavat::ParserSalavat, parser_uds::ParserUds,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -43,6 +43,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Ahstep => {
             parser_ahstep(set);
+        }
+        Args::Salavat => {
+            parser_salavat(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -123,6 +126,16 @@ fn parser_megafon(set: &FullSettingsParser) {
 
 fn parser_ahstep(set: &FullSettingsParser) {
     let mut p = ParserAhstep {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_salavat(set: &FullSettingsParser) {
+    let mut p = ParserSalavat {
         add_tender: 0,
         upd_tender: 0,
         settings: set,

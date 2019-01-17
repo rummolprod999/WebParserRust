@@ -26,7 +26,32 @@ impl RegexTools {
         };
         rz
     }
-
+    pub fn get_one_group_fix(s: &str, pattern: &str) -> Option<String> {
+        let re = Regex::new(pattern);
+        let result = match re {
+            Ok(r) => r,
+            Err(e) => {
+                warn!("{}", e);
+                return None;
+            }
+        };
+        let cap = match result.captures(s) {
+            Some(t) => t,
+            None => return None,
+        };
+        let rz = if cap.len() > 2 {
+            let r = &cap.get(1).map(|m| m.as_str()).unwrap_or("");
+            if *r == "" {
+                let d = &cap.get(2).map(|m| m.as_str()).unwrap_or("");
+                Some(d.to_string())
+            } else {
+                Some(r.to_string())
+            }
+        } else {
+            None
+        };
+        rz
+    }
     pub fn del_double_ws(s: &String) -> Option<String> {
         let pat = r"\s+";
         let re = Regex::new(pat);
