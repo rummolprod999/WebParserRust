@@ -191,7 +191,7 @@ impl<'a> TenderNornic<'a> {
         id_customer: &u64,
         doc: &Document,
     ) -> Result<(), Box<error::Error>> {
-        let lots = &doc.find(
+        let lots = doc.find(
             Name("td")
                 .and(Class("lotlist"))
                 .child(Name("table"))
