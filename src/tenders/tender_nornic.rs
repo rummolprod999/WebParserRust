@@ -198,7 +198,13 @@ impl<'a> TenderNornic<'a> {
                 .child(Name("tbody"))
                 .child(Name("tr")),
         );
-        let count = (&lots).count();
+        let count = doc.find(
+            Name("td")
+                .and(Class("lotlist"))
+                .child(Name("table"))
+                .child(Name("tbody"))
+                .child(Name("tr")),
+        ).count();
         let mut lot_num = 1;
         for lot in lots {
             let lot_name = lot.find(Name("td")).nth(1);
