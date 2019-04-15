@@ -79,8 +79,7 @@ impl<'a> TenderNornic<'a> {
             let phone = "+7 (3919) 258001";
             let email = "nord@nk.nornik.ru";
             let inn = "8401005730";
-            let post_address =
-                "Москва, просп. Вернадского, д.6, БЦ \"Капитолий\"";
+            let post_address = "";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());

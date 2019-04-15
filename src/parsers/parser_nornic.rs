@@ -133,7 +133,7 @@ impl<'a> ParserNornic<'a> {
         let href = format!("http://www.zf.norilsknickel.ru/{}", href_t);
         let tn: TenderNornic = TenderNornic {
             type_fz: 181,
-            etp_name: "ПАО \"ГМК \"Норильский никель\"".to_string(),
+            etp_name: "ЗФ ПАО \"ГМК \"Норильский никель\"".to_string(),
             etp_url: "http://www.zf.norilsknickel.ru/".to_string(),
             href,
             pur_num,
