@@ -200,11 +200,18 @@ impl<'a> TenderNornic<'a> {
         );
         for lot in lots {
             let lot_name = lot.find(Name("td")).nth(1);
+            let mut lot_num = 1;
             if let Some(l_n) = lot_name {
-                let res_insert = (pool.prep_exec("INSERT INTO lot SET id_tender = :id_tender, lot_number = :lot_number, currency = :currency", params! {"id_tender" => id_tender, "lot_number" => 1, "currency" => ""}))?;
+                let res_insert = (pool.prep_exec("INSERT INTO lot SET id_tender = :id_tender, lot_number = :lot_number, currency = :currency", params! {"id_tender" => id_tender, "lot_number" => lot_num, "currency" => ""}))?;
                 let lot_id = res_insert.last_insert_id();
                 (pool.prep_exec("INSERT INTO purchase_object SET id_lot = :id_lot, id_customer = :id_customer, name = :name", params! {"id_lot" => &lot_id, "id_customer" => &id_customer, "name" => &l_n.text()}))?;
+                lot_num += 1;
             }
+        }
+        if lots.count() == 0 {
+            let res_insert = (pool.prep_exec("INSERT INTO lot SET id_tender = :id_tender, lot_number = :lot_number, currency = :currency", params! {"id_tender" => id_tender, "lot_number" => 1, "currency" => ""}))?;
+            let lot_id = res_insert.last_insert_id();
+            (pool.prep_exec("INSERT INTO purchase_object SET id_lot = :id_lot, id_customer = :id_customer, name = :name", params! {"id_lot" => &lot_id, "id_customer" => &id_customer, "name" => &self.pur_name}))?;
         }
         Ok(())
     }
