@@ -8,7 +8,7 @@ use web_parser_rust::parsers::parsers::WebParserTenders;
 use web_parser_rust::parsers::{
     parser_ahstep::ParserAhstep, parser_beeline::ParserBeeline, parser_kam_gb::ParserKamgb,
     parser_megafon::ParserMegafon, parser_mts::ParserMts, parser_nefaz::ParserNefaz,
-    parser_salavat::ParserSalavat, parser_uds::ParserUds, parser_nornic::ParserNornic,
+    parser_nornic::ParserNornic, parser_salavat::ParserSalavat, parser_uds::ParserUds,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,

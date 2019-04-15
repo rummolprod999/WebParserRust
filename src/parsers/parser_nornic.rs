@@ -3,11 +3,11 @@ extern crate select;
 
 use self::select::document::Document;
 use self::select::node::Node;
-use self::select::predicate::{Name, Predicate, Class};
+use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::parsers::parsers::Attachment;
 use crate::settings::settings::FullSettingsParser;
-use crate::tenders::tender_salavat::TenderSalavat;
+use crate::tenders::tender_nornic::TenderNornic;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::datetimetools;
 use crate::toolslib::httptools;
@@ -55,20 +55,96 @@ impl<'a> ParserNornic<'a> {
     fn get_tenders_from_page(&mut self, page_text: String) {
         let document = Document::from(&*page_text);
         for (i, ten) in document
-            .find(Name("table").and(Class("GuestListSet")).child(Name("tr")).child(Name("td")).child(Name("table")))
+            .find(
+                Name("table")
+                    .and(Class("GuestListSet"))
+                    .child(Name("tbody"))
+                    .child(Name("tr"))
+                    .child(Name("td"))
+                    .child(Name("table"))
+                    .child(Name("tbody")),
+            )
             .enumerate()
-            {
-                match self.parser_tender(ten) {
-                    Ok(_) => (),
-                    Err(e) => {
-                        error!("{}", e);
-                    }
+        {
+            match self.parser_tender(ten) {
+                Ok(_) => (),
+                Err(e) => {
+                    error!("{}", e);
                 }
             }
+        }
     }
 
     fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
-        println!("{}", tender.text());
+        let pur_num_t = tender
+            .find(Name("tr"))
+            .next()
+            .ok_or("can not find pur_num_t on tender")?
+            .find(Name("td"))
+            .next()
+            .ok_or("can not find pur_num_t on tender")?
+            .attr("id")
+            .ok_or("can not find attr id pur_num_t on tender")?
+            .to_string();
+        let pur_num = pur_num_t.replace("l", "");
+        let tmp = tender
+            .find(
+                Name("tr")
+                    .child(Name("td"))
+                    .child(Name("table"))
+                    .child(Name("tbody"))
+                    .child(Name("tr"))
+                    .child(Name("td")),
+            )
+            .nth(0)
+            .ok_or("can not find tmp on tender")?
+            .text()
+            .to_string();
+        let cus_name_t = regextools::RegexTools::get_one_group(&tmp.trim(), r":(.+)№")
+            .ok_or(format!("{} {}", "can not find cus_name on tender", pur_num))?;
+        let cus_name =
+            regextools::RegexTools::del_double_ws(&cus_name_t).ok_or("del double space error")?;
+        let pub_date_t =
+            regextools::RegexTools::get_one_group(&tmp.trim(), r"(\d{2}\.\d{2}\.\d{4})").ok_or(
+                format!("{} {}", "can not find pub_date_t on tender", pur_num),
+            )?;
+        let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y")
+            .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+        let pur_name = tender
+            .find(Name("td").and(Class("Name")))
+            .next()
+            .ok_or("can not find attr pur_name on tender")?
+            .text();
+        let href_t = tender
+            .find(Name("a").and(|x: &Node| {
+                if x.text().contains("подробнее") {
+                    true
+                } else {
+                    false
+                }
+            }))
+            .next()
+            .ok_or(format!("{} {}", "can not find href_t on tender", pur_num))?
+            .attr("href")
+            .ok_or(format!(
+                "{} {}",
+                "can not find href_t attr on tender", pur_num
+            ))?;
+        let href = format!("http://www.zf.norilsknickel.ru/{}", href_t);
+        let tn: TenderNornic = TenderNornic {
+            type_fz: 181,
+            etp_name: "ПАО \"ГМК \"Норильский никель\"".to_string(),
+            etp_url: "http://www.zf.norilsknickel.ru/".to_string(),
+            href,
+            pur_num,
+            pur_name,
+            cus_name,
+            date_pub,
+            connect_string: &self.connect_string,
+        };
+        let (addt, updt) = tn.parser();
+        self.add_tender += addt;
+        self.upd_tender += updt;
         Ok(())
     }
 }

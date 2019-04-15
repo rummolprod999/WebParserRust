@@ -92,7 +92,8 @@ impl<'a> TenderSalavat<'a> {
             let phone = "";
             let email = "";
             let inn = "";
-            let post_address = "Москва, просп. Вернадского, д.6, БЦ \"Капитолий\"";
+            let post_address =
+                "Москва, просп. Вернадского, д.6, БЦ \"Капитолий\"";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());

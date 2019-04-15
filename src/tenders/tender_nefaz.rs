@@ -140,7 +140,10 @@ impl<'a> TenderNefaz<'a> {
     }
 
     fn insert_attachment(&self, pool: &my::Pool, id_tender: &u64) -> Result<(), Box<error::Error>> {
-        (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => "Документация", "url" => &self.href}))?;
+        (pool.prep_exec(
+            "INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url",
+            params! {"id_tender" => id_tender, "file_name" => "Документация", "url" => &self.href},
+        ))?;
         Ok(())
     }
 }

@@ -81,19 +81,18 @@ impl<'a> ParserSalavat<'a> {
             .text()
             .trim()
             .to_string();
-        let pur_num_t = match regextools::RegexTools::get_one_group_fix(
-            &pur_name,
-            r"(?:№(.+?)|(ПК.+?))\s+",
-        ) {
-            Some(pn) => {
-                let tmp = pn.trim();
-                tmp.to_string()
-            }
-            None => {
-                warn!("{} {}", "can not find pur_num on tender", &pur_name);
-                return Ok(());
-            }
-        };
+        let pur_num_t =
+            match regextools::RegexTools::get_one_group_fix(&pur_name, r"(?:№(.+?)|(ПК.+?))\s+")
+            {
+                Some(pn) => {
+                    let tmp = pn.trim();
+                    tmp.to_string()
+                }
+                None => {
+                    warn!("{} {}", "can not find pur_num on tender", &pur_name);
+                    return Ok(());
+                }
+            };
         let pur_num = if pur_num_t.ends_with("для") {
             let m = pur_num_t.replace("для", "");
             m

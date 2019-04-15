@@ -96,7 +96,8 @@ impl<'a> TenderAhstep<'a> {
             let phone = "+7 (861) 646-25-32";
             let email = "ofﬁce@ahstep.ru";
             let inn = "";
-            let post_address = "353715, Краснодарский край, Каневской р-н, ст. Челбасская, Набережная ул., д. 137";
+            let post_address =
+                "353715, Краснодарский край, Каневской р-н, ст. Челбасская, Набережная ул., д. 137";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());
@@ -154,9 +155,7 @@ impl<'a> TenderAhstep<'a> {
         doc: &Document,
     ) -> Result<(), Box<error::Error>> {
         let attachments = doc.find(Name("a").and(|x: &Node| {
-            if x.text()
-                .contains("Закупочная документация")
-            {
+            if x.text().contains("Закупочная документация") {
                 true
             } else {
                 false

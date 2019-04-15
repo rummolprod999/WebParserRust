@@ -91,7 +91,8 @@ impl<'a> TenderKamgb<'a> {
             let phone = "+7 (8552) 39 65 69";
             let email = "bildanova@kamgb.ru";
             let inn = "1650297664";
-            let post_address = "423810, Республика Татарстан, Набережные Челны, ул. Академика Рубаненко, дом 6";
+            let post_address =
+                "423810, Республика Татарстан, Набережные Челны, ул. Академика Рубаненко, дом 6";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());

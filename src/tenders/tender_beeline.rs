@@ -119,7 +119,8 @@ impl<'a> TenderBeeline<'a> {
             let phone = "";
             let email = "";
             let inn = "7713076301";
-            let post_address = "Российская Федерация, 127083, г. Москва, ул. Восьмого Марта, дом 10, строение 14";
+            let post_address =
+                "Российская Федерация, 127083, г. Москва, ул. Восьмого Марта, дом 10, строение 14";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());
