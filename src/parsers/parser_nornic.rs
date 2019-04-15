@@ -5,7 +5,6 @@ use self::select::document::Document;
 use self::select::node::Node;
 use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
-use crate::parsers::parsers::Attachment;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_nornic::TenderNornic;
 use crate::tenders::tenders::WebTender;
@@ -54,7 +53,7 @@ impl<'a> ParserNornic<'a> {
 
     fn get_tenders_from_page(&mut self, page_text: String) {
         let document = Document::from(&*page_text);
-        for (i, ten) in document
+        for (_i, ten) in document
             .find(
                 Name("table")
                     .and(Class("GuestListSet"))
