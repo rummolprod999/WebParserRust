@@ -28,6 +28,7 @@ pub enum Args {
     Ahstep,
     Salavat,
     Nornic,
+    Pewete,
 }
 
 #[derive(Deserialize, Debug)]
@@ -62,6 +63,7 @@ impl fmt::Display for Args {
             Args::Ahstep => write!(f, "ahstep"),
             Args::Salavat => write!(f, "salavat"),
             Args::Nornic => write!(f, "nornic"),
+            Args::Pewete => write!(f, "pewete"),
         }
     }
 }
@@ -157,7 +159,7 @@ pub fn get_argument() -> Option<Args> {
 
 pub fn check_args() -> Args {
     let arguments =
-        "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic";
+        "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic, pewete";
     let matches = App::new("web_parser_rust")
         .version("1.0.0")
         .author("rummolprod999")
@@ -185,6 +187,7 @@ pub fn check_args() -> Args {
             "ahstep" => Args::Ahstep,
             "salavat" => Args::Salavat,
             "nornic" => Args::Nornic,
+            "pewete" => Args::Pewete,
             _ => {
                 println!("bad argument, use -h for help");
                 process::exit(0x0100);
