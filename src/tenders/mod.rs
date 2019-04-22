@@ -5,7 +5,7 @@ pub mod tender_megafon;
 pub mod tender_mts;
 pub mod tender_nefaz;
 pub mod tender_nornic;
+pub mod tender_pewete;
 pub mod tender_salavat;
 pub mod tender_uds;
-pub mod tender_pewete;
 pub mod tenders;
