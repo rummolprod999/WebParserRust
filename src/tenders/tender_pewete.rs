@@ -109,7 +109,7 @@ impl<'a> TenderPewete<'a> {
     }
 
     fn get_cus_id(&self, pool: &my::Pool) -> Result<u64, Box<error::Error>> {
-        let cus_name = format!("{} {}", &self.etp_name, &self.etp_name);
+        let cus_name = &self.etp_name;
         let mut res = (pool.prep_exec(
             "SELECT id_customer FROM customer WHERE full_name = :full_name",
             params! {"full_name" => &cus_name},
