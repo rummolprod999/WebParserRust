@@ -8,8 +8,8 @@ use web_parser_rust::parsers::parsers::WebParserTenders;
 use web_parser_rust::parsers::{
     parser_ahstep::ParserAhstep, parser_beeline::ParserBeeline, parser_kam_gb::ParserKamgb,
     parser_megafon::ParserMegafon, parser_mts::ParserMts, parser_nefaz::ParserNefaz,
-    parser_nornic::ParserNornic, parser_pewete::ParserPewete, parser_salavat::ParserSalavat,
-    parser_uds::ParserUds,
+    parser_nornic::ParserNornic, parser_pewete::ParserPewete, parser_quadra::ParserQuadra,
+    parser_salavat::ParserSalavat, parser_uds::ParserUds,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -53,6 +53,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Pewete => {
             parser_pewete(set);
+        }
+        Args::Quadra => {
+            parser_quadra(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -163,6 +166,16 @@ fn parser_nornic(set: &FullSettingsParser) {
 
 fn parser_pewete(set: &FullSettingsParser) {
     let mut p = ParserPewete {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_quadra(set: &FullSettingsParser) {
+    let mut p = ParserQuadra {
         add_tender: 0,
         upd_tender: 0,
         settings: set,

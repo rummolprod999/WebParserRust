@@ -93,6 +93,34 @@ pub trait WebTender {
         }
     }
 
+    fn get_placing_way_id(&self, pool: &my::Pool, pw_name: &str) -> Result<u64, Box<error::Error>> {
+        let mut res = (pool.prep_exec(
+            "SELECT id_placing_way FROM placing_way WHERE name = :name LIMIT 1",
+            params! {"name" => pw_name},
+        ))?;
+        if let Some(id_pw_row) = res.next() {
+            let id_pw = (id_pw_row)?
+                .get_opt::<Value, usize>(0)
+                .ok_or("None id_pw")?
+                .and_then(|x| my::from_value_opt::<u64>(x))?;
+            return Ok(id_pw);
+        } else {
+            let conf = match pw_name.to_lowercase() {
+                ref x if x.contains("открыт") => 5,
+                ref x if x.contains("аукцион") => 1,
+                ref x if x.contains("котиров") => 2,
+                ref x if x.contains("предложен") => 3,
+                ref x if x.contains("единств") => 4,
+                _ => 6,
+            };
+            let res_insert = (pool.prep_exec(
+                "INSERT INTO placing_way SET name = :name, conformity = :conformity",
+                params! {"name" => pw_name, "conformity" => &conf},
+            ))?;
+            return Ok(res_insert.last_insert_id());
+        }
+    }
+
     fn add_version_num(
         &self,
         pool: &my::Pool,

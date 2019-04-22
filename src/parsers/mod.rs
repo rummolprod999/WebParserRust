@@ -6,6 +6,7 @@ pub mod parser_mts;
 pub mod parser_nefaz;
 pub mod parser_nornic;
 pub mod parser_pewete;
+pub mod parser_quadra;
 pub mod parser_salavat;
 pub mod parser_uds;
 pub mod parsers;
