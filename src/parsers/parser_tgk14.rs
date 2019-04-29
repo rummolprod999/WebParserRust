@@ -5,14 +5,11 @@ use self::select::document::Document;
 use self::select::node::Node;
 use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
-use crate::parsers::parsers::Attachment;
 use crate::settings::settings::FullSettingsParser;
-use crate::tenders::tender_quadra::TenderQuadra;
 use crate::tenders::tender_tgk14::TenderTgk14;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::datetimetools;
 use crate::toolslib::httptools;
-use crate::toolslib::regextools;
 use std::error;
 
 pub struct ParserTgk14<'a> {
