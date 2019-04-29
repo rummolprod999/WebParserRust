@@ -39,7 +39,7 @@ impl<'a> ParserTgk14<'a> {
         self.connect_string = c_s;
         let url_b = "https://www.tgk-14.com/trade/vesti.sections.php?&num_page=";
 
-        for d in 1..=3 {
+        for d in 3..=1 {
             let url = format!("{}{}", url_b, d);
             let page = httptools::HttpTools::get_page_text(&url);
             match page {
