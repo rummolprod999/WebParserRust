@@ -95,7 +95,7 @@ pub trait WebTender {
 
     fn get_placing_way_id(&self, pool: &my::Pool, pw_name: &str) -> Result<u64, Box<error::Error>> {
         if pw_name == ""{
-            return 0u64
+            return Ok(0u64)
         }
         let mut res = (pool.prep_exec(
             "SELECT id_placing_way FROM placing_way WHERE name = :name LIMIT 1",
