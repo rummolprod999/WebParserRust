@@ -125,7 +125,7 @@ impl<'a> ParserTgk14<'a> {
             &date_end_t,
             "%d.%m.%Y %H:%M:%S",
         )
-        .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+        .ok_or(format!("{} {}", "can not find date_end on tender", pur_num))?;
         let status = tender
             .find(Name("td"))
             .nth(6)
