@@ -32,6 +32,7 @@ pub enum Args {
     Quadra,
     Tgk14,
     Medsi,
+    Lada,
 }
 
 #[derive(Deserialize, Debug)]
@@ -70,6 +71,7 @@ impl fmt::Display for Args {
             Args::Quadra => write!(f, "quadra"),
             Args::Tgk14 => write!(f, "tgk14"),
             Args::Medsi => write!(f, "medsi"),
+            Args::Lada => write!(f, "lada"),
         }
     }
 }
@@ -165,7 +167,7 @@ pub fn get_argument() -> Option<Args> {
 
 pub fn check_args() -> Args {
     let arguments =
-        "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic, pewete, quadra, tgk14, medsi";
+        "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic, pewete, quadra, tgk14, medsi, lada";
     let matches = App::new("web_parser_rust")
         .version("1.0.0")
         .author("rummolprod999")
@@ -197,6 +199,7 @@ pub fn check_args() -> Args {
             "quadra" => Args::Quadra,
             "tgk14" => Args::Tgk14,
             "medsi" => Args::Medsi,
+            "lada" => Args::Lada,
             _ => {
                 println!("bad argument, use -h for help");
                 process::exit(0x0100);

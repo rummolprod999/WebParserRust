@@ -1,6 +1,7 @@
 pub mod parser_ahstep;
 pub mod parser_beeline;
 pub mod parser_kam_gb;
+pub mod parser_lada;
 pub mod parser_medsi;
 pub mod parser_megafon;
 pub mod parser_mts;
