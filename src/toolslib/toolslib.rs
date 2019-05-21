@@ -41,6 +41,35 @@ pub fn month_to_number(inp: &str) -> String {
     }
     return "".to_string();
 }
+
+pub fn replace_date_in_string(s: &str) -> String {
+    if s.contains("января") {
+        return s.replace("января", "01").replace(" ", ".");
+    } else if s.contains("февраля") {
+        return s.replace("февраля", "02").replace(" ", ".");
+    } else if s.contains("марта") {
+        return s.replace("марта", "03").replace(" ", ".");
+    } else if s.contains("апреля") {
+        return s.replace("апреля", "04").replace(" ", ".");
+    } else if s.contains("мая") {
+        return s.replace("мая", "05").replace(" ", ".");
+    } else if s.contains("июня") {
+        return s.replace("июня", "06").replace(" ", ".");
+    } else if s.contains("июля") {
+        return s.replace("июля", "07").replace(" ", ".");
+    } else if s.contains("августа") {
+        return s.replace("августа", "08").replace(" ", ".");
+    } else if s.contains("сентября") {
+        return s.replace("сентября", "09").replace(" ", ".");
+    } else if s.contains("октября") {
+        return s.replace("октября", "10").replace(" ", ".");
+    } else if s.contains("ноября") {
+        return s.replace("ноября", "11").replace(" ", ".");
+    } else if s.contains("декабря") {
+        return s.replace("декабря", "12").replace(" ", ".");
+    }
+    return "".to_string();
+}
 pub fn find_from_child_text<'a, 'b, T: Predicate>(
     find: &mut Find<'a, T>,
     err_str: &'a str,
