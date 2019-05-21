@@ -23,7 +23,6 @@ pub struct TenderLada<'a> {
     pub pur_num: String,
     pub pur_name: String,
     pub date_pub: DateTime<FixedOffset>,
-    pub date_end: DateTime<FixedOffset>,
     pub connect_string: &'a String,
 }
 
@@ -43,6 +42,7 @@ impl<'a> WebTender for TenderLada<'a> {
         let mut add_t = 0;
         let mut upd_t = 0;
         let pool = (my::Pool::new(self.connect_string))?;
+        Ok((add_t, upd_t))
     }
 }
 impl<'a> TenderLada<'a> {}

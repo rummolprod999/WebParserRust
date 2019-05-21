@@ -12,6 +12,35 @@ pub fn create_md5_str(inp: &str) -> String {
     res_str
 }
 
+pub fn month_to_number(inp: &str) -> String {
+    let lover = inp.to_lowercase();
+    if lover.contains("янв") {
+        return "01".to_string();
+    } else if lover.contains("февр") {
+        return "02".to_string();
+    } else if lover.contains("март") {
+        return "03".to_string();
+    } else if lover.contains("апр") {
+        return "04".to_string();
+    } else if lover.contains("мая") {
+        return "05".to_string();
+    } else if lover.contains("июн") {
+        return "06".to_string();
+    } else if lover.contains("июль") {
+        return "07".to_string();
+    } else if lover.contains("авг") {
+        return "08".to_string();
+    } else if lover.contains("сент") {
+        return "09".to_string();
+    } else if lover.contains("окт") {
+        return "10".to_string();
+    } else if lover.contains("нояб") {
+        return "11".to_string();
+    } else if lover.contains("дек") {
+        return "12".to_string();
+    }
+    return "".to_string();
+}
 pub fn find_from_child_text<'a, 'b, T: Predicate>(
     find: &mut Find<'a, T>,
     err_str: &'a str,
