@@ -13,6 +13,7 @@ use crate::toolslib::toolslib::replace_date_in_string;
 use crate::toolslib::{httptools, regextools};
 use chrono::prelude::*;
 use chrono::DateTime;
+use select::node::Node;
 use std::error;
 
 pub struct TenderLada<'a> {
@@ -154,7 +155,16 @@ impl<'a> TenderLada<'a> {
         id_tender: &u64,
         doc: &Document,
     ) -> Result<(), Box<error::Error>> {
-        let attachments = doc.find(Name("a").and(Class("item")).child(Name("a")));
+        let attachments = doc.find(Name("a").and(|x: &Node| {
+            if x.attr("href")
+                .map_or("".to_string(), |x| x.to_string())
+                .contains("/upload/")
+            {
+                true
+            } else {
+                false
+            }
+        }));
         for att in attachments {
             let url_att_t = att.attr("href").map_or("".to_string(), |x| x.to_string());
             let url_at = format!("https://lada-image.ru{}", url_att_t);
