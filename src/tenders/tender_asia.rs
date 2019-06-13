@@ -24,6 +24,9 @@ pub struct TenderAsia<'a> {
     pub pur_num: String,
     pub pur_name: String,
     pub date_pub: DateTime<FixedOffset>,
+    pub date_end: DateTime<FixedOffset>,
+    pub attach_url: String,
+    pub notice_ver: String,
     pub connect_string: &'a String,
 }
 

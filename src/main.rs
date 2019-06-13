@@ -6,11 +6,11 @@ extern crate log4rs;
 use std::process;
 use web_parser_rust::parsers::parsers::WebParserTenders;
 use web_parser_rust::parsers::{
-    parser_ahstep::ParserAhstep, parser_beeline::ParserBeeline, parser_kam_gb::ParserKamgb,
-    parser_lada::ParserLada, parser_medsi::ParserMedsi, parser_megafon::ParserMegafon,
-    parser_mts::ParserMts, parser_nefaz::ParserNefaz, parser_nornic::ParserNornic,
-    parser_pewete::ParserPewete, parser_quadra::ParserQuadra, parser_salavat::ParserSalavat,
-    parser_tgk14::ParserTgk14, parser_uds::ParserUds, parser_asia::ParserAsia,
+    parser_ahstep::ParserAhstep, parser_asia::ParserAsia, parser_beeline::ParserBeeline,
+    parser_kam_gb::ParserKamgb, parser_lada::ParserLada, parser_medsi::ParserMedsi,
+    parser_megafon::ParserMegafon, parser_mts::ParserMts, parser_nefaz::ParserNefaz,
+    parser_nornic::ParserNornic, parser_pewete::ParserPewete, parser_quadra::ParserQuadra,
+    parser_salavat::ParserSalavat, parser_tgk14::ParserTgk14, parser_uds::ParserUds,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
