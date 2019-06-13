@@ -10,7 +10,7 @@ use web_parser_rust::parsers::{
     parser_lada::ParserLada, parser_medsi::ParserMedsi, parser_megafon::ParserMegafon,
     parser_mts::ParserMts, parser_nefaz::ParserNefaz, parser_nornic::ParserNornic,
     parser_pewete::ParserPewete, parser_quadra::ParserQuadra, parser_salavat::ParserSalavat,
-    parser_tgk14::ParserTgk14, parser_uds::ParserUds,
+    parser_tgk14::ParserTgk14, parser_uds::ParserUds, parser_asia::ParserAsia,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -66,6 +66,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Lada => {
             parser_lada(set);
+        }
+        Args::Asia => {
+            parser_asia(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -216,6 +219,16 @@ fn parser_medsi(set: &FullSettingsParser) {
 
 fn parser_lada(set: &FullSettingsParser) {
     let mut p = ParserLada {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_asia(set: &FullSettingsParser) {
+    let mut p = ParserAsia {
         add_tender: 0,
         upd_tender: 0,
         settings: set,
