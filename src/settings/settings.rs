@@ -171,7 +171,7 @@ pub fn check_args() -> Args {
     let arguments =
         "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic, pewete, quadra, tgk14, medsi, lada, asia";
     let matches = App::new("web_parser_rust")
-        .version("1.15.0")
+        .version("1.16.0")
         .author("rummolprod999")
         .about("web_parser_rust")
         .arg(

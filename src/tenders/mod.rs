@@ -13,4 +13,5 @@ pub mod tender_quadra;
 pub mod tender_salavat;
 pub mod tender_tgk14;
 pub mod tender_uds;
+pub mod tender_eldorado;
 pub mod tenders;
