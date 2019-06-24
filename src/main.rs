@@ -4,7 +4,6 @@ extern crate log;
 extern crate log4rs;
 
 use std::process;
-use web_parser_rust::parsers::parser_eldorado::ParserEldorado;
 use web_parser_rust::parsers::parsers::WebParserTenders;
 use web_parser_rust::parsers::{
     parser_ahstep::ParserAhstep, parser_asia::ParserAsia, parser_beeline::ParserBeeline,

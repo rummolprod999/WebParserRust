@@ -38,18 +38,20 @@ impl<'a> ParserEldorado<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://www.eldorado.ru/company/tenders/";
-        let page = httptools::HttpTools::get_page_text(&url);
+        let url = "http://www.eldorado.ru/company/tenders/";
+        let page = httptools::HttpTools::get_page_from_wget_1251(&url);
         match page {
-            Some(p) => {
+            Ok(p) => {
                 self.get_tenders_from_page(p);
             }
-            None => {
-                warn!("can not get start page {}", url);
+            Err(e) => {
+                warn!("can not get start page {} {}", url, e);
                 return;
             }
         }
     }
 
-    fn get_tenders_from_page(&mut self, page_text: String) {}
+    fn get_tenders_from_page(&mut self, page_text: String) {
+        println!("{}", page_text);
+    }
 }

@@ -1,6 +1,8 @@
 use std::error::Error;
 use std::io::Read;
 use std::option::Option;
+use std::process::Command;
+use std::process::Stdio;
 
 pub struct HttpTools {}
 
@@ -54,5 +56,28 @@ impl HttpTools {
         let mut res = reqwest::get(url)?;
         let x = res.text()?;
         Ok(x)
+    }
+
+    pub fn get_page_from_wget_1251(url: &str) -> Result<String, Box<Error>> {
+        let output = Command::new("wget")
+            .args(&[
+                "--header='Accept-Charset: windows-1251'",
+                "-q",
+                "-O",
+                "-",
+                url,
+                " | iconv -f cp1251",
+            ])
+            .stdout(Stdio::piped())
+            .spawn()?
+            .stdout
+            .ok_or("error in child process wget")?;
+        let out = Command::new("iconv")
+            .args(&["-f", "cp1251"])
+            .stdin(output)
+            .output()?
+            .stdout;
+        let s = String::from_utf8(out)?;
+        Ok(s)
     }
 }
