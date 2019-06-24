@@ -75,7 +75,7 @@ impl fmt::Display for Args {
             Args::Medsi => write!(f, "medsi"),
             Args::Lada => write!(f, "lada"),
             Args::Asia => write!(f, "asia"),
-            Args::Eldorado => write!(f, "asia"),
+            Args::Eldorado => write!(f, "eldorado"),
         }
     }
 }
