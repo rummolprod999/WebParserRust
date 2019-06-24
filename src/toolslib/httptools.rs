@@ -66,7 +66,6 @@ impl HttpTools {
                 "-O",
                 "-",
                 url,
-                " | iconv -f cp1251",
             ])
             .stdout(Stdio::piped())
             .spawn()?
