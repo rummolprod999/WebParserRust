@@ -6,12 +6,11 @@ use self::select::node::Node;
 use self::select::predicate::{Class, Name, Not, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
-use crate::tenders::tender_asia::TenderAsia;
 use crate::tenders::tender_eldorado::TenderEldorado;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::datetimetools::DateTimeTools;
+use crate::toolslib::httptools;
 use crate::toolslib::toolslib;
-use crate::toolslib::{httptools, regextools};
 use std::error;
 
 pub struct ParserEldorado<'a> {
