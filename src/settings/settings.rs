@@ -34,6 +34,7 @@ pub enum Args {
     Medsi,
     Lada,
     Asia,
+    Eldorado,
 }
 
 #[derive(Deserialize, Debug)]
@@ -74,6 +75,7 @@ impl fmt::Display for Args {
             Args::Medsi => write!(f, "medsi"),
             Args::Lada => write!(f, "lada"),
             Args::Asia => write!(f, "asia"),
+            Args::Eldorado => write!(f, "asia"),
         }
     }
 }
@@ -169,7 +171,7 @@ pub fn get_argument() -> Option<Args> {
 
 pub fn check_args() -> Args {
     let arguments =
-        "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic, pewete, quadra, tgk14, medsi, lada, asia";
+        "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic, pewete, quadra, tgk14, medsi, lada, asia, eldorado";
     let matches = App::new("web_parser_rust")
         .version("1.16.0")
         .author("rummolprod999")
@@ -203,6 +205,7 @@ pub fn check_args() -> Args {
             "medsi" => Args::Medsi,
             "lada" => Args::Lada,
             "asia" => Args::Asia,
+            "eldorado" => Args::Eldorado,
             _ => {
                 println!("bad argument, use -h for help");
                 process::exit(0x0100);
