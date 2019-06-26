@@ -6,12 +6,10 @@ use self::select::node::Node;
 use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
-use crate::tenders::tender_asia::TenderAsia;
 use crate::tenders::tender_mosobl::TenderMosobl;
 use crate::tenders::tenders::WebTender;
-use crate::toolslib::datetimetools::DateTimeTools;
-use crate::toolslib::{datetimetools, toolslib};
-use crate::toolslib::{httptools, regextools};
+use crate::toolslib::{datetimetools};
+use crate::toolslib::{httptools};
 use std::error;
 
 pub struct ParserMosobl<'a> {
