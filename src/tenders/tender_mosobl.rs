@@ -38,9 +38,9 @@ impl<'a> WebTender for TenderMosobl<'a> {
     fn parser_unwrap(&self) -> Result<(i32, i32), Box<error::Error>> {
         let date_upd = DateTimeTools::return_datetime_now();
         let mut add_t = 0;
-        let mut upd_t = 0;}
+        let mut upd_t = 0;
+        Ok((add_t, upd_t))
+    }
 }
 
-impl<'a> TenderMosobl<'a> {
-
-}
+impl<'a> TenderMosobl<'a> {}

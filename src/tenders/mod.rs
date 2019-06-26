@@ -6,6 +6,7 @@ pub mod tender_kamgb;
 pub mod tender_lada;
 pub mod tender_medsi;
 pub mod tender_megafon;
+pub mod tender_mosobl;
 pub mod tender_mts;
 pub mod tender_nefaz;
 pub mod tender_nornic;
