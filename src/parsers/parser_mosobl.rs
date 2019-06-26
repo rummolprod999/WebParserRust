@@ -108,7 +108,10 @@ impl<'a> ParserMosobl<'a> {
             .text()
             .replace("0019", "2019");
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+            .ok_or(format!(
+                "{} {} {}",
+                "can not find date_pub on tender", pur_num, date_pub_t
+            ))?;
         let date_end_t = tender
             .find(Name("td"))
             .nth(1)
@@ -117,7 +120,13 @@ impl<'a> ParserMosobl<'a> {
             .replace("0019", "2019");
         let date_end =
             datetimetools::DateTimeTools::get_datetime_from_string(&date_end_t, "%d.%m.%Y %H:%M")
-                .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+                .or_else(|| {
+                    datetimetools::DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y")
+                })
+                .ok_or(format!(
+                    "{} {} {}",
+                    "can not find date_end on tender", pur_num, date_pub_t
+                ))?;
         let tn = TenderMosobl {
             type_fz: 199,
             etp_name: "ПАО МОСОБЛБАНК".to_string(),
