@@ -15,12 +15,12 @@ pub struct TenderMosobl<'a> {
     pub type_fz: i32,
     pub etp_name: String,
     pub etp_url: String,
-    pub href: String,
+    pub href: &'a String,
     pub pur_num: String,
     pub pur_name: String,
     pub date_pub: DateTime<FixedOffset>,
     pub date_end: DateTime<FixedOffset>,
-    pub attach_url: String,
+    pub attach_url: &'a String,
     pub connect_string: &'a String,
 }
 
