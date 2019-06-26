@@ -8,8 +8,8 @@ use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_mosobl::TenderMosobl;
 use crate::tenders::tenders::WebTender;
-use crate::toolslib::{datetimetools};
-use crate::toolslib::{httptools};
+use crate::toolslib::datetimetools;
+use crate::toolslib::httptools;
 use std::error;
 
 pub struct ParserMosobl<'a> {
@@ -105,14 +105,16 @@ impl<'a> ParserMosobl<'a> {
             .find(Name("td"))
             .nth(0)
             .ok_or("can not find date_pub_t on tender")?
-            .text();
+            .text()
+            .replace("0019", "2019");
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
             .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
         let date_end_t = tender
             .find(Name("td"))
             .nth(1)
             .ok_or("can not find date_end_t on tender")?
-            .text();
+            .text()
+            .replace("0019", "2019");
         let date_end =
             datetimetools::DateTimeTools::get_datetime_from_string(&date_end_t, "%d.%m.%Y %H:%M")
                 .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
