@@ -6,10 +6,11 @@ use self::select::node::Node;
 use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
+use crate::tenders::tender_baltika::TenderBaltika;
 use crate::tenders::tender_mosobl::TenderMosobl;
 use crate::tenders::tenders::WebTender;
-use crate::toolslib::{datetimetools, toolslib};
 use crate::toolslib::httptools;
+use crate::toolslib::{datetimetools, toolslib};
 use std::error;
 
 pub struct ParserBaltika<'a> {
@@ -82,9 +83,36 @@ impl<'a> ParserBaltika<'a> {
             .attr("href")
             .ok_or("can not find href attr on href_t")?;
         let href = format!("https://corporate.baltika.ru{}", href_t);
-
-        println!("{}", pur_name);
-        println!("{}", href);
+        let date_pub_t = tender
+            .find(Name("time").and(Class("news-list__result-date")))
+            .nth(0)
+            .ok_or(format!(
+                "{} {}",
+                "can not find date_pub_t on tender", pur_name
+            ))?
+            .text()
+            .trim()
+            .to_string();
+        let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
+            .ok_or(format!(
+                "{} {} {}",
+                "can not find date_pub on tender", pur_num, date_pub_t
+            ))?;
+        let date_end = date_pub.clone();
+        let tn = TenderBaltika {
+            type_fz: 200,
+            etp_name: "«Балтика»".to_string(),
+            etp_url: "https://corporate.baltika.ru/".to_string(),
+            href: &href,
+            pur_num,
+            pur_name,
+            date_pub,
+            date_end,
+            connect_string: &self.connect_string,
+        };
+        let (addt, updt) = tn.parser();
+        self.add_tender += addt;
+        self.upd_tender += updt;
         Ok(())
     }
 }
