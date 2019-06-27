@@ -15,4 +15,5 @@ pub mod parser_quadra;
 pub mod parser_salavat;
 pub mod parser_tgk14;
 pub mod parser_uds;
+pub mod parser_baltika;
 pub mod parsers;
