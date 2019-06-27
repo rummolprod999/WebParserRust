@@ -7,7 +7,6 @@ use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_baltika::TenderBaltika;
-use crate::tenders::tender_mosobl::TenderMosobl;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::httptools;
 use crate::toolslib::{datetimetools, toolslib};
