@@ -1,5 +1,6 @@
 pub mod tender_ahstep;
 pub mod tender_asia;
+pub mod tender_baltika;
 pub mod tender_beeline;
 pub mod tender_eldorado;
 pub mod tender_kamgb;
@@ -15,5 +16,4 @@ pub mod tender_quadra;
 pub mod tender_salavat;
 pub mod tender_tgk14;
 pub mod tender_uds;
-pub mod tender_baltika;
 pub mod tenders;

@@ -51,6 +51,6 @@ impl<'a> ParserBaltika<'a> {
     }
 
     fn get_tenders_from_page(&mut self, page_text: String) {
-println!("{}", page_text);
+        println!("{}", page_text);
     }
 }

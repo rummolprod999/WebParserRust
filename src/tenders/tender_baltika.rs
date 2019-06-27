@@ -38,9 +38,8 @@ impl<'a> WebTender for TenderBaltika<'a> {
         let date_upd = DateTimeTools::return_datetime_now();
         let mut add_t = 0;
         let mut upd_t = 0;
-        Ok((add_t, upd_t))}
+        Ok((add_t, upd_t))
+    }
 }
 
-impl<'a> TenderBaltika<'a> {
-
-}
+impl<'a> TenderBaltika<'a> {}
