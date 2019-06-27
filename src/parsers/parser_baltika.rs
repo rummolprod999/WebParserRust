@@ -8,7 +8,7 @@ use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_mosobl::TenderMosobl;
 use crate::tenders::tenders::WebTender;
-use crate::toolslib::datetimetools;
+use crate::toolslib::{datetimetools, toolslib};
 use crate::toolslib::httptools;
 use std::error;
 
@@ -51,6 +51,40 @@ impl<'a> ParserBaltika<'a> {
     }
 
     fn get_tenders_from_page(&mut self, page_text: String) {
-        println!("{}", page_text);
+        let document = Document::from(&*page_text);
+        for ten in document.find(
+            Name("div")
+                .and(Class("news-list__result-records"))
+                .child(Name("div").and(Class("news-list__result"))),
+        ) {
+            match self.parser_tender(ten) {
+                Ok(_) => (),
+                Err(e) => {
+                    error!("{}", e);
+                }
+            }
+        }
+    }
+
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+        let pur_name = tender
+            .find(Name("h2").and(Class("news-list__result-title")))
+            .nth(0)
+            .ok_or(format!("{} {}", "can not find  pur_name on tender", ""))?
+            .text()
+            .trim()
+            .to_string();
+        let pur_num = toolslib::create_md5_str(&pur_name);
+        let href_t = tender
+            .find(Name("a"))
+            .next()
+            .ok_or("can not find href_t on tender")?
+            .attr("href")
+            .ok_or("can not find href attr on href_t")?;
+        let href = format!("https://corporate.baltika.ru{}", href_t);
+
+        println!("{}", pur_name);
+        println!("{}", href);
+        Ok(())
     }
 }
