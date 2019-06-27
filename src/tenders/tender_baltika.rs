@@ -20,7 +20,6 @@ pub struct TenderBaltika<'a> {
     pub pur_name: String,
     pub date_pub: DateTime<FixedOffset>,
     pub date_end: DateTime<FixedOffset>,
-    pub attach_url: &'a String,
     pub connect_string: &'a String,
 }
 

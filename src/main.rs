@@ -11,7 +11,7 @@ use web_parser_rust::parsers::{
     parser_medsi::ParserMedsi, parser_megafon::ParserMegafon, parser_mosobl::ParserMosobl,
     parser_mts::ParserMts, parser_nefaz::ParserNefaz, parser_nornic::ParserNornic,
     parser_pewete::ParserPewete, parser_quadra::ParserQuadra, parser_salavat::ParserSalavat,
-    parser_tgk14::ParserTgk14, parser_uds::ParserUds,
+    parser_tgk14::ParserTgk14, parser_uds::ParserUds, parser_baltika::ParserBaltika,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -76,6 +76,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Mosobl => {
             parser_mosobl(set);
+        }
+        Args::Baltika => {
+            parser_baltika(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -256,6 +259,17 @@ fn parser_eldorado(set: &FullSettingsParser) {
 
 fn parser_mosobl(set: &FullSettingsParser) {
     let mut p = ParserMosobl {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+
+fn parser_baltika(set: &FullSettingsParser) {
+    let mut p = ParserBaltika {
         add_tender: 0,
         upd_tender: 0,
         settings: set,
