@@ -112,7 +112,6 @@ impl<'a> ParserAlfa<'a> {
         let (addt, updt) = tn.parser();
         self.add_tender += addt;
         self.upd_tender += updt;
-        println!("{:?}", date_pub);
         Ok(())
     }
 }
