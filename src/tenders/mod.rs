@@ -15,6 +15,7 @@ pub mod tender_nornic;
 pub mod tender_pewete;
 pub mod tender_quadra;
 pub mod tender_salavat;
+pub mod tender_smp;
 pub mod tender_tgk14;
 pub mod tender_uds;
 pub mod tenders;

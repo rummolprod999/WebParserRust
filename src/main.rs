@@ -11,8 +11,8 @@ use web_parser_rust::parsers::{
     parser_kam_gb::ParserKamgb, parser_lada::ParserLada, parser_medsi::ParserMedsi,
     parser_megafon::ParserMegafon, parser_mosobl::ParserMosobl, parser_mts::ParserMts,
     parser_nefaz::ParserNefaz, parser_nornic::ParserNornic, parser_pewete::ParserPewete,
-    parser_quadra::ParserQuadra, parser_salavat::ParserSalavat, parser_tgk14::ParserTgk14,
-    parser_uds::ParserUds,
+    parser_quadra::ParserQuadra, parser_salavat::ParserSalavat, parser_smp::ParserSmp,
+    parser_tgk14::ParserTgk14, parser_uds::ParserUds,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -83,6 +83,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Alfa => {
             parser_alfa(set);
+        }
+        Args::Smp => {
+            parser_smp(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -283,6 +286,16 @@ fn parser_baltika(set: &FullSettingsParser) {
 
 fn parser_alfa(set: &FullSettingsParser) {
     let mut p = ParserAlfa {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_smp(set: &FullSettingsParser) {
+    let mut p = ParserSmp {
         add_tender: 0,
         upd_tender: 0,
         settings: set,
