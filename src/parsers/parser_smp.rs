@@ -26,7 +26,7 @@ impl<'a> WebParserTenders for ParserSmp<'a> {
     }
 }
 
-impl<'a> ParserMosobl<'a> {
+impl<'a> ParserSmp<'a> {
     pub fn try_parsing(&mut self) {
         let c_s = format!(
             "mysql://{}:{}@{}:{}/{}",
