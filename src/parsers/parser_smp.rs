@@ -108,6 +108,9 @@ impl<'a> ParserSmp<'a> {
             .text()
             .replace("0019", "2019");
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
+            .or_else(|| {
+                datetimetools::DateTimeTools::get_datetime_from_string(&date_pub_t, "%d.%m.%Y %H:%M")
+            })
             .ok_or(format!(
                 "{} {} {}",
                 "can not find date_pub on tender", pur_num, date_pub_t
