@@ -7,7 +7,6 @@ use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_am::TenderAm;
-use crate::tenders::tender_smp::TenderSmp;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::httptools;
 use crate::toolslib::{datetimetools, regextools, toolslib};
@@ -107,7 +106,7 @@ impl<'a> ParserAm<'a> {
         .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
         let date_end = date_pub.clone();
         let tn = TenderAm {
-            type_fz: 202,
+            type_fz: 209,
             etp_name: "МИНИСТЕРСТВО ФИНАНСОВ РЕСПУБЛИКИ АРМЕНИЯ"
                 .to_string(),
             etp_url: "http://procurement.am/".to_string(),
