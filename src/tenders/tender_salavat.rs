@@ -142,7 +142,11 @@ impl<'a> TenderSalavat<'a> {
         (pool.prep_exec("INSERT INTO purchase_object SET id_lot = :id_lot, id_customer = :id_customer, name = :name", params! {"id_lot" => id_lot, "id_customer" => id_customer, "name" => &self.pur_name}))?;
         Ok(())
     }
-    fn insert_attachment(&self, pool: &my::Pool, id_tender: &u64) -> Result<(), Box<dyn error::Error>> {
+    fn insert_attachment(
+        &self,
+        pool: &my::Pool,
+        id_tender: &u64,
+    ) -> Result<(), Box<dyn error::Error>> {
         for att in &self.attachments {
             (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => &att.name_file, "url" => &att.url_file}))?;
         }

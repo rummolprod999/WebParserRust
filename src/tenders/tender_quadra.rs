@@ -144,7 +144,11 @@ impl<'a> TenderQuadra<'a> {
         Ok(())
     }
 
-    fn insert_attachment(&self, pool: &my::Pool, id_tender: &u64) -> Result<(), Box<dyn error::Error>> {
+    fn insert_attachment(
+        &self,
+        pool: &my::Pool,
+        id_tender: &u64,
+    ) -> Result<(), Box<dyn error::Error>> {
         for att in &self.attachments {
             (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => &att.name_file, "url" => &att.url_file}))?;
         }

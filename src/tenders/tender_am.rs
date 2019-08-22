@@ -42,9 +42,6 @@ impl<'a> WebTender for TenderAm<'a> {
         let pool = (my::Pool::new(self.connect_string))?;
         Ok((add_t, upd_t))
     }
-
 }
 
-impl<'a> TenderAm<'a> {
-
-}
+impl<'a> TenderAm<'a> {}

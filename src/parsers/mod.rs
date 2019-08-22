@@ -1,5 +1,6 @@
 pub mod parser_ahstep;
 pub mod parser_alfa;
+pub mod parser_am;
 pub mod parser_asia;
 pub mod parser_baltika;
 pub mod parser_beeline;
@@ -18,5 +19,4 @@ pub mod parser_salavat;
 pub mod parser_smp;
 pub mod parser_tgk14;
 pub mod parser_uds;
-pub mod parser_am;
 pub mod parsers;

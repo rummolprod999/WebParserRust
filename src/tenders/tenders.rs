@@ -93,7 +93,11 @@ pub trait WebTender {
         }
     }
 
-    fn get_placing_way_id(&self, pool: &my::Pool, pw_name: &str) -> Result<u64, Box<dyn error::Error>> {
+    fn get_placing_way_id(
+        &self,
+        pool: &my::Pool,
+        pw_name: &str,
+    ) -> Result<u64, Box<dyn error::Error>> {
         if pw_name == "" {
             return Ok(0u64);
         }

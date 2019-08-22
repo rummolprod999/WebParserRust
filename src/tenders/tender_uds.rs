@@ -131,7 +131,11 @@ impl<'a> TenderUds<'a> {
         let res_insert = (pool.prep_exec("INSERT INTO lot SET id_tender = :id_tender, lot_number = :lot_number, currency = :currency", params! {"id_tender" => id_tender, "lot_number" => 1, "currency" => ""}))?;
         return Ok(res_insert.last_insert_id());
     }
-    fn insert_attachment(&self, pool: &my::Pool, id_tender: &u64) -> Result<(), Box<dyn error::Error>> {
+    fn insert_attachment(
+        &self,
+        pool: &my::Pool,
+        id_tender: &u64,
+    ) -> Result<(), Box<dyn error::Error>> {
         (pool.prep_exec(
             "INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url",
             params! {"id_tender" => id_tender, "file_name" => "Документация", "url" => &self.href},

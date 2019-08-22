@@ -125,7 +125,11 @@ impl<'a> TenderAsia<'a> {
         Ok(())
     }
 
-    fn insert_attachment(&self, pool: &my::Pool, id_tender: &u64) -> Result<(), Box<dyn error::Error>> {
+    fn insert_attachment(
+        &self,
+        pool: &my::Pool,
+        id_tender: &u64,
+    ) -> Result<(), Box<dyn error::Error>> {
         (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => "Документация", "url" => &self.attach_url}))?;
         Ok(())
     }
