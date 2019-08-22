@@ -69,7 +69,7 @@ impl<'a> ParserAhstep<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let a_t = tender
             .find(Name("p").and(Class("tender-title")).child(Name("a")))
             .next()

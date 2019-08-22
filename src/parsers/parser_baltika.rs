@@ -66,7 +66,7 @@ impl<'a> ParserBaltika<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let pur_name = tender
             .find(Name("h2").and(Class("news-list__result-title")))
             .nth(0)

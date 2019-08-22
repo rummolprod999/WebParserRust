@@ -26,7 +26,7 @@ impl HttpTools {
         s
     }
 
-    pub fn try_get_page(url: &str) -> Result<String, Box<Error>> {
+    pub fn try_get_page(url: &str) -> Result<String, Box<dyn Error>> {
         let mut res = reqwest::get(url)?;
         let mut body = String::new();
         res.read_to_string(&mut body)?;
@@ -52,13 +52,13 @@ impl HttpTools {
         s
     }
 
-    pub fn try_get_page1251(url: &str) -> Result<String, Box<Error>> {
+    pub fn try_get_page1251(url: &str) -> Result<String, Box<dyn Error>> {
         let mut res = reqwest::get(url)?;
         let x = res.text()?;
         Ok(x)
     }
 
-    pub fn get_page_from_wget_1251(url: &str) -> Result<String, Box<Error>> {
+    pub fn get_page_from_wget_1251(url: &str) -> Result<String, Box<dyn Error>> {
         let output = Command::new("wget")
             .args(&[
                 "--header='Accept-Charset: windows-1251'",

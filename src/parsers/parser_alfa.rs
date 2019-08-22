@@ -66,7 +66,7 @@ impl<'a> ParserAlfa<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let pur_name = tender
             .find(Name("div").and(Class("title")))
             .nth(0)

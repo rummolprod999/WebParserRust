@@ -38,7 +38,7 @@ impl<'a> WebTender for TenderBeeline<'a> {
         };
         res
     }
-    fn parser_unwrap(&self) -> Result<(i32, i32), Box<error::Error>> {
+    fn parser_unwrap(&self) -> Result<(i32, i32), Box<dyn error::Error>> {
         let page = httptools::HttpTools::get_page_text(&self.href)
             .ok_or(format!("can not download page {}", &self.href))?;
         let date_upd = DateTimeTools::return_datetime_now();
@@ -104,7 +104,7 @@ impl<'a> WebTender for TenderBeeline<'a> {
 }
 
 impl<'a> TenderBeeline<'a> {
-    fn get_org_id(&self, pool: &my::Pool) -> Result<u64, Box<error::Error>> {
+    fn get_org_id(&self, pool: &my::Pool) -> Result<u64, Box<dyn error::Error>> {
         let mut res = (pool.prep_exec(
             "SELECT id_organizer FROM organizer WHERE full_name = :full_name",
             params! {"full_name" => &self.etp_name},
@@ -137,12 +137,12 @@ impl<'a> TenderBeeline<'a> {
         cancel_status: &i32,
         date_pub: &DateTime<FixedOffset>,
         date_end: &DateTime<FixedOffset>,
-    ) -> Result<u64, Box<error::Error>> {
+    ) -> Result<u64, Box<dyn error::Error>> {
         let res_insert = (pool.prep_exec("INSERT INTO tender SET id_xml = :id_xml, purchase_number = :purchase_number, doc_publish_date = :doc_publish_date, href = :href, purchase_object_info = :purchase_object_info, type_fz = :type_fz, id_organizer = :id_organizer, id_placing_way = :id_placing_way, id_etp = :id_etp, end_date = :end_date, cancel = :cancel, date_version = :date_version, num_version = :num_version, xml = :xml, print_form = :print_form, id_region = :id_region, notice_version = :notice_version", params! {"id_xml" => &self.pur_num, "purchase_number" => &self.pur_num, "doc_publish_date" => &date_pub.naive_local(), "href" => &self.href, "purchase_object_info" => &self.pur_name, "type_fz" => &self.type_fz, "id_organizer" => id_organizer, "id_placing_way" => id_placing_way, "id_etp" => id_etp, "end_date" => &date_end.naive_local(), "cancel" => cancel_status, "date_version" => &date_upd.naive_local(), "num_version" => 1, "xml" => &self.href, "print_form" => &self.href, "id_region" => 0, "notice_version" => ""}))?;
         return Ok(res_insert.last_insert_id());
     }
 
-    fn get_cus_id(&self, pool: &my::Pool) -> Result<u64, Box<error::Error>> {
+    fn get_cus_id(&self, pool: &my::Pool) -> Result<u64, Box<dyn error::Error>> {
         let cus_name = format!("{} {}", &self.etp_name, &self.etp_name);
         let mut res = (pool.prep_exec(
             "SELECT id_customer FROM customer WHERE full_name = :full_name",
@@ -161,7 +161,7 @@ impl<'a> TenderBeeline<'a> {
             return Ok(res_insert.last_insert_id());
         }
     }
-    fn get_lot_id(&self, pool: &my::Pool, id_tender: &u64) -> Result<u64, Box<error::Error>> {
+    fn get_lot_id(&self, pool: &my::Pool, id_tender: &u64) -> Result<u64, Box<dyn error::Error>> {
         let res_insert = (pool.prep_exec("INSERT INTO lot SET id_tender = :id_tender, lot_number = :lot_number, currency = :currency", params! {"id_tender" => id_tender, "lot_number" => 1, "currency" => ""}))?;
         return Ok(res_insert.last_insert_id());
     }
@@ -170,7 +170,7 @@ impl<'a> TenderBeeline<'a> {
         pool: &my::Pool,
         id_lot: &u64,
         id_customer: &u64,
-    ) -> Result<(), Box<error::Error>> {
+    ) -> Result<(), Box<dyn error::Error>> {
         (pool.prep_exec("INSERT INTO purchase_object SET id_lot = :id_lot, id_customer = :id_customer, name = :name", params! {"id_lot" => id_lot, "id_customer" => id_customer, "name" => &self.pur_name}))?;
         Ok(())
     }

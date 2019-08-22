@@ -65,7 +65,7 @@ impl<'a> ParserKamgb<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let a_t = tender
             .find(Class("tender__name").and(Name("div")).child(Name("a")))
             .next()

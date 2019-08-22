@@ -70,7 +70,7 @@ impl<'a> ParserPewete<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let mut pur_num = tender
             .find(Name("td"))
             .nth(0)

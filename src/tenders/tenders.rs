@@ -12,7 +12,7 @@ use std::error;
 
 pub trait WebTender {
     fn parser(&self) -> (i32, i32);
-    fn parser_unwrap(&self) -> Result<(i32, i32), Box<error::Error>>;
+    fn parser_unwrap(&self) -> Result<(i32, i32), Box<dyn error::Error>>;
 
     fn ret_cancel_status(
         &self,
@@ -20,7 +20,7 @@ pub trait WebTender {
         type_fz: i32,
         pur_num: &String,
         date_upd: &DateTime<FixedOffset>,
-    ) -> Result<(i32, bool), Box<error::Error>> {
+    ) -> Result<(i32, bool), Box<dyn error::Error>> {
         let d_upd = &date_upd.naive_local();
         let mut cancel = 0;
         let mut upd = false;
@@ -73,7 +73,7 @@ pub trait WebTender {
         pool: &my::Pool,
         etp_name: &str,
         etp_url: &str,
-    ) -> Result<u64, Box<error::Error>> {
+    ) -> Result<u64, Box<dyn error::Error>> {
         let mut res = (pool.prep_exec(
             "SELECT id_etp FROM etp WHERE name = :name AND url = :url LIMIT 1",
             params! {"name" => etp_name, "url" => etp_url},
@@ -93,7 +93,7 @@ pub trait WebTender {
         }
     }
 
-    fn get_placing_way_id(&self, pool: &my::Pool, pw_name: &str) -> Result<u64, Box<error::Error>> {
+    fn get_placing_way_id(&self, pool: &my::Pool, pw_name: &str) -> Result<u64, Box<dyn error::Error>> {
         if pw_name == "" {
             return Ok(0u64);
         }
@@ -129,7 +129,7 @@ pub trait WebTender {
         pool: &my::Pool,
         type_fz: i32,
         pur_num: &String,
-    ) -> Result<(), Box<error::Error>> {
+    ) -> Result<(), Box<dyn error::Error>> {
         let mut ver_num = 1;
         let res = (pool.prep_exec("SELECT id_tender FROM tender WHERE purchase_number = :purchase_number AND type_fz = :type_fz ORDER BY UNIX_TIMESTAMP(date_version) ASC", params! {"purchase_number" => pur_num, "type_fz" => type_fz}))?;
         for r in res.into_iter() {
@@ -147,7 +147,7 @@ pub trait WebTender {
         &self,
         pool: &my::Pool,
         id_tender: &u64,
-    ) -> Result<(), Box<error::Error>> {
+    ) -> Result<(), Box<dyn error::Error>> {
         let mut s = "".to_string();
         let res_po = (pool.prep_exec("SELECT DISTINCT po.name, po.okpd_name FROM purchase_object AS po LEFT JOIN lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = :id_tender", params! {"id_tender" => id_tender}))?;
         for r_po in res_po.into_iter() {

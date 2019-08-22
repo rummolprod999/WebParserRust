@@ -63,7 +63,7 @@ impl<'a> ParserAsia<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let href = "https://asiacement.ru/tendery-i-zakupki".to_string();
         let pur_name = tender
             .find(Name("div").and(Class("tenders-line__item_title")))

@@ -74,7 +74,7 @@ pub fn find_from_child_text<'a, 'b, T: Predicate>(
     find: &mut Find<'a, T>,
     err_str: &'a str,
     find_str: &'a str,
-) -> Result<Node<'a>, Box<error::Error>> {
+) -> Result<Node<'a>, Box<dyn error::Error>> {
     while let Some(n) = find.next() {
         if n.text().contains(find_str) {
             return Ok(n);
@@ -89,7 +89,7 @@ pub trait FindExt<P> {
         p: P,
         err_str: &str,
         find_str: &str,
-    ) -> Result<Node, Box<error::Error>>;
+    ) -> Result<Node, Box<dyn error::Error>>;
 }
 
 impl<'a, P: Predicate> FindExt<P> for Node<'a> {
@@ -98,7 +98,7 @@ impl<'a, P: Predicate> FindExt<P> for Node<'a> {
         p: P,
         err_str: &str,
         find_str: &str,
-    ) -> Result<Node, Box<error::Error>> {
+    ) -> Result<Node, Box<dyn error::Error>> {
         let mut res = self.find(p);
         while let Some(n) = res.next() {
             if n.text().contains(find_str) {

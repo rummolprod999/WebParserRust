@@ -73,7 +73,7 @@ impl<'a> ParserSalavat<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node, url: &String) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node, url: &String) -> Result<(), Box<dyn error::Error>> {
         let pur_name = tender
             .find(Name("td"))
             .next()

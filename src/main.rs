@@ -12,7 +12,7 @@ use web_parser_rust::parsers::{
     parser_megafon::ParserMegafon, parser_mosobl::ParserMosobl, parser_mts::ParserMts,
     parser_nefaz::ParserNefaz, parser_nornic::ParserNornic, parser_pewete::ParserPewete,
     parser_quadra::ParserQuadra, parser_salavat::ParserSalavat, parser_smp::ParserSmp,
-    parser_tgk14::ParserTgk14, parser_uds::ParserUds,
+    parser_tgk14::ParserTgk14, parser_uds::ParserUds, parser_am::ParserAm,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -86,6 +86,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Smp => {
             parser_smp(set);
+        }
+        Args::Am => {
+            parser_am(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -296,6 +299,16 @@ fn parser_alfa(set: &FullSettingsParser) {
 
 fn parser_smp(set: &FullSettingsParser) {
     let mut p = ParserSmp {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_am(set: &FullSettingsParser) {
+    let mut p = ParserAm {
         add_tender: 0,
         upd_tender: 0,
         settings: set,

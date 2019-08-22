@@ -68,7 +68,7 @@ impl<'a> ParserEldorado<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let href = "https://www.eldorado.ru/company/tenders/".to_string();
         let pur_name = tender
             .find(Name("td"))

@@ -74,7 +74,7 @@ impl<'a> ParserNornic<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let pur_num_t = tender
             .find(Name("tr"))
             .next()

@@ -73,7 +73,7 @@ impl<'a> ParserQuadra<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender1: Node, tender2: Node) -> Result<(), Box<error::Error>> {
+    fn parser_tender(&mut self, tender1: Node, tender2: Node) -> Result<(), Box<dyn error::Error>> {
         let pur_name = tender2
             .find(Name("font"))
             .nth(0)
