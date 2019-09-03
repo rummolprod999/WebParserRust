@@ -53,11 +53,9 @@ impl<'a> ParserUds<'a> {
     fn get_tenders_from_page(&mut self, page_text: String) {
         let document = Document::from(&*page_text);
         for ten in document.find(
-            Class("table-responsive")
+            Class("traders")
                 .and(Name("div"))
-                .child(Name("table").and(Class("table")))
-                .child(Name("tbody"))
-                .child(Name("tr")),
+                .child(Name("div").and(Class("js-spoiler-content"))),
         ) {
             match self.parser_tender(ten) {
                 Ok(_) => (),
@@ -70,56 +68,47 @@ impl<'a> ParserUds<'a> {
 
     fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let a_t = tender
-            .find(Name("td").child(Name("a")))
+            .find(Name("div").child(Name("a")))
             .next()
             .ok_or("can not find a tag on tender")?;
         let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
         let href = format!("http://uds-group.ru{}", href_t);
         let pur_name = tender
-            .find(Name("td"))
-            .nth(1)
+            .find(Class("traders__td_width2"))
+            .nth(0)
             .ok_or("can not find pur_name on tender")?
             .text()
             .trim()
+            .replace("Наименование тендера", "")
             .to_string();
         let mut pur_obj = tender
-            .find(Name("td"))
-            .nth(2)
+            .find(Class("traders__td_width3"))
+            .nth(0)
             .ok_or("can not find pur_obj on tender")?
             .text()
+            .replace("Наименование объекта", "")
             .trim()
             .to_string();
         if pur_obj == "" {
             pur_obj = pur_name.clone();
         }
         let pur_num = tender
-            .find(Name("td"))
+            .find(Class("traders__td_width1"))
             .nth(0)
             .ok_or("can not find pur_num on tender")?
             .text()
+            .replace("Номер тендера", "")
             .trim()
             .to_string();
-        let pub_date_t = tender
-            .find(Name("td"))
-            .nth(3)
-            .ok_or("can not find pub_date_t on tender")?
-            .text()
-            .trim()
-            .to_string();
-        let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y")
-            .ok_or("can not find date_pub on tender")?;
+        let date_pub = datetimetools::DateTimeTools::return_datetime_now();
         let end_date_t = tender
-            .find(Name("td"))
-            .nth(4)
-            .map(|x| x.text().trim().to_string())
-            .and_then(|x| {
-                if x == "" {
-                    Some("01.01.1970".to_string())
-                } else {
-                    Some(x)
-                }
-            })
-            .unwrap_or("01.01.1970".to_string());
+            .find(Class("traders__td_width4"))
+            .nth(0)
+            .ok_or("can not find pur_num on tender")?
+            .text()
+            .replace("Дата окончания подачи заявок", "")
+            .trim()
+            .to_string();
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&end_date_t, "%d.%m.%Y")
             .ok_or("can not find date_end on tender")?;
         let tn: TenderUds = TenderUds {
