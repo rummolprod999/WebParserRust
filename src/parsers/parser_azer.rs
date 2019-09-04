@@ -6,10 +6,10 @@ use self::select::node::Node;
 use self::select::predicate::{Class, Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
-use crate::tenders::tender_am::TenderAm;
+use crate::tenders::tender_azer::TenderAzer;
 use crate::tenders::tenders::WebTender;
+use crate::toolslib::datetimetools;
 use crate::toolslib::httptools;
-use crate::toolslib::{datetimetools, regextools, toolslib};
 use std::error;
 
 pub struct ParserAzer<'a> {
@@ -50,7 +50,73 @@ impl<'a> ParserAzer<'a> {
         }
     }
     fn get_tenders_from_page(&mut self, page_text: String) {
-        println!("{}", page_text);
+        let document = Document::from(&*page_text);
+        for ten in document.find(Name("div").and(Class("country_list_single"))) {
+            match self.parser_tender(ten) {
+                Ok(_) => (),
+                Err(e) => {
+                    error!("{}", e);
+                }
+            }
+        }
+    }
 
+    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
+        let pur_name = tender
+            .find(
+                Name("div")
+                    .and(Class("country_list_txt"))
+                    .child(Name("a"))
+                    .child(Name("b")),
+            )
+            .nth(0)
+            .ok_or(format!("{} {}", "can not find  pur_name on tender", ""))?
+            .text()
+            .trim()
+            .to_string();
+        let href = tender
+            .find(Name("div").and(Class("country_list_txt")).child(Name("a")))
+            .next()
+            .ok_or("can not find href on tender")?
+            .attr("href")
+            .ok_or("can not find href attr on href")?;
+        let date_pub = datetimetools::DateTimeTools::return_datetime_now();
+        let pur_num = tender
+            .find(
+                Name("div")
+                    .and(Class("right"))
+                    .child(Name("p"))
+                    .child(Name("span").and(Class("right"))),
+            )
+            .nth(0)
+            .ok_or(format!(
+                "{} {}",
+                "can not find div tag pur_num on tender", href
+            ))?
+            .text()
+            .trim()
+            .to_string();
+        let org_name = tender
+            .find(Name("span").and(Class("s14")))
+            .nth(1)
+            .ok_or(format!("{} {}", "cannot find  org_name on tender", ""))?
+            .text()
+            .trim()
+            .to_string();
+        let tn = TenderAzer {
+            type_fz: 211,
+            etp_name: "TenderInfo.Org".to_string(),
+            etp_url: "http://ru.azerbaijan.tenderinfo.org/".to_string(),
+            href: &href.to_string(),
+            pur_num,
+            pur_name,
+            date_pub,
+            org_name,
+            connect_string: &self.connect_string,
+        };
+        let (addt, updt) = tn.parser();
+        self.add_tender += addt;
+        self.upd_tender += updt;
+        Ok(())
     }
 }

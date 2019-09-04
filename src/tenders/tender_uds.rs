@@ -119,7 +119,7 @@ impl<'a> TenderUds<'a> {
                 .get_opt::<Value, usize>(0)
                 .ok_or("None id_customer")?
                 .and_then(|x| my::from_value_opt::<u64>(x))?;
-            return Ok(id_cus)
+            return Ok(id_cus);
         } else {
             let inn = "";
             let reg_num = Uuid::new_v4().hyphenated().to_string();
@@ -129,7 +129,7 @@ impl<'a> TenderUds<'a> {
     }
     fn get_lot_id(&self, pool: &my::Pool, id_tender: &u64) -> Result<u64, Box<dyn error::Error>> {
         let res_insert = (pool.prep_exec("INSERT INTO lot SET id_tender = :id_tender, lot_number = :lot_number, currency = :currency", params! {"id_tender" => id_tender, "lot_number" => 1, "currency" => ""}))?;
-        return Ok(res_insert.last_insert_id())
+        return Ok(res_insert.last_insert_id());
     }
     fn insert_attachment(
         &self,
