@@ -40,6 +40,7 @@ pub enum Args {
     Alfa,
     Smp,
     Am,
+    Azer,
 }
 
 #[derive(Deserialize, Debug)]
@@ -86,6 +87,7 @@ impl fmt::Display for Args {
             Args::Alfa => write!(f, "alfa"),
             Args::Smp => write!(f, "smp"),
             Args::Am => write!(f, "am"),
+            Args::Azer => write!(f, "azer"),
         }
     }
 }
@@ -181,9 +183,9 @@ pub fn get_argument() -> Option<Args> {
 
 pub fn check_args() -> Args {
     let arguments =
-        "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic, pewete, quadra, tgk14, medsi, lada, asia, eldorado, mosobl, baltika, alfa, smp, am";
+        "Please, use this arguments: mts, beeline, nefaz, kamgb, uds, megafon, ahstep, salavat, nornic, pewete, quadra, tgk14, medsi, lada, asia, eldorado, mosobl, baltika, alfa, smp, am, azer";
     let matches = App::new("web_parser_rust")
-        .version("1.21.0")
+        .version("1.22.0")
         .author("rummolprod999")
         .about("web_parser_rust")
         .arg(
@@ -221,6 +223,7 @@ pub fn check_args() -> Args {
             "alfa" => Args::Alfa,
             "smp" => Args::Smp,
             "am" => Args::Am,
+            "azer" => Args::Azer,
             _ => {
                 println!("bad argument, use -h for help");
                 process::exit(0x0100);
