@@ -89,8 +89,7 @@ impl<'a> TenderSmp<'a> {
             let phone = "8 800 555-2-555";
             let email = "";
             let inn = "7750005482";
-            let post_address =
-                "115035, Москва, Садовническая ул., д. 71, стр. 11";
+            let post_address = "115035, Москва, Садовническая ул., д. 71, стр. 11";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());

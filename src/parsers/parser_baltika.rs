@@ -100,8 +100,7 @@ impl<'a> ParserBaltika<'a> {
         let date_end = date_pub.clone();
         let tn = TenderBaltika {
             type_fz: 200,
-            etp_name: "ООО \"ПИВОВАРЕННАЯ КОМПАНИЯ \"БАЛТИКА\""
-                .to_string(),
+            etp_name: "ООО \"ПИВОВАРЕННАЯ КОМПАНИЯ \"БАЛТИКА\"".to_string(),
             etp_url: "https://corporate.baltika.ru/".to_string(),
             href: &href,
             pur_num,

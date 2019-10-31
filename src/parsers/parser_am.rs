@@ -107,8 +107,7 @@ impl<'a> ParserAm<'a> {
         let date_end = date_pub.clone();
         let tn = TenderAm {
             type_fz: 209,
-            etp_name: "МИНИСТЕРСТВО ФИНАНСОВ РЕСПУБЛИКИ АРМЕНИЯ"
-                .to_string(),
+            etp_name: "МИНИСТЕРСТВО ФИНАНСОВ РЕСПУБЛИКИ АРМЕНИЯ".to_string(),
             etp_url: "http://procurement.am/".to_string(),
             href: &href,
             pur_num,

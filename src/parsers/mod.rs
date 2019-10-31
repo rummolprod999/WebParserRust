@@ -5,6 +5,7 @@ pub mod parser_asia;
 pub mod parser_azer;
 pub mod parser_baltika;
 pub mod parser_beeline;
+pub mod parser_dochki;
 pub mod parser_eldorado;
 pub mod parser_kam_gb;
 pub mod parser_lada;

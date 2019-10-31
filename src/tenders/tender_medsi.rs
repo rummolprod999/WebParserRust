@@ -96,8 +96,7 @@ impl<'a> TenderMedsi<'a> {
             let phone = "+7 (495) 737-07-93";
             let email = "tender@medsigroup.ru";
             let inn = "7710641442";
-            let post_address =
-                "123242, Москва, Зоологическая ул., д.1 стр.1, кабинет 6.21";
+            let post_address = "123242, Москва, Зоологическая ул., д.1 стр.1, кабинет 6.21";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());
@@ -163,9 +162,8 @@ impl<'a> TenderMedsi<'a> {
     ) -> Result<(), Box<dyn error::Error>> {
         let deliv_place = doc
             .find(Name("tr").and(|x: &Node| {
-                if x.text().contains(
-                    "Грузополучатель/место оказания услуги",
-                ) {
+                if x.text().contains("Грузополучатель/место оказания услуги")
+                {
                     true
                 } else {
                     false
@@ -181,9 +179,9 @@ impl<'a> TenderMedsi<'a> {
             .to_string();
         let deliv_term = doc
             .find(Name("tr").and(|x: &Node| {
-                if x.text().contains(
-                    "Информация об условиях и порядке проведения процедуры",
-                ) {
+                if x.text()
+                    .contains("Информация об условиях и порядке проведения процедуры")
+                {
                     true
                 } else {
                     false

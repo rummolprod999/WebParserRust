@@ -132,8 +132,7 @@ impl<'a> ParserTgk14<'a> {
             .map_or("".to_string(), |x| x.text());
         let tn = TenderTgk14 {
             type_fz: 187,
-            etp_name: "ПАО «Территориальная Генерирующая Компания № 14»"
-                .to_string(),
+            etp_name: "ПАО «Территориальная Генерирующая Компания № 14»".to_string(),
             etp_url: "https://www.tgk-14.com/".to_string(),
             href,
             pur_num,

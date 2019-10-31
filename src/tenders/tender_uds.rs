@@ -89,8 +89,7 @@ impl<'a> TenderUds<'a> {
             let phone = "+7 (3412) 998-000";
             let email = "office@uds18.ru";
             let inn = "";
-            let post_address =
-                "426057, гор. Ижевск, ул. Ленина, д. 21, БЦ \"Форум\"";
+            let post_address = "426057, гор. Ижевск, ул. Ленина, д. 21, БЦ \"Форум\"";
             let cont_person = "";
             let res_insert = (pool.prep_exec("INSERT INTO organizer SET full_name = :full_name, contact_person = :contact_person, contact_phone = :contact_phone, contact_email = :contact_email, inn = :inn, post_address = :post_address", params! {"full_name" => &self.etp_name, "contact_person" => cont_person, "contact_phone" => phone, "contact_email" => email, "inn" => inn, "post_address" => post_address}))?;
             return Ok(res_insert.last_insert_id());

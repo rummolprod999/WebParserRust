@@ -98,9 +98,8 @@ impl<'a> ParserAsia<'a> {
             .to_string();
         let date_pub_t = regextools::RegexTools::get_one_group(&dates, r"с\s*(\d{2}-\d{2}-\d{4})")
             .ok_or(format!("{} {}", "can not find date_pub_t on tender", href))?;
-        let date_end_t =
-            regextools::RegexTools::get_one_group(&dates, r"до\s*(\d{2}-\d{2}-\d{4})")
-                .ok_or(format!("{} {}", "can not find date_end_t on tender", href))?;
+        let date_end_t = regextools::RegexTools::get_one_group(&dates, r"до\s*(\d{2}-\d{2}-\d{4})")
+            .ok_or(format!("{} {}", "can not find date_end_t on tender", href))?;
         let date_pub = DateTimeTools::get_date_from_string(&date_pub_t, "%d-%m-%Y")
             .ok_or(format!("{} {}", "can not find date_pub on tender", href))?;
         let date_end = DateTimeTools::get_date_from_string(&date_end_t, "%d-%m-%Y")
