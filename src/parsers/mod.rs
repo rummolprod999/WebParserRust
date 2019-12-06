@@ -21,4 +21,5 @@ pub mod parser_salavat;
 pub mod parser_smp;
 pub mod parser_tgk14;
 pub mod parser_uds;
+pub mod parser_ungi;
 pub mod parsers;

@@ -21,4 +21,5 @@ pub mod tender_salavat;
 pub mod tender_smp;
 pub mod tender_tgk14;
 pub mod tender_uds;
+pub mod tender_ungi;
 pub mod tenders;
