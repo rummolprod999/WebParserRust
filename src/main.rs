@@ -12,8 +12,9 @@ use web_parser_rust::parsers::{
     parser_kam_gb::ParserKamgb, parser_lada::ParserLada, parser_medsi::ParserMedsi,
     parser_megafon::ParserMegafon, parser_mosobl::ParserMosobl, parser_mts::ParserMts,
     parser_nefaz::ParserNefaz, parser_nornic::ParserNornic, parser_pewete::ParserPewete,
-    parser_quadra::ParserQuadra, parser_salavat::ParserSalavat, parser_smp::ParserSmp,
-    parser_tgk14::ParserTgk14, parser_uds::ParserUds, parser_ungi::ParserUngi,
+    parser_quadra::ParserQuadra, parser_ruscoal::ParserRuscoal, parser_salavat::ParserSalavat,
+    parser_smp::ParserSmp, parser_tgk14::ParserTgk14, parser_uds::ParserUds,
+    parser_ungi::ParserUngi,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -99,6 +100,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Ungi => {
             parser_ungi(set);
+        }
+        Args::Ruscoal => {
+            parser_ruscoal(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -349,6 +353,16 @@ fn parser_dochki(set: &FullSettingsParser) {
 
 fn parser_ungi(set: &FullSettingsParser) {
     let mut p = ParserUngi {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_ruscoal(set: &FullSettingsParser) {
+    let mut p = ParserRuscoal {
         add_tender: 0,
         upd_tender: 0,
         settings: set,
