@@ -37,7 +37,7 @@ impl<'a> ParserTgk14<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url_b = "https://www.tgk-14.com/trade/vesti.sections.php?&num_page=";
+        let url_b = "https://old.tgk-14.com/trade/vesti.sections.php?&num_page=";
 
         for d in (1..=3).rev() {
             let url = format!("{}{}", url_b, d);
@@ -104,7 +104,7 @@ impl<'a> ParserTgk14<'a> {
                 "can not find a tag a_t on tender", pur_num
             ))?;
         let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
-        let href = format!("https://www.tgk-14.com{}", href_t);
+        let href = format!("https://old.tgk-14.com{}", href_t);
         let pw_name = tender
             .find(Name("td"))
             .nth(3)
