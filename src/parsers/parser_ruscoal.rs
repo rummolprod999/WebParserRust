@@ -66,11 +66,11 @@ impl<'a> ParserRuscoal<'a> {
                 cus_name: "АО «УК «Разрез Степной»".to_string(),
             },
         ];
-        for url in urls.iter() {
+        for (c, url) in urls.iter().enumerate() {
             let page = httptools::HttpTools::get_page_text(&url.url);
             match page {
                 Some(p) => {
-                    self.get_tenders_from_page(p, url);
+                    self.get_tenders_from_page(p, url, c);
                 }
                 None => {
                     warn!("can not get start page {}", url.url);
@@ -80,7 +80,7 @@ impl<'a> ParserRuscoal<'a> {
         }
     }
 
-    fn get_tenders_from_page(&mut self, page_text: String, place: &Ruscoal) {
+    fn get_tenders_from_page(&mut self, page_text: String, place: &Ruscoal, count: usize) {
         let document = Document::from(&*page_text);
         for ten in document.find(
             Name("table")
@@ -88,7 +88,7 @@ impl<'a> ParserRuscoal<'a> {
                 .child(Name("tbody"))
                 .child(Name("tr").and(Not(Class("tender-table-head")))),
         ) {
-            match self.parser_tender(ten, place) {
+            match self.parser_tender(ten, place, count) {
                 Ok(_) => (),
                 Err(e) => {
                     error!("{}", e);
@@ -101,6 +101,7 @@ impl<'a> ParserRuscoal<'a> {
         &mut self,
         tender: Node,
         place: &Ruscoal,
+        count: usize,
     ) -> Result<(), Box<dyn error::Error>> {
         let pur_num = tender
             .find(Name("td"))
@@ -113,6 +114,7 @@ impl<'a> ParserRuscoal<'a> {
             .text()
             .trim()
             .to_string();
+        let pur_num = format!("{}_{}", pur_num, count);
         let pur_name = tender
             .find(Name("td"))
             .nth(4)
