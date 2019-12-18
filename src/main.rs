@@ -7,14 +7,14 @@ use std::process;
 use web_parser_rust::parsers::parsers::WebParserTenders;
 use web_parser_rust::parsers::{
     parser_ahstep::ParserAhstep, parser_alfa::ParserAlfa, parser_am::ParserAm,
-    parser_asia::ParserAsia, parser_azer::ParserAzer, parser_baltika::ParserBaltika,
-    parser_beeline::ParserBeeline, parser_dochki::ParserDochki, parser_eldorado::ParserEldorado,
-    parser_kam_gb::ParserKamgb, parser_lada::ParserLada, parser_medsi::ParserMedsi,
-    parser_megafon::ParserMegafon, parser_mosobl::ParserMosobl, parser_mts::ParserMts,
-    parser_nefaz::ParserNefaz, parser_nornic::ParserNornic, parser_pewete::ParserPewete,
-    parser_quadra::ParserQuadra, parser_ruscoal::ParserRuscoal, parser_salavat::ParserSalavat,
-    parser_smp::ParserSmp, parser_tgk14::ParserTgk14, parser_uds::ParserUds,
-    parser_ungi::ParserUngi,
+    parser_asia::ParserAsia, parser_azer::ParserAzer, parser_azs::ParserAzs,
+    parser_baltika::ParserBaltika, parser_beeline::ParserBeeline, parser_dochki::ParserDochki,
+    parser_eldorado::ParserEldorado, parser_kam_gb::ParserKamgb, parser_lada::ParserLada,
+    parser_medsi::ParserMedsi, parser_megafon::ParserMegafon, parser_mosobl::ParserMosobl,
+    parser_mts::ParserMts, parser_nefaz::ParserNefaz, parser_nornic::ParserNornic,
+    parser_pewete::ParserPewete, parser_quadra::ParserQuadra, parser_ruscoal::ParserRuscoal,
+    parser_salavat::ParserSalavat, parser_smp::ParserSmp, parser_tgk14::ParserTgk14,
+    parser_uds::ParserUds, parser_ungi::ParserUngi,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -103,6 +103,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Ruscoal => {
             parser_ruscoal(set);
+        }
+        Args::Azs => {
+            parser_azs(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -363,6 +366,16 @@ fn parser_ungi(set: &FullSettingsParser) {
 
 fn parser_ruscoal(set: &FullSettingsParser) {
     let mut p = ParserRuscoal {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_azs(set: &FullSettingsParser) {
+    let mut p = ParserAzs {
         add_tender: 0,
         upd_tender: 0,
         settings: set,

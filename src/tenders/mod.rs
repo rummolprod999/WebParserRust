@@ -3,6 +3,7 @@ pub mod tender_alfa;
 pub mod tender_am;
 pub mod tender_asia;
 pub mod tender_azer;
+pub mod tender_azs;
 pub mod tender_baltika;
 pub mod tender_beeline;
 pub mod tender_dochki;
