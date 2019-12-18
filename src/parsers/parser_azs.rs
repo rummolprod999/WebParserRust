@@ -8,11 +8,9 @@ use super::parsers::WebParserTenders;
 use crate::parsers::parsers::Attachment;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_azs::TenderAzs;
-use crate::tenders::tender_ruscoal::TenderRuscoal;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::httptools;
 use crate::toolslib::{datetimetools, regextools};
-use select::predicate::Not;
 use std::error;
 
 pub struct ParserAzs<'a> {
