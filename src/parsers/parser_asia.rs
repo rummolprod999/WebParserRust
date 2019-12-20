@@ -79,13 +79,8 @@ impl<'a> ParserAsia<'a> {
         let notice_ver = tender
             .find(Name("div").and(Class("tenders-line__item_desc")))
             .nth(0)
-            .ok_or(format!(
-                "{} {}",
-                "can not find div tag notice_version on tender", href
-            ))?
-            .text()
-            .trim()
-            .to_string();
+            .and_then(|x| Some(x.text().trim().to_string()))
+            .unwrap_or_default();
         let dates = tender
             .find(Name("div").and(Class("tenders-line__item_date-num")))
             .nth(0)
@@ -96,26 +91,15 @@ impl<'a> ParserAsia<'a> {
             .text()
             .trim()
             .to_string();
-        let date_pub_t = regextools::RegexTools::get_one_group(&dates, r"с\s*(\d{2}-\d{2}-\d{4})")
+        let date_pub_t = regextools::RegexTools::get_one_group(&dates, r"с\s*(\d{2}.\d{2}.\d{4})")
             .ok_or(format!("{} {}", "can not find date_pub_t on tender", href))?;
-        let date_end_t = regextools::RegexTools::get_one_group(&dates, r"до\s*(\d{2}-\d{2}-\d{4})")
+        let date_end_t = regextools::RegexTools::get_one_group(&dates, r"до\s*(\d{2}.\d{2}.\d{4})")
             .ok_or(format!("{} {}", "can not find date_end_t on tender", href))?;
-        let date_pub = DateTimeTools::get_date_from_string(&date_pub_t, "%d-%m-%Y")
+        let date_pub = DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
             .ok_or(format!("{} {}", "can not find date_pub on tender", href))?;
-        let date_end = DateTimeTools::get_date_from_string(&date_end_t, "%d-%m-%Y")
+        let date_end = DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y")
             .ok_or(format!("{} {}", "can not find date_end on tender", href))?;
-        let attach_temp = tender
-            .find(Name("button").and(Class("all-button_download")))
-            .nth(0)
-            .ok_or(format!(
-                "{} {}",
-                "can not find button tag attach_temp on tender", href
-            ))?
-            .attr("onclick")
-            .ok_or("can not find onclick attr on tender")?;
-        let attach_u = regextools::RegexTools::get_one_group(attach_temp, r"'(/uploads/.+?)'")
-            .ok_or(format!("{} {}", "can not find attach_url on tender", href))?;
-        let attach_url = format!("https://asiacement.ru{}", attach_u);
+        let attach_url = "https://asiacement.ru/tendery-i-zakupki".to_string();
         let tn = TenderAsia {
             type_fz: 195,
             etp_name: "ООО \"Азия Цемент\"".to_string(),
