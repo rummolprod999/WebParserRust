@@ -40,7 +40,7 @@ impl<'a> ParserAhstep<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://ahstep.ru/tenders";
+        let url = "https://ahstep.ru/tender";
         let page = httptools::HttpTools::get_page_text(url);
         match page {
             Some(p) => {
