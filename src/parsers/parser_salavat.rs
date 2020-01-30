@@ -39,10 +39,7 @@ impl<'a> ParserSalavat<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let urls = [
-            "http://gazpromss.ru/zakupki/izveshenya/zakiz18/",
-            "http://gazpromss.ru/zakupki/izveshenya/zizv2019/",
-        ];
+        let urls = ["http://gazpromss.ru/zakupki/izveshenya/szi2020/"];
         for url in urls.iter() {
             let page = httptools::HttpTools::get_page_text(url);
             match page {
