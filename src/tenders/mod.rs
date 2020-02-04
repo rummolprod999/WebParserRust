@@ -15,6 +15,7 @@ pub mod tender_megafon;
 pub mod tender_mosobl;
 pub mod tender_mts;
 pub mod tender_nefaz;
+pub mod tender_nordstar;
 pub mod tender_nornic;
 pub mod tender_pewete;
 pub mod tender_quadra;

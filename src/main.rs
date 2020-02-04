@@ -14,7 +14,7 @@ use web_parser_rust::parsers::{
     parser_mts::ParserMts, parser_nefaz::ParserNefaz, parser_nornic::ParserNornic,
     parser_pewete::ParserPewete, parser_quadra::ParserQuadra, parser_ruscoal::ParserRuscoal,
     parser_salavat::ParserSalavat, parser_smp::ParserSmp, parser_tgk14::ParserTgk14,
-    parser_uds::ParserUds, parser_ungi::ParserUngi,
+    parser_uds::ParserUds, parser_ungi::ParserUngi, parser_nordstar::ParserNordstar,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -376,6 +376,16 @@ fn parser_ruscoal(set: &FullSettingsParser) {
 
 fn parser_azs(set: &FullSettingsParser) {
     let mut p = ParserAzs {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_nordstar(set: &FullSettingsParser) {
+    let mut p = ParserNordstar {
         add_tender: 0,
         upd_tender: 0,
         settings: set,

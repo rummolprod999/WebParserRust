@@ -15,6 +15,7 @@ pub mod parser_megafon;
 pub mod parser_mosobl;
 pub mod parser_mts;
 pub mod parser_nefaz;
+pub mod parser_nordstar;
 pub mod parser_nornic;
 pub mod parser_pewete;
 pub mod parser_quadra;
