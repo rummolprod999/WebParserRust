@@ -8,6 +8,7 @@ pub mod tender_baltika;
 pub mod tender_beeline;
 pub mod tender_dochki;
 pub mod tender_eldorado;
+pub mod tender_ingrad;
 pub mod tender_kamgb;
 pub mod tender_lada;
 pub mod tender_medsi;
