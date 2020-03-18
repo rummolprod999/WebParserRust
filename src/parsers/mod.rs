@@ -10,6 +10,7 @@ pub mod parser_dochki;
 pub mod parser_eldorado;
 pub mod parser_ingrad;
 pub mod parser_kam_gb;
+pub mod parser_kaprem;
 pub mod parser_lada;
 pub mod parser_medsi;
 pub mod parser_megafon;

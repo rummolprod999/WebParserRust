@@ -10,6 +10,7 @@ pub mod tender_dochki;
 pub mod tender_eldorado;
 pub mod tender_ingrad;
 pub mod tender_kamgb;
+pub mod tender_kaprem;
 pub mod tender_lada;
 pub mod tender_medsi;
 pub mod tender_megafon;
