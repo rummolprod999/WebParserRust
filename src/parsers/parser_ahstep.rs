@@ -83,7 +83,8 @@ impl<'a> ParserAhstep<'a> {
             .text()
             .trim()
             .to_string();
-        let pur_num = toolslib::create_md5_str(&*href);
+        let pur_num = regextools::RegexTools::get_one_group(href_t, r"tender(\d+)$")
+            .ok_or(format!("{} {}", "can not find date_end_t on tender", href))?;
         let date_pub = DateTimeTools::return_datetime_now();
         let mut end_date_t = tender
             .find(Name("p").and(Class("text-center")))
