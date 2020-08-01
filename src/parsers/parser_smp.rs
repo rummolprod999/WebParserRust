@@ -37,7 +37,7 @@ impl<'a> ParserSmp<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://smpbank.ru/ru/competition/";
+        let url = "https://new.smpbank.ru/tenders";
         let page = httptools::HttpTools::get_page_text(&url);
         match page {
             Some(p) => {
@@ -54,7 +54,7 @@ impl<'a> ParserSmp<'a> {
         let document = Document::from(&*page_text);
         for ten in document.find(
             Name("table")
-                .and(Class("mortgage_table"))
+                .and(Class("TableSimple-common__table__3Wk7m"))
                 .child(Name("tbody"))
                 .child(Name("tr").and(|x: &Node| {
                     if x.text().contains("Начало")
@@ -100,7 +100,7 @@ impl<'a> ParserSmp<'a> {
             .ok_or("can not find href_t on tender")?
             .attr("href")
             .ok_or("can not find href attr on href_t")?;
-        let href = format!("https://smpbank.ru{}", href_t);
+        let href = format!("https://new.smpbank.ru{}", href_t);
         let date_pub_t = tender
             .find(Name("td"))
             .nth(0)
@@ -111,7 +111,7 @@ impl<'a> ParserSmp<'a> {
             .or_else(|| {
                 datetimetools::DateTimeTools::get_datetime_from_string(
                     &date_pub_t,
-                    "%d.%m.%Y %H:%M",
+                    "%d.%m.%Y %H:%M:%S",
                 )
             })
             .ok_or(format!(
@@ -124,15 +124,15 @@ impl<'a> ParserSmp<'a> {
             .ok_or("can not find date_end_t on tender")?
             .text()
             .replace("0019", "2019");
-        let date_end =
-            datetimetools::DateTimeTools::get_datetime_from_string(&date_end_t, "%d.%m.%Y %H:%M")
-                .or_else(|| {
-                    datetimetools::DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y")
-                })
-                .ok_or(format!(
-                    "{} {} {}",
-                    "can not find date_end on tender", pur_num, date_pub_t
-                ))?;
+        let date_end = datetimetools::DateTimeTools::get_datetime_from_string(
+            &date_end_t,
+            "%d.%m.%Y %H:%M:%S",
+        )
+        .or_else(|| datetimetools::DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y"))
+        .ok_or(format!(
+            "{} {} {}",
+            "can not find date_end on tender", pur_num, date_pub_t
+        ))?;
         let tn = TenderSmp {
             type_fz: 202,
             etp_name: "АО «СМП Банк»".to_string(),
