@@ -106,7 +106,9 @@ impl<'a> ParserSmp<'a> {
             .nth(0)
             .ok_or("can not find date_pub_t on tender")?
             .text()
-            .replace("0019", "2019");
+            .replace("0019", "2019")
+            .trim()
+            .to_string();
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
             .or_else(|| {
                 datetimetools::DateTimeTools::get_datetime_from_string(
@@ -115,7 +117,7 @@ impl<'a> ParserSmp<'a> {
                 )
             })
             .ok_or(format!(
-                "{} {} {}",
+                "{} {} \"{}\"",
                 "can not find date_pub on tender", pur_num, date_pub_t
             ))?;
         let date_end_t = tender
@@ -123,15 +125,17 @@ impl<'a> ParserSmp<'a> {
             .nth(1)
             .ok_or("can not find date_end_t on tender")?
             .text()
-            .replace("0019", "2019");
+            .replace("0019", "2019")
+            .trim()
+            .to_string();
         let date_end = datetimetools::DateTimeTools::get_datetime_from_string(
             &date_end_t,
             "%d.%m.%Y %H:%M:%S",
         )
         .or_else(|| datetimetools::DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y"))
         .ok_or(format!(
-            "{} {} {}",
-            "can not find date_end on tender", pur_num, date_pub_t
+            "{} {} \"{}\"",
+            "can not find date_end on tender", pur_num, date_end_t
         ))?;
         let tn = TenderSmp {
             type_fz: 202,
