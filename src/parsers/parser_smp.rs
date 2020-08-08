@@ -54,7 +54,7 @@ impl<'a> ParserSmp<'a> {
         let document = Document::from(&*page_text);
         for ten in document.find(
             Name("table")
-                .and(Class("TableSimple-common__table__3Wk7m"))
+                .and(Class("_3Wk7m061yf"))
                 .child(Name("tbody"))
                 .child(Name("tr").and(|x: &Node| {
                     if x.text().contains("Начало")
