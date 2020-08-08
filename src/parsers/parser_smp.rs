@@ -92,6 +92,7 @@ impl<'a> ParserSmp<'a> {
                 "can not find  pur_num on tender", pur_name
             ))?
             .text()
+            .replace("№", "")
             .trim()
             .to_string();
         let href_t = tender
