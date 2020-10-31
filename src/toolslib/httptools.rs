@@ -19,7 +19,7 @@ impl HttpTools {
                 }
                 Err(e) => {
                     i -= 1;
-                    warn!("{} {}", e, e.description());
+                    warn!("{} {}", e, e.to_string());
                 }
             }
         }
@@ -45,7 +45,7 @@ impl HttpTools {
                 }
                 Err(e) => {
                     i -= 1;
-                    warn!("{} {}", e, e.description());
+                    warn!("{} {}", e, e.to_string());
                 }
             }
         }

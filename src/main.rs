@@ -14,8 +14,8 @@ use web_parser_rust::parsers::{
     parser_megafon::ParserMegafon, parser_mosobl::ParserMosobl, parser_mts::ParserMts,
     parser_nefaz::ParserNefaz, parser_nordstar::ParserNordstar, parser_nornic::ParserNornic,
     parser_pewete::ParserPewete, parser_quadra::ParserQuadra, parser_ruscoal::ParserRuscoal,
-    parser_salavat::ParserSalavat, parser_smp::ParserSmp, parser_tgk14::ParserTgk14,
-    parser_uds::ParserUds, parser_ungi::ParserUngi,
+    parser_salavat::ParserSalavat, parser_smp::ParserSmp, parser_snhz::ParserSnHz,
+    parser_tgk14::ParserTgk14, parser_uds::ParserUds, parser_ungi::ParserUngi,
 };
 use web_parser_rust::settings::settings::{
     create_settings, get_argument, Args, FullSettingsParser,
@@ -116,6 +116,9 @@ fn parser_executor(set: &FullSettingsParser) {
         }
         Args::Kaprem => {
             parser_kaprem(set);
+        }
+        Args::Snhz => {
+            parser_snhz(set);
         }
         _ => {
             warn!("Bad enum type!");
@@ -416,6 +419,16 @@ fn parser_ingrad(set: &FullSettingsParser) {
 
 fn parser_kaprem(set: &FullSettingsParser) {
     let mut p = ParserKaprem {
+        add_tender: 0,
+        upd_tender: 0,
+        settings: set,
+        connect_string: String::new(),
+    };
+    p.parser();
+}
+
+fn parser_snhz(set: &FullSettingsParser) {
+    let mut p = ParserSnHz {
         add_tender: 0,
         upd_tender: 0,
         settings: set,

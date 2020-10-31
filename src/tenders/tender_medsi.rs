@@ -32,7 +32,7 @@ impl<'a> WebTender for TenderMedsi<'a> {
         let res = match self.parser_unwrap() {
             Ok(v) => v,
             Err(e) => {
-                warn!("{} {}", e, e.description());
+                warn!("{} {}", e, e.to_string());
                 (0, 0)
             }
         };
