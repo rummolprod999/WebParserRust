@@ -39,9 +39,9 @@ impl<'a> ParserSnHz<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let urls = ["https://nordstar.ru/partners/purchase/?SID=8"];
+        let urls = ["https://snhz.ru/?event=zakupki"];
         for url in urls.iter() {
-            let page = httptools::HttpTools::get_page_text(url);
+            let page = httptools::HttpTools::get_page_text1251(url);
             match page {
                 Some(p) => {
                     self.get_tenders_from_page(p, url.to_string());
@@ -53,5 +53,36 @@ impl<'a> ParserSnHz<'a> {
             }
         }
     }
-    fn get_tenders_from_page(&mut self, page_text: String, url: String) {}
+    fn get_tenders_from_page(&mut self, page_text: String, url: String) {
+        let document = Document::from(&*page_text);
+        for (_i, ten) in document
+            .find(
+                Name("table")
+                    .and(Class("tab_z"))
+                    .child(Name("tbody"))
+                    .child(Name("tr")),
+            )
+            .enumerate()
+        {
+            match self.parser_tender(ten, &url) {
+                Ok(_) => (),
+                Err(e) => {
+                    error!("{}", e);
+                }
+            }
+        }
+    }
+
+    fn parser_tender(&mut self, tender: Node, _url: &String) -> Result<(), Box<dyn error::Error>> {
+        let href = tender
+            .find(Name("div").and(Class("al-dl-doc-name")).child(Name("a")))
+            .next()
+            .ok_or("cannot find href_t on tender")?
+            .attr("href")
+            .ok_or("cannot find href attr on href")?
+            .to_string();
+        let href = format!("https://nordstar.ru/partners/purchase/{}", href.to_string());
+        println!("{:?}", tender.as_text());
+        Ok(())
+    }
 }
