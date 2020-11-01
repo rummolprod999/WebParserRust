@@ -44,7 +44,7 @@ impl<'a> ParserAlfa<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -70,7 +70,7 @@ impl<'a> ParserAlfa<'a> {
         let pur_name = tender
             .find(Name("div").and(Class("title")))
             .nth(0)
-            .ok_or(format!("{} {}", "can not find  pur_name on tender", ""))?
+            .ok_or(format!("{} {}", "cannot find  pur_name on tender", ""))?
             .text()
             .trim()
             .to_string();
@@ -78,16 +78,16 @@ impl<'a> ParserAlfa<'a> {
         let href_t = tender
             .find(Name("a"))
             .next()
-            .ok_or("can not find href_t on tender")?
+            .ok_or("cannot find href_t on tender")?
             .attr("href")
-            .ok_or("can not find href attr on href_t")?;
+            .ok_or("cannot find href attr on href_t")?;
         let href = format!("https://alfabank.ru{}", href_t);
         let date_pub_t = tender
             .find(Name("div").and(Class("date")))
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find date_pub_t on tender", pur_name
+                "cannot find date_pub_t on tender", pur_name
             ))?
             .text()
             .trim()
@@ -95,7 +95,7 @@ impl<'a> ParserAlfa<'a> {
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
             .ok_or(format!(
                 "{} {} {}",
-                "can not find date_pub on tender", pur_num, date_pub_t
+                "cannot find date_pub on tender", pur_num, date_pub_t
             ))?;
         let date_end = date_pub.clone();
         let tn = TenderAlfa {

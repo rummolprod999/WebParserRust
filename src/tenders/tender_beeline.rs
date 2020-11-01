@@ -40,7 +40,7 @@ impl<'a> WebTender for TenderBeeline<'a> {
     }
     fn parser_unwrap(&self) -> Result<(i32, i32), Box<dyn error::Error>> {
         let page = httptools::HttpTools::get_page_text(&self.href)
-            .ok_or(format!("can not download page {}", &self.href))?;
+            .ok_or(format!("cannot download page {}", &self.href))?;
         let date_upd = DateTimeTools::return_datetime_now();
         let mut add_t = 0;
         let mut upd_t = 0;
@@ -54,19 +54,19 @@ impl<'a> WebTender for TenderBeeline<'a> {
                 }
             }))
             .next()
-            .ok_or("can not find date_pub_tt on tender")?
+            .ok_or("cannot find date_pub_tt on tender")?
             .find(Name("em"))
             .next()
-            .ok_or("can not find date_pub_tt em tag on tender")?
+            .ok_or("cannot find date_pub_tt em tag on tender")?
             .text()
             .trim()
             .to_string();
         let pub_date_t = date_pub_tt.replace("года", "").trim().to_string();
         let pub_date_str = datetimetools::DateTimeTools::replace_str_months(&pub_date_t)
-            .ok_or("can not replace pub_date_str")?;
+            .ok_or("cannot replace pub_date_str")?;
         let date_pub =
             datetimetools::DateTimeTools::get_date_from_string(&pub_date_str, "%d.%m.%Y")
-                .ok_or("can not find date_pub on tender")?;
+                .ok_or("cannot find date_pub on tender")?;
         let date_end = datetimetools::DateTimeTools::return_min_datetime();
         let pool = (my::Pool::new(self.connect_string))?;
         let mut query_res = (pool.prep_exec(r"SELECT id_tender FROM tender WHERE purchase_number = :purchase_number AND type_fz = :type_fz AND doc_publish_date = :doc_publish_date", params! {"purchase_number" => &self.pur_num, "type_fz" => &self.type_fz, "doc_publish_date" => &date_pub.naive_local()}))?;

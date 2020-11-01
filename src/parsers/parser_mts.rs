@@ -42,7 +42,7 @@ impl<'a> ParserMts<'a> {
         match page {
             Some(p) => self.get_tenders_from_page(p),
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -58,14 +58,14 @@ impl<'a> ParserMts<'a> {
         let a_t = match tender.find(Name("a")).next() {
             Some(n) => n,
             None => {
-                warn!("{}", "can not find a tag on tender");
+                warn!("{}", "cannot find a tag on tender");
                 return;
             }
         };
         let href_t = match a_t.attr("href") {
             Some(hr) => hr,
             None => {
-                warn!("{}", "can not find href attr on tender");
+                warn!("{}", "cannot find href attr on tender");
                 return;
             }
         };
@@ -74,7 +74,7 @@ impl<'a> ParserMts<'a> {
         let pur_num = match regextools::RegexTools::get_one_group(href_t, r"tender_id=(\d+)") {
             Some(pn) => pn,
             None => {
-                warn!("{} {}", "can not find pur_num on tender", href_t);
+                warn!("{} {}", "cannot find pur_num on tender", href_t);
                 return;
             }
         };
@@ -82,7 +82,7 @@ impl<'a> ParserMts<'a> {
         let date_pb = match tender.find(Class("m-purchases-list-date")).next() {
             Some(n) => n,
             None => {
-                warn!("{} {}", "can not find date_pb on tender", href);
+                warn!("{} {}", "cannot find date_pb on tender", href);
                 return;
             }
         };
@@ -92,7 +92,7 @@ impl<'a> ParserMts<'a> {
         ) {
             Some(pn) => pn,
             None => {
-                warn!("{} {}", "can not find date_pub_t on tender", href_t);
+                warn!("{} {}", "cannot find date_pub_t on tender", href_t);
                 return;
             }
         };
@@ -100,7 +100,7 @@ impl<'a> ParserMts<'a> {
         let date_pub = match date_pub_t {
             Some(d) => d,
             None => {
-                warn!("{} {}", "can not find date_pub on tender", href_t);
+                warn!("{} {}", "cannot find date_pub on tender", href_t);
                 return;
             }
         };

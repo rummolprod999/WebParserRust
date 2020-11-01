@@ -45,7 +45,7 @@ impl<'a> ParserNornic<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -78,12 +78,12 @@ impl<'a> ParserNornic<'a> {
         let pur_num_t = tender
             .find(Name("tr"))
             .next()
-            .ok_or("can not find pur_num_t on tender")?
+            .ok_or("cannot find pur_num_t on tender")?
             .find(Name("td"))
             .next()
-            .ok_or("can not find pur_num_t on tender")?
+            .ok_or("cannot find pur_num_t on tender")?
             .attr("id")
-            .ok_or("can not find attr id pur_num_t on tender")?
+            .ok_or("cannot find attr id pur_num_t on tender")?
             .to_string();
         let pur_num = pur_num_t.replace("l", "");
         let tmp = tender
@@ -96,23 +96,23 @@ impl<'a> ParserNornic<'a> {
                     .child(Name("td")),
             )
             .nth(0)
-            .ok_or("can not find tmp on tender")?
+            .ok_or("cannot find tmp on tender")?
             .text()
             .to_string();
         let cus_name_t = regextools::RegexTools::get_one_group(&tmp.trim(), r":(.+)№")
-            .ok_or(format!("{} {}", "can not find cus_name on tender", pur_num))?;
+            .ok_or(format!("{} {}", "cannot find cus_name on tender", pur_num))?;
         let cus_name =
             regextools::RegexTools::del_double_ws(&cus_name_t).ok_or("del double space error")?;
         let pub_date_t =
             regextools::RegexTools::get_one_group(&tmp.trim(), r"(\d{2}\.\d{2}\.\d{4})").ok_or(
-                format!("{} {}", "can not find pub_date_t on tender", pur_num),
+                format!("{} {}", "cannot find pub_date_t on tender", pur_num),
             )?;
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+            .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let pur_name = tender
             .find(Name("td").and(Class("Name")))
             .next()
-            .ok_or("can not find attr pur_name on tender")?
+            .ok_or("cannot find attr pur_name on tender")?
             .text();
         let href_t = tender
             .find(Name("a").and(|x: &Node| {
@@ -123,11 +123,11 @@ impl<'a> ParserNornic<'a> {
                 }
             }))
             .next()
-            .ok_or(format!("{} {}", "can not find href_t on tender", pur_num))?
+            .ok_or(format!("{} {}", "cannot find href_t on tender", pur_num))?
             .attr("href")
             .ok_or(format!(
                 "{} {}",
-                "can not find href_t attr on tender", pur_num
+                "cannot find href_t attr on tender", pur_num
             ))?;
         let href = format!("http://www.zf.norilsknickel.ru/{}", href_t);
         let tn: TenderNornic = TenderNornic {

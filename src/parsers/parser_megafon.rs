@@ -44,7 +44,7 @@ impl<'a> ParserMegafon<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -67,8 +67,8 @@ impl<'a> ParserMegafon<'a> {
         let a_t = tender
             .find(Name("div").child(Name("a")))
             .next()
-            .ok_or("can not find a tag on tender")?;
-        let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
+            .ok_or("cannot find a tag on tender")?;
+        let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
         let href = format!(
             "http://corp.megafon.ru/about/purchase/oao_megafon_retail/{}",
             href_t
@@ -76,39 +76,39 @@ impl<'a> ParserMegafon<'a> {
         let pur_name = tender
             .find(Name("div").child(Name("a")))
             .next()
-            .ok_or("can not find pur_name on tender")?
+            .ok_or("cannot find pur_name on tender")?
             .text()
             .trim()
             .to_string();
         let pur_num = tender
             .find(Name("div"))
             .nth(0)
-            .ok_or("can not find pur_num on tender")?
+            .ok_or("cannot find pur_num on tender")?
             .text()
             .trim()
             .to_string();
         let pub_date_t = tender
             .find(Name("div").and(Class("b-adaptive-table-row__data")))
             .nth(2)
-            .ok_or("can not find pub_date_t on tender")?
+            .ok_or("cannot find pub_date_t on tender")?
             .text()
             .trim()
             .to_string();
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y")
-            .ok_or("can not find date_pub on tender")?;
+            .ok_or("cannot find date_pub on tender")?;
         let end_date_t = tender
             .find(Name("div").and(Class("b-adaptive-table-row__data")))
             .nth(3)
-            .ok_or("can not find end_date_t on tender")?
+            .ok_or("cannot find end_date_t on tender")?
             .text()
             .trim()
             .to_string();
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&end_date_t, "%d.%m.%Y")
-            .ok_or("can not find date_end on tender")?;
+            .ok_or("cannot find date_end on tender")?;
         let status = tender
             .find(Name("div").and(Class("b-adaptive-table-row__data")))
             .nth(4)
-            .ok_or("can not find status on tender")?
+            .ok_or("cannot find status on tender")?
             .text()
             .trim()
             .to_string();

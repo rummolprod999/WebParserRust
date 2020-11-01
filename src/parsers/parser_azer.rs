@@ -44,7 +44,7 @@ impl<'a> ParserAzer<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -70,16 +70,16 @@ impl<'a> ParserAzer<'a> {
                     .child(Name("b")),
             )
             .nth(0)
-            .ok_or(format!("{} {}", "can not find  pur_name on tender", ""))?
+            .ok_or(format!("{} {}", "cannot find  pur_name on tender", ""))?
             .text()
             .trim()
             .to_string();
         let href = tender
             .find(Name("div").and(Class("country_list_txt")).child(Name("a")))
             .next()
-            .ok_or("can not find href on tender")?
+            .ok_or("cannot find href on tender")?
             .attr("href")
-            .ok_or("can not find href attr on href")?;
+            .ok_or("cannot find href attr on href")?;
         let date_pub = datetimetools::DateTimeTools::return_datetime_now();
         let pur_num = tender
             .find(
@@ -91,7 +91,7 @@ impl<'a> ParserAzer<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find div tag pur_num on tender", href
+                "cannot find div tag pur_num on tender", href
             ))?
             .text()
             .trim()

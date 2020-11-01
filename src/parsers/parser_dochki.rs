@@ -48,7 +48,7 @@ impl<'a> ParserDochki<'a> {
                     self.get_tenders_from_page(p);
                 }
                 None => {
-                    warn!("can not get start page {}", url);
+                    warn!("cannot get start page {}", url);
                     return;
                 }
             }
@@ -71,7 +71,7 @@ impl<'a> ParserDochki<'a> {
         let pur_name = tender
             .find(Name("h2"))
             .nth(0)
-            .ok_or(format!("{} {}", "can not find  pur_name on tender", ""))?
+            .ok_or(format!("{} {}", "cannot find  pur_name on tender", ""))?
             .text()
             .trim()
             .to_string();
@@ -80,20 +80,18 @@ impl<'a> ParserDochki<'a> {
             regextools::RegexTools::get_one_group(&pur_name.trim(), r"\((\d{2}\.\d{2}\.\d{2})")
                 .ok_or(format!(
                     "{} {}",
-                    "can not find pub_date_t on tender", pur_num
+                    "cannot find pub_date_t on tender", pur_num
                 ))?;
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%y")
-            .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+            .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let pub_end_t =
             regextools::RegexTools::get_one_group(&pur_name.trim(), r"-\s*(\d{2}\.\d{2}\.\d{2})")
                 .ok_or(format!(
                 "{} {}",
-                "can not find pub_end_t on tender", pur_name
+                "cannot find pub_end_t on tender", pur_name
             ))?;
-        let date_end =
-            datetimetools::DateTimeTools::get_date_from_string(&pub_end_t, "%d.%m.%y").ok_or(
-                format!("{} {}", "can not find date_end on tender", pur_name),
-            )?;
+        let date_end = datetimetools::DateTimeTools::get_date_from_string(&pub_end_t, "%d.%m.%y")
+            .ok_or(format!("{} {}", "cannot find date_end on tender", pur_name))?;
         let href = tender
             .find(
                 Name("div")
@@ -102,9 +100,9 @@ impl<'a> ParserDochki<'a> {
                     .child(Name("a")),
             )
             .next()
-            .ok_or("can not find href_t on tender")?
+            .ok_or("cannot find href_t on tender")?
             .attr("href")
-            .ok_or("can not find href attr on href")?;
+            .ok_or("cannot find href attr on href")?;
         let tn = TenderDochki {
             type_fz: 215,
             etp_name: "Дочки & сыночки".to_string(),

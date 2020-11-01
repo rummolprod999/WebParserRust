@@ -46,7 +46,7 @@ impl<'a> ParserQuadra<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -77,7 +77,7 @@ impl<'a> ParserQuadra<'a> {
         let pur_name = tender2
             .find(Name("font"))
             .nth(0)
-            .ok_or("can not find pur_name on tender")?
+            .ok_or("cannot find pur_name on tender")?
             .text();
         let href_t = tender2
             .find(Name("a").and(|x: &Node| {
@@ -88,52 +88,50 @@ impl<'a> ParserQuadra<'a> {
                 }
             }))
             .next()
-            .ok_or("can not find href_t on tender")?
+            .ok_or("cannot find href_t on tender")?
             .attr("href")
-            .ok_or("can not find href attr on href_t")?;
+            .ok_or("cannot find href attr on href_t")?;
         let href = format!("https://trade.quadra.ru{}", href_t);
         let mut tmp_cus_and_pur_name = tender1
             .find(Name("div").child(Name("b")).child(Name("font")))
             .next()
-            .ok_or("can not find tmp_cus_and_pur_name on tender")?
+            .ok_or("cannot find tmp_cus_and_pur_name on tender")?
             .text()
             .to_string();
         tmp_cus_and_pur_name = tmp_cus_and_pur_name.trim().to_string();
         let pur_num = regextools::RegexTools::get_one_group(&tmp_cus_and_pur_name, r"№(\d+)")
-            .ok_or(format!("{} {}", "can not find pur_num on tender", pur_name))?;
-        let cus_name =
-            regextools::RegexTools::get_one_group(&tmp_cus_and_pur_name, r"/\s+(.+)").ok_or(
-                format!("{} {}", "can not find cus_name on tender", pur_name),
-            )?;
+            .ok_or(format!("{} {}", "cannot find pur_num on tender", pur_name))?;
+        let cus_name = regextools::RegexTools::get_one_group(&tmp_cus_and_pur_name, r"/\s+(.+)")
+            .ok_or(format!("{} {}", "cannot find cus_name on tender", pur_name))?;
         let pw_name = tender1
             .find(Name("b"))
             .nth(0)
-            .ok_or("can not find pw_name on tender")?
+            .ok_or("cannot find pw_name on tender")?
             .attr("title")
-            .ok_or("can not find title attr on pw_name")?
+            .ok_or("cannot find title attr on pw_name")?
             .to_string();
         let date_pub_t = tender1
             .find(Name("a"))
             .nth(0)
-            .ok_or("can not find date_pub_t on tender")?
+            .ok_or("cannot find date_pub_t on tender")?
             .text();
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+            .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let date_end_t = tender1
             .find(Name("a"))
             .nth(1)
-            .ok_or("can not find date_end_t on tender")?
+            .ok_or("cannot find date_end_t on tender")?
             .text();
         let date_end =
             datetimetools::DateTimeTools::get_datetime_from_string(&date_end_t, "%d.%m.%Y (%H:%M)")
-                .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+                .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let mut attachments: Vec<Attachment> = Vec::new();
         let attach_s = tender2.find(Name("a"));
         for at in attach_s {
             let name_att = at.text().trim().to_string();
             let url_att_t = at
                 .attr("href")
-                .ok_or("can not find href attr on attachment")?;
+                .ok_or("cannot find href attr on attachment")?;
             let url_att = format!("https://trade.quadra.ru{}", url_att_t);
             let att = Attachment {
                 name_file: name_att,

@@ -46,7 +46,7 @@ impl<'a> ParserAhstep<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -72,23 +72,23 @@ impl<'a> ParserAhstep<'a> {
         let a_t = tender
             .find(Name("p").and(Class("tender-title")).child(Name("a")))
             .next()
-            .ok_or("can not find a tag on tender")?;
-        let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
+            .ok_or("cannot find a tag on tender")?;
+        let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
         let href = format!("https://ahstep.ru/tenders{}", href_t);
         let pur_name = tender
             .find(Name("p").and(Class("tender-title")).child(Name("a")))
             .next()
-            .ok_or("can not find pur_name on tender")?
+            .ok_or("cannot find pur_name on tender")?
             .text()
             .trim()
             .to_string();
         let pur_num = regextools::RegexTools::get_one_group(href_t, r"tender(\d+)$")
-            .ok_or(format!("{} {}", "can not find date_end_t on tender", href))?;
+            .ok_or(format!("{} {}", "cannot find date_end_t on tender", href))?;
         let date_pub = DateTimeTools::return_datetime_now();
         let mut end_date_t = tender
             .find(Name("p").and(Class("text-center")))
             .nth(0)
-            .ok_or("can not find end_date_t on tender")?
+            .ok_or("cannot find end_date_t on tender")?
             .text()
             .trim()
             .to_string();
@@ -96,7 +96,7 @@ impl<'a> ParserAhstep<'a> {
             .ok_or("bad delete double whitespace")?;
         let date_end =
             datetimetools::DateTimeTools::get_datetime_from_string(&end_date_t, "%d.%m.%Y %H:%M")
-                .ok_or("can not find date_end on tender")?;
+                .ok_or("cannot find date_end on tender")?;
         let tn: TenderAhstep = TenderAhstep {
             type_fz: 141,
             etp_name: "АО Агрохолдинг «СТЕПЬ»".to_string(),

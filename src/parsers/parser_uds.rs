@@ -44,7 +44,7 @@ impl<'a> ParserUds<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -70,13 +70,13 @@ impl<'a> ParserUds<'a> {
         let a_t = tender
             .find(Name("div").child(Name("a")))
             .next()
-            .ok_or("can not find a tag on tender")?;
-        let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
+            .ok_or("cannot find a tag on tender")?;
+        let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
         let href = format!("http://uds-group.ru{}", href_t);
         let pur_name = tender
             .find(Class("traders__td_width2"))
             .nth(0)
-            .ok_or("can not find pur_name on tender")?
+            .ok_or("cannot find pur_name on tender")?
             .text()
             .trim()
             .replace("Наименование тендера", "")
@@ -84,7 +84,7 @@ impl<'a> ParserUds<'a> {
         let mut pur_obj = tender
             .find(Class("traders__td_width3"))
             .nth(0)
-            .ok_or("can not find pur_obj on tender")?
+            .ok_or("cannot find pur_obj on tender")?
             .text()
             .replace("Наименование объекта", "")
             .trim()
@@ -95,7 +95,7 @@ impl<'a> ParserUds<'a> {
         let pur_num = tender
             .find(Class("traders__td_width1"))
             .nth(0)
-            .ok_or("can not find pur_num on tender")?
+            .ok_or("cannot find pur_num on tender")?
             .text()
             .replace("Номер тендера", "")
             .trim()
@@ -104,13 +104,13 @@ impl<'a> ParserUds<'a> {
         let end_date_t = tender
             .find(Class("traders__td_width4"))
             .nth(0)
-            .ok_or("can not find pur_num on tender")?
+            .ok_or("cannot find pur_num on tender")?
             .text()
             .replace("Дата окончания подачи заявок", "")
             .trim()
             .to_string();
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&end_date_t, "%d.%m.%Y")
-            .ok_or("can not find date_end on tender")?;
+            .ok_or("cannot find date_end on tender")?;
         let tn: TenderUds = TenderUds {
             type_fz: 134,
             etp_name: "Холдинг UDS group".to_string(),

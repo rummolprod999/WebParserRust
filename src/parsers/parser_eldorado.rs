@@ -45,7 +45,7 @@ impl<'a> ParserEldorado<'a> {
                 self.get_tenders_from_page(p);
             }
             Err(e) => {
-                warn!("can not get start page {} {}", url, e);
+                warn!("cannot get start page {} {}", url, e);
                 return;
             }
         }
@@ -75,7 +75,7 @@ impl<'a> ParserEldorado<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find td 0 tag pur_name on tender", href
+                "cannot find td 0 tag pur_name on tender", href
             ))?
             .text()
             .trim()
@@ -86,27 +86,25 @@ impl<'a> ParserEldorado<'a> {
             .nth(2)
             .ok_or(format!(
                 "{} {}",
-                "can not find td 2 tag pur_name on tender", pur_name
+                "cannot find td 2 tag pur_name on tender", pur_name
             ))?
             .text()
             .trim()
             .to_string();
-        let date_pub = DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y").ok_or(
-            format!("{} {}", "can not find date_pub on tender", pur_name),
-        )?;
+        let date_pub = DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
+            .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_name))?;
         let date_end_t = tender
             .find(Name("td"))
             .nth(3)
             .ok_or(format!(
                 "{} {}",
-                "can not find td 3 tag pur_name on tender", pur_name
+                "cannot find td 3 tag pur_name on tender", pur_name
             ))?
             .text()
             .trim()
             .to_string();
-        let date_end = DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y").ok_or(
-            format!("{} {}", "can not find date_end on tender", pur_name),
-        )?;
+        let date_end = DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y")
+            .ok_or(format!("{} {}", "cannot find date_end on tender", pur_name))?;
         let tn = TenderEldorado {
             type_fz: 198,
             etp_name: "ПАО «М.Видео-Эльдорадо»".to_string(),

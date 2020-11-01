@@ -52,7 +52,7 @@ impl<'a> WebTender for TenderNornic<'a> {
             return Ok((0, 0));
         };
         let page = httptools::HttpTools::get_page_text1251(&self.href)
-            .ok_or(format!("can not download page {}", &self.href))?;
+            .ok_or(format!("cannot download page {}", &self.href))?;
         let document = Document::from(&*page);
         let (cancel_status, update) =
             (self.ret_cancel_status(&pool, self.type_fz, &self.pur_num, &date_upd))?;
@@ -76,10 +76,10 @@ impl<'a> WebTender for TenderNornic<'a> {
             regextools::RegexTools::get_one_group(&dates_t.trim(), r"-\s+(\d{2}\.\d{2}\.\d{4})")
                 .ok_or(format!(
                     "{} {}",
-                    "can not find date_end_t on tender", &self.href
+                    "cannot find date_end_t on tender", &self.href
                 ))?;
         let date_end = DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y").ok_or(
-            format!("{} {}", "can not find date_pub on tender", &self.href),
+            format!("{} {}", "cannot find date_pub on tender", &self.href),
         )?;
         let id_tender = (self.get_tender_id(
             &pool,

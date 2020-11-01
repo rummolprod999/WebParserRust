@@ -73,7 +73,7 @@ impl<'a> ParserRuscoal<'a> {
                     self.get_tenders_from_page(p, url, c);
                 }
                 None => {
-                    warn!("can not get start page {}", url.url);
+                    warn!("cannot get start page {}", url.url);
                     return;
                 }
             }
@@ -108,7 +108,7 @@ impl<'a> ParserRuscoal<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find  pur_num on tender",
+                "cannot find  pur_num on tender",
                 tender.text()
             ))?
             .text()
@@ -120,7 +120,7 @@ impl<'a> ParserRuscoal<'a> {
             .nth(4)
             .ok_or(format!(
                 "{} {}",
-                "can not find  pur_name on tender",
+                "cannot find  pur_name on tender",
                 tender.text()
             ))?
             .text()
@@ -131,7 +131,7 @@ impl<'a> ParserRuscoal<'a> {
             .nth(1)
             .ok_or(format!(
                 "{} {}",
-                "can not find  pub_date_t on tender",
+                "cannot find  pub_date_t on tender",
                 tender.text()
             ))?
             .text()
@@ -139,14 +139,14 @@ impl<'a> ParserRuscoal<'a> {
             .to_string();
         let date_pub =
             datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y").ok_or(
-                format!("{} {}", "can not find date_pub on tender", pub_date_t),
+                format!("{} {}", "cannot find date_pub on tender", pub_date_t),
             )?;
         let end_date_text = tender
             .find(Name("td"))
             .nth(2)
             .ok_or(format!(
                 "{} {}",
-                "can not find  end_date_text on tender",
+                "cannot find  end_date_text on tender",
                 tender.text()
             ))?
             .text()
@@ -154,7 +154,7 @@ impl<'a> ParserRuscoal<'a> {
             .to_string();
         let date_end_t =
             regextools::RegexTools::get_one_group(&end_date_text, r"(\d{2}.\d{2}.\d{4})").ok_or(
-                format!("{} {}", "can not find date_end_t on tender", end_date_text),
+                format!("{} {}", "cannot find date_end_t on tender", end_date_text),
             )?;
         let time_end_t = regextools::RegexTools::get_one_group(&end_date_text, r"(\d{2}[:-]\d{2})")
             .unwrap_or("".to_string());
@@ -167,7 +167,7 @@ impl<'a> ParserRuscoal<'a> {
         .or_else(|| datetimetools::DateTimeTools::get_date_from_string(&date_end_temp, "%d.%m.%Y"))
         .ok_or(format!(
             "{} {}",
-            "can not find date_end on tender", date_end_temp
+            "cannot find date_end on tender", date_end_temp
         ))?;
         let cus_name = if place.cus_name == "" {
             tender
@@ -175,7 +175,7 @@ impl<'a> ParserRuscoal<'a> {
                 .nth(5)
                 .ok_or(format!(
                     "{} {}",
-                    "can not find  cus_name on tender",
+                    "cannot find  cus_name on tender",
                     tender.text()
                 ))?
                 .text()
@@ -189,7 +189,7 @@ impl<'a> ParserRuscoal<'a> {
             .find(Name("td"))
             .nth(6)
             .or_else(|| tender.find(Name("td")).nth(5))
-            .ok_or("can not find attachements")?
+            .ok_or("cannot find attachements")?
             .find(Name("a"));
         for at in attach_s {
             let name_att = at.text().trim().to_string();
@@ -198,7 +198,7 @@ impl<'a> ParserRuscoal<'a> {
             }
             let url_att_t = at
                 .attr("href")
-                .ok_or("can not find href attr on attachment")?;
+                .ok_or("cannot find href attr on attachment")?;
             let url_att = format!("https://www.ruscoal.ru{}", url_att_t.to_string());
             let att = Attachment {
                 name_file: name_att,

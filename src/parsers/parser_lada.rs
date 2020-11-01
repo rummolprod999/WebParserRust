@@ -46,7 +46,7 @@ impl<'a> ParserLada<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -67,8 +67,8 @@ impl<'a> ParserLada<'a> {
         let a_t = tender
             .find(Name("a"))
             .nth(0)
-            .ok_or(format!("{}", "can not find td tag a_t on tender"))?;
-        let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
+            .ok_or(format!("{}", "cannot find td tag a_t on tender"))?;
+        let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
         let href = format!("https://lada-image.ru{}", href_t);
         let pur_num = toolslib::create_md5_str(&*href);
         let pur_name = tender
@@ -76,7 +76,7 @@ impl<'a> ParserLada<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find div tag pur_name on tender", pur_num
+                "cannot find div tag pur_name on tender", pur_num
             ))?
             .text();
         let number_d = tender
@@ -84,13 +84,13 @@ impl<'a> ParserLada<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find div tag number_d on tender", pur_num
+                "cannot find div tag number_d on tender", pur_num
             ))?
             .find(Name("span"))
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find span tag number_d on tender", pur_num
+                "cannot find span tag number_d on tender", pur_num
             ))?
             .text();
         let month_text = tender
@@ -98,20 +98,20 @@ impl<'a> ParserLada<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find div tag month_text on tender", pur_num
+                "cannot find div tag month_text on tender", pur_num
             ))?
             .find(Name("span"))
             .nth(1)
             .ok_or(format!(
                 "{} {}",
-                "can not find span tag month_text on tender", pur_num
+                "cannot find span tag month_text on tender", pur_num
             ))?
             .text();
         let curr_year = format!("{}", DateTimeTools::return_datetime_now().date().year());
         let month = toolslib::month_to_number(&month_text);
         let full_date = format!("{}.{}.{}", number_d, month, curr_year);
         let date_pub = DateTimeTools::get_date_from_string(&full_date, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+            .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let tn = TenderLada {
             type_fz: 191,
             etp_name: "АО «Лада-Имидж»".to_string(),

@@ -44,7 +44,7 @@ impl<'a> ParserBeeline<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -70,13 +70,13 @@ impl<'a> ParserBeeline<'a> {
         let a_t = tender
             .find(Name("a"))
             .next()
-            .ok_or("can not find a tag on tender")?;
-        let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
+            .ok_or("cannot find a tag on tender")?;
+        let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
         let href = format!("https://moskva.beeline.ru{}", href_t);
         let pur_name = tender
             .find(Name("a"))
             .next()
-            .ok_or("can not find pur_name on tender")?
+            .ok_or("cannot find pur_name on tender")?
             .text()
             .trim()
             .to_string();

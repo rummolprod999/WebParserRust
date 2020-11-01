@@ -43,26 +43,26 @@ impl<'a> WebTender for TenderLada<'a> {
         let mut add_t = 0;
         let mut upd_t = 0;
         let page = httptools::HttpTools::get_page_text1251(&self.href)
-            .ok_or(format!("can not download page {}", &self.href))?;
+            .ok_or(format!("cannot download page {}", &self.href))?;
         let document = Document::from(&*page);
         let page_text = document
             .find(Name("div").and(Class("bl_text")))
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find div tag page_text on tender", &self.href
+                "cannot find div tag page_text on tender", &self.href
             ))?
             .text();
         let date_end_text_temp =
             regextools::RegexTools::get_one_group(&page_text, r"(\d{1,2}\s.+\d{4})").ok_or(
                 format!(
                     "{} {}",
-                    "can not find date_end_text_temp on tender", &self.href
+                    "cannot find date_end_text_temp on tender", &self.href
                 ),
             )?;
         let date_end_t = replace_date_in_string(&date_end_text_temp);
         let date_end = DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y").ok_or(
-            format!("{} {}", "can not find date_end on tender", date_end_t),
+            format!("{} {}", "cannot find date_end on tender", date_end_t),
         )?;
         let pool = (my::Pool::new(self.connect_string))?;
         let mut query_res = (pool.prep_exec(r"SELECT id_tender FROM tender WHERE purchase_number = :purchase_number AND type_fz = :type_fz AND doc_publish_date = :doc_publish_date AND end_date = :end_date", params! {"purchase_number" => &self.pur_num, "type_fz" => &self.type_fz, "doc_publish_date" => &self.date_pub.naive_local(), "end_date" => &date_end.naive_local()}))?;

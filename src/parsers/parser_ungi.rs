@@ -51,7 +51,7 @@ impl<'a> ParserUngi<'a> {
                         self.get_tenders_from_page(p);
                     }
                     None => {
-                        warn!("can not get start page {}", url);
+                        warn!("cannot get start page {}", url);
                         return;
                     }
                 }
@@ -78,19 +78,19 @@ impl<'a> ParserUngi<'a> {
         let pur_name = tender
             .find(Name("h4"))
             .nth(0)
-            .ok_or(format!("{} {}", "can not find  pur_name on tender", ""))?
+            .ok_or(format!("{} {}", "cannot find  pur_name on tender", ""))?
             .text()
             .trim()
             .to_string();
         let full_text = tender
             .find(Name("p"))
             .nth(0)
-            .ok_or(format!("{} {}", "can not find  full_text on tender", ""))?
+            .ok_or(format!("{} {}", "cannot find  full_text on tender", ""))?
             .html()
             .trim()
             .to_string();
         let mut pur_num = regextools::RegexTools::get_one_group(&full_text, r"№ отбора —(.+?)<br")
-            .ok_or(format!("{} {}", "can not find pur_num on tender", pur_name))?;
+            .ok_or(format!("{} {}", "cannot find pur_num on tender", pur_name))?;
         pur_num = pur_num
             .replace("<strong>", "")
             .replace("</strong>", "")
@@ -103,7 +103,7 @@ impl<'a> ParserUngi<'a> {
         )
         .ok_or(format!(
             "{} {}",
-            "can not find date_pub_text on tender", pur_name
+            "cannot find date_pub_text on tender", pur_name
         ))?;
         date_pub_text = date_pub_text
             .replace("<strong>", "")
@@ -113,7 +113,7 @@ impl<'a> ParserUngi<'a> {
             .to_string();
         let date_pub =
             datetimetools::DateTimeTools::get_date_from_string(&date_pub_text, "%d.%m.%Y").ok_or(
-                format!("{} {}", "can not find date_pub on tender", date_pub_text),
+                format!("{} {}", "cannot find date_pub on tender", date_pub_text),
             )?;
         let mut date_end_text = regextools::RegexTools::get_one_group(
             &full_text,
@@ -121,7 +121,7 @@ impl<'a> ParserUngi<'a> {
         )
         .ok_or(format!(
             "{} {}",
-            "can not find date_end_text on tender", pur_name
+            "cannot find date_end_text on tender", pur_name
         ))?;
         date_end_text = date_end_text
             .replace("<strong>", "")
@@ -135,12 +135,11 @@ impl<'a> ParserUngi<'a> {
         )
         .ok_or(format!(
             "{} {}",
-            "can not find date_end on tender", date_end_text
+            "cannot find date_end on tender", date_end_text
         ))?;
         let mut cus_name =
-            regextools::RegexTools::get_one_group(&full_text, r"Заказчик.+?—(.+?)<br").ok_or(
-                format!("{} {}", "can not find cus_name on tender", pur_name),
-            )?;
+            regextools::RegexTools::get_one_group(&full_text, r"Заказчик.+?—(.+?)<br")
+                .ok_or(format!("{} {}", "cannot find cus_name on tender", pur_name))?;
         cus_name = cus_name
             .replace("<strong>", "")
             .replace("</strong>", "")
@@ -150,9 +149,9 @@ impl<'a> ParserUngi<'a> {
         let href = tender
             .find(Name("a").and(|node: &Node| node.text().contains("Скачать файл")))
             .next()
-            .ok_or("can not find href_t on tender")?
+            .ok_or("cannot find href_t on tender")?
             .attr("href")
-            .ok_or("can not find href attr on href")?
+            .ok_or("cannot find href attr on href")?
             .to_string();
         let tn = TenderUngi {
             type_fz: 224,

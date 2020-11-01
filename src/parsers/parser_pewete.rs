@@ -44,7 +44,7 @@ impl<'a> ParserPewete<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -74,37 +74,37 @@ impl<'a> ParserPewete<'a> {
         let mut pur_num = tender
             .find(Name("td"))
             .nth(0)
-            .ok_or("can not find tmp on tender")?
+            .ok_or("cannot find tmp on tender")?
             .text();
         pur_num = pur_num.trim().to_string();
         let mut pur_name = tender
             .find(Name("td"))
             .nth(1)
-            .ok_or("can not find pur_name on tender")?
+            .ok_or("cannot find pur_name on tender")?
             .text();
         pur_name = pur_name.trim().to_string();
         let date_pub_t = tender
             .find(Name("td"))
             .nth(2)
-            .ok_or("can not find date_pub_t on tender")?
+            .ok_or("cannot find date_pub_t on tender")?
             .text();
         let date_end_t = tender
             .find(Name("td"))
             .nth(3)
-            .ok_or("can not find date_end_t on tender")?
+            .ok_or("cannot find date_end_t on tender")?
             .text();
         let date_scoring_t = tender
             .find(Name("td"))
             .nth(4)
-            .ok_or("can not find date_scoring_t on tender")?
+            .ok_or("cannot find date_scoring_t on tender")?
             .text();
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+            .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_end on tender", pur_num))?;
+            .ok_or(format!("{} {}", "cannot find date_end on tender", pur_num))?;
         let date_scoring =
             datetimetools::DateTimeTools::get_date_from_string(&date_scoring_t, "%d.%m.%Y").ok_or(
-                format!("{} {}", "can not find date_scoring_t on tender", pur_num),
+                format!("{} {}", "cannot find date_scoring_t on tender", pur_num),
             )?;
         let tn = TenderPewete {
             type_fz: 183,

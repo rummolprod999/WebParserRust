@@ -49,7 +49,7 @@ impl<'a> WebTender for TenderMedsi<'a> {
             return Ok((0, 0));
         };
         let page = httptools::HttpTools::get_page_text(&self.href)
-            .ok_or(format!("can not download page {}", &self.href))?;
+            .ok_or(format!("cannot download page {}", &self.href))?;
         let document = Document::from(&*page);
         let (cancel_status, update) =
             (self.ret_cancel_status(&pool, self.type_fz, &self.pur_num, &date_upd))?;

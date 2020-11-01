@@ -47,7 +47,7 @@ impl<'a> ParserAm<'a> {
                         self.get_tenders_from_page(p);
                     }
                     None => {
-                        warn!("can not get start page {}", url);
+                        warn!("cannot get start page {}", url);
                         return;
                     }
                 }
@@ -69,7 +69,7 @@ impl<'a> ParserAm<'a> {
         let pur_name = tender
             .find(Name("div").and(Class("tender_title")))
             .nth(0)
-            .ok_or(format!("{} {}", "can not find  pur_name on tender", ""))?
+            .ok_or(format!("{} {}", "cannot find  pur_name on tender", ""))?
             .text()
             .trim()
             .to_string();
@@ -81,15 +81,15 @@ impl<'a> ParserAm<'a> {
                     .child(Name("a")),
             )
             .next()
-            .ok_or("can not find href_t on tender")?
+            .ok_or("cannot find href_t on tender")?
             .attr("href")
-            .ok_or("can not find href attr on href")?
+            .ok_or("cannot find href attr on href")?
             .to_string();
         let pur_num = toolslib::create_md5_str(&href);
         let date_pub_t = tender
             .find(Name("div").child(Name("p").and(Class("tender_time"))))
             .nth(0)
-            .ok_or("can not find date_pub_t on tender")?
+            .ok_or("cannot find date_pub_t on tender")?
             .text();
         let date_pub_tt = regextools::RegexTools::get_one_group(
             &date_pub_t,
@@ -97,13 +97,13 @@ impl<'a> ParserAm<'a> {
         )
         .ok_or(format!(
             "{} {}",
-            "can not find date_pub_tt on tender", pur_num
+            "cannot find date_pub_tt on tender", pur_num
         ))?;
         let date_pub = datetimetools::DateTimeTools::get_datetime_from_string(
             &date_pub_tt,
             "%Y-%m-%d %H:%M:%S",
         )
-        .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+        .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let date_end = date_pub.clone();
         let tn = TenderAm {
             type_fz: 209,

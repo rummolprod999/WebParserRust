@@ -44,7 +44,7 @@ impl<'a> ParserMosobl<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -80,42 +80,39 @@ impl<'a> ParserMosobl<'a> {
         let pur_name = tender
             .find(Name("td"))
             .nth(3)
-            .ok_or(format!("{} {}", "can not find  pur_name on tender", ""))?
+            .ok_or(format!("{} {}", "cannot find  pur_name on tender", ""))?
             .text()
             .trim()
             .to_string();
         let pur_num = tender
             .find(Name("td"))
             .nth(2)
-            .ok_or(format!(
-                "{} {}",
-                "can not find  pur_num on tender", pur_name
-            ))?
+            .ok_or(format!("{} {}", "cannot find  pur_num on tender", pur_name))?
             .text()
             .trim()
             .to_string();
         let href_t = tender
             .find(Name("a"))
             .next()
-            .ok_or("can not find href_t on tender")?
+            .ok_or("cannot find href_t on tender")?
             .attr("href")
-            .ok_or("can not find href attr on href_t")?;
+            .ok_or("cannot find href attr on href_t")?;
         let href = format!("https://mosoblbank.ru{}", href_t);
         let date_pub_t = tender
             .find(Name("td"))
             .nth(0)
-            .ok_or("can not find date_pub_t on tender")?
+            .ok_or("cannot find date_pub_t on tender")?
             .text()
             .replace("0019", "2019");
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
             .ok_or(format!(
                 "{} {} {}",
-                "can not find date_pub on tender", pur_num, date_pub_t
+                "cannot find date_pub on tender", pur_num, date_pub_t
             ))?;
         let date_end_t = tender
             .find(Name("td"))
             .nth(1)
-            .ok_or("can not find date_end_t on tender")?
+            .ok_or("cannot find date_end_t on tender")?
             .text()
             .replace("0019", "2019");
         let date_end =
@@ -125,7 +122,7 @@ impl<'a> ParserMosobl<'a> {
                 })
                 .ok_or(format!(
                     "{} {} {}",
-                    "can not find date_end on tender", pur_num, date_pub_t
+                    "cannot find date_end on tender", pur_num, date_pub_t
                 ))?;
         let tn = TenderMosobl {
             type_fz: 199,

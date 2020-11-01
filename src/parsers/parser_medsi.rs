@@ -44,7 +44,7 @@ impl<'a> ParserMedsi<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -66,20 +66,20 @@ impl<'a> ParserMedsi<'a> {
         let pur_num = tender
             .find(Name("td"))
             .nth(0)
-            .ok_or("can not find pur_num on tender")?
+            .ok_or("cannot find pur_num on tender")?
             .text();
         let pur_name = tender
             .find(Name("td"))
             .nth(2)
             .ok_or(format!(
                 "{} {}",
-                "can not find td tag pur_name on tender", pur_num
+                "cannot find td tag pur_name on tender", pur_num
             ))?
             .find(Name("a"))
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find a tag pur_name on tender", pur_num
+                "cannot find a tag pur_name on tender", pur_num
             ))?
             .text();
         let a_t = tender
@@ -87,33 +87,30 @@ impl<'a> ParserMedsi<'a> {
             .nth(2)
             .ok_or(format!(
                 "{} {}",
-                "can not find td tag a_t on tender", pur_num
+                "cannot find td tag a_t on tender", pur_num
             ))?
             .find(Name("a"))
             .nth(0)
-            .ok_or(format!(
-                "{} {}",
-                "can not find a tag a_t on tender", pur_num
-            ))?;
-        let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
+            .ok_or(format!("{} {}", "cannot find a tag a_t on tender", pur_num))?;
+        let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
         let href = format!("https://medsi.ru{}", href_t);
         let date_pub_t = tender
             .find(Name("td"))
             .nth(3)
-            .ok_or("can not find date_pub_t on tender")?
+            .ok_or("cannot find date_pub_t on tender")?
             .text();
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_pub on tender", pur_num))?;
+            .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let date_end_t = tender
             .find(Name("td"))
             .nth(4)
-            .ok_or("can not find date_end_t on tender")?
+            .ok_or("cannot find date_end_t on tender")?
             .text();
         let date_end = datetimetools::DateTimeTools::get_datetime_from_string(
             &date_end_t,
             "%d.%m.%Y %H:%M:%S",
         )
-        .ok_or(format!("{} {}", "can not find date_end on tender", pur_num))?;
+        .ok_or(format!("{} {}", "cannot find date_end on tender", pur_num))?;
         let tn = TenderMedsi {
             type_fz: 190,
             etp_name: "Медицинская корпорация МЕДСИ".to_string(),

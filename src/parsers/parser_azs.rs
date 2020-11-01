@@ -45,7 +45,7 @@ impl<'a> ParserAzs<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -76,7 +76,7 @@ impl<'a> ParserAzs<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find  pur_name on tender",
+                "cannot find  pur_name on tender",
                 tender.text()
             ))?
             .text()
@@ -87,34 +87,34 @@ impl<'a> ParserAzs<'a> {
             .nth(1)
             .ok_or(format!(
                 "{} {}",
-                "can not find  pur_name2 on tender",
+                "cannot find  pur_name2 on tender",
                 tender.text()
             ))?
             .text()
             .trim()
             .to_string();
         let pur_num = regextools::RegexTools::get_one_group(&pur_name, r"№(\d+)")
-            .ok_or(format!("{} {}", "can not find pur_num on tender", pur_name))?;
+            .ok_or(format!("{} {}", "cannot find pur_num on tender", pur_name))?;
         let pub_date_t =
             regextools::RegexTools::get_one_group(&pur_name, r"/(\d{2}\.\d{2}\.\d{4})/").ok_or(
-                format!("{} {}", "can not find pub_date_t on tender", pur_name),
+                format!("{} {}", "cannot find pub_date_t on tender", pur_name),
             )?;
         let date_pub =
             datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y").ok_or(
-                format!("{} {}", "can not find date_pub on tender", pub_date_t),
+                format!("{} {}", "cannot find date_pub on tender", pub_date_t),
             )?;
         let pw_name = tender
             .find(Name("td"))
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find  pw_name on tender",
+                "cannot find  pw_name on tender",
                 tender.text()
             ))?
             .first_child()
             .ok_or(format!(
                 "{} {}",
-                "can not find  pw_name on tender",
+                "cannot find  pw_name on tender",
                 tender.text()
             ))?
             .text()
@@ -125,7 +125,7 @@ impl<'a> ParserAzs<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find  pw_name on tender",
+                "cannot find  pw_name on tender",
                 tender.text()
             ))?
             .text()
@@ -137,7 +137,7 @@ impl<'a> ParserAzs<'a> {
         )
         .ok_or(format!(
             "{} {}",
-            "can not find end_date_t on tender", end_date_full
+            "cannot find end_date_t on tender", end_date_full
         ))?;
         let date_end =
             datetimetools::DateTimeTools::get_datetime_from_string(&end_date_t, "%d.%m.%Y, %H:%M")
@@ -146,20 +146,20 @@ impl<'a> ParserAzs<'a> {
                 })
                 .ok_or(format!(
                     "{} {}",
-                    "can not find date_end on tender", end_date_t
+                    "cannot find date_end on tender", end_date_t
                 ))?;
         let cus_name = tender
             .find(Name("td"))
             .nth(2)
             .ok_or(format!(
                 "{} {}",
-                "can not find  cus_name on tender",
+                "cannot find  cus_name on tender",
                 tender.text()
             ))?
             .first_child()
             .ok_or(format!(
                 "{} {}",
-                "can not find  cus_name on tender",
+                "cannot find  cus_name on tender",
                 tender.text()
             ))?
             .text()
@@ -170,13 +170,13 @@ impl<'a> ParserAzs<'a> {
             .nth(2)
             .ok_or(format!(
                 "{} {}",
-                "can not find  cus_name on tender",
+                "cannot find  cus_name on tender",
                 tender.text()
             ))?
             .last_child()
             .ok_or(format!(
                 "{} {}",
-                "can not find  cus_name on tender",
+                "cannot find  cus_name on tender",
                 tender.text()
             ))?
             .text()
@@ -196,7 +196,7 @@ impl<'a> ParserAzs<'a> {
             }
             let url_att_t = at
                 .attr("href")
-                .ok_or("can not find href attr on attachment")?;
+                .ok_or("cannot find href attr on attachment")?;
             let url_att = format!("https://azsgazprom.ru/{}", url_att_t.to_string());
             let att = Attachment {
                 name_file: name_att,

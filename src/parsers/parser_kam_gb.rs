@@ -47,7 +47,7 @@ impl<'a> ParserKamgb<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -69,8 +69,8 @@ impl<'a> ParserKamgb<'a> {
         let a_t = tender
             .find(Class("tender__name").and(Name("div")).child(Name("a")))
             .next()
-            .ok_or("can not find a tag on tender")?;
-        let href_t = a_t.attr("href").ok_or("can not find href attr on tender")?;
+            .ok_or("cannot find a tag on tender")?;
+        let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
         let href = format!("http://www.kamgb.ru{}", href_t);
         let pur_num = toolslib::create_md5_str(&href);
         let pur_name = a_t.text().trim().to_string();
@@ -80,7 +80,7 @@ impl<'a> ParserKamgb<'a> {
             let name_att = at.text().trim().to_string();
             let url_att_t = at
                 .attr("href")
-                .ok_or("can not find href attr on attachment")?;
+                .ok_or("cannot find href attr on attachment")?;
             let url_att = format!("http://www.kamgb.ru{}", url_att_t);
             let att = Attachment {
                 name_file: name_att,
@@ -91,7 +91,7 @@ impl<'a> ParserKamgb<'a> {
         let mut ten_info = tender.find(Class("tender__info").and(Name("div")));
         let cus_name_tt = toolslib::find_from_child_text(
             &mut ten_info,
-            "can not find cus_name_t",
+            "cannot find cus_name_t",
             "Инициатор закупки",
         )?;
         let cus_name = cus_name_tt
@@ -103,7 +103,7 @@ impl<'a> ParserKamgb<'a> {
         let mut ten_info = tender.find(Class("tender__info").and(Name("div")));
         let pub_date_tt = toolslib::find_from_child_text(
             &mut ten_info,
-            "can not find pub_date_tt",
+            "cannot find pub_date_tt",
             "Дата размещения",
         )?;
         let pub_date_t = pub_date_tt
@@ -114,7 +114,7 @@ impl<'a> ParserKamgb<'a> {
 
         let end_date_tt = tender.find_text_in_node(
             Class("tender__info").and(Name("div")),
-            "can not find end_date_tt",
+            "cannot find end_date_tt",
             "Срок приёма предложения",
         )?;
         let end_date_t = end_date_tt
@@ -123,15 +123,15 @@ impl<'a> ParserKamgb<'a> {
             .trim()
             .to_string();
         let pub_date_str = datetimetools::DateTimeTools::replace_str_months(&pub_date_t)
-            .ok_or("can not replace pub_date_str")?;
+            .ok_or("cannot replace pub_date_str")?;
         let end_date_str = datetimetools::DateTimeTools::replace_str_months(&end_date_t)
-            .ok_or("can not replace end_date_str")?;
+            .ok_or("cannot replace end_date_str")?;
         let date_pub =
             datetimetools::DateTimeTools::get_date_from_string(&pub_date_str, "%d.%m.%Y")
-                .ok_or("can not find date_pub on tender")?;
+                .ok_or("cannot find date_pub on tender")?;
         let date_end =
             datetimetools::DateTimeTools::get_date_from_string(&end_date_str, "%d.%m.%Y")
-                .ok_or("can not find date_end on tender")?;
+                .ok_or("cannot find date_end on tender")?;
         let tn: TenderKamgb = TenderKamgb {
             type_fz: 133,
             etp_name: "OOO «КАМАЗжилбыт»".to_string(),

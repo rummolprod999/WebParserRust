@@ -43,7 +43,7 @@ impl<'a> ParserNefaz<'a> {
         match page {
             Some(p) => self.get_tenders_from_page(p),
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -60,14 +60,14 @@ impl<'a> ParserNefaz<'a> {
         let a_t = match tender.find(Name("a")).next() {
             Some(n) => n,
             None => {
-                warn!("{}", "can not find a tag on tender");
+                warn!("{}", "cannot find a tag on tender");
                 return;
             }
         };
         let href_t = match a_t.attr("href") {
             Some(hr) => hr,
             None => {
-                warn!("{}", "can not find href attr on tender");
+                warn!("{}", "cannot find href attr on tender");
                 return;
             }
         };
@@ -76,14 +76,14 @@ impl<'a> ParserNefaz<'a> {
         let pur_name = match tender.find(Name("td")).nth(1) {
             Some(n) => n.text(),
             None => {
-                warn!("{}", "can not find pur_name on tender");
+                warn!("{}", "cannot find pur_name on tender");
                 return;
             }
         };
         let date_pb = match tender.find(Name("td")).nth(0) {
             Some(n) => n.text(),
             None => {
-                warn!("{}", "can not find date_pb on tender");
+                warn!("{}", "cannot find date_pb on tender");
                 return;
             }
         };
@@ -93,7 +93,7 @@ impl<'a> ParserNefaz<'a> {
         ) {
             Some(pn) => pn,
             None => {
-                warn!("{} {}", "can not find date_pub_t on tender", href_t);
+                warn!("{} {}", "cannot find date_pub_t on tender", href_t);
                 return;
             }
         };
@@ -101,7 +101,7 @@ impl<'a> ParserNefaz<'a> {
         let date_pub = match date_pub_t {
             Some(d) => d,
             None => {
-                warn!("{} {}", "can not find date_pub on tender", href_t);
+                warn!("{} {}", "cannot find date_pub on tender", href_t);
                 return;
             }
         };
@@ -109,7 +109,7 @@ impl<'a> ParserNefaz<'a> {
         let org_name = match tender.find(Name("td")).nth(2) {
             Some(n) => n.text(),
             None => {
-                warn!("{}", "can not find org_name on tender");
+                warn!("{}", "cannot find org_name on tender");
                 return;
             }
         };

@@ -57,7 +57,7 @@ impl<'a> ParserKaprem<'a> {
                     self.get_tenders_from_page(p, url, c);
                 }
                 None => {
-                    warn!("can not get start page {}", url.url);
+                    warn!("cannot get start page {}", url.url);
                     return;
                 }
             }
@@ -90,7 +90,7 @@ impl<'a> ParserKaprem<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find  pur_name on tender",
+                "cannot find  pur_name on tender",
                 tender.text()
             ))?
             .text()
@@ -107,7 +107,7 @@ impl<'a> ParserKaprem<'a> {
             }
             let url_att_t = at
                 .attr("href")
-                .ok_or("can not find href attr on attachment")?;
+                .ok_or("cannot find href attr on attachment")?;
             let url_att = format!("http://kapremont02.ru{}", url_att_t.to_string());
             let att = Attachment {
                 name_file: name_att,

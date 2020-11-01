@@ -47,7 +47,7 @@ impl<'a> ParserSalavat<'a> {
                     self.get_tenders_from_page(p, url.to_string());
                 }
                 None => {
-                    warn!("can not get start page {}", url);
+                    warn!("cannot get start page {}", url);
                     return;
                 }
             }
@@ -74,7 +74,7 @@ impl<'a> ParserSalavat<'a> {
         let pur_name = tender
             .find(Name("td"))
             .next()
-            .ok_or("can not find pur_name on tender")?
+            .ok_or("cannot find pur_name on tender")?
             .text()
             .trim()
             .to_string();
@@ -86,7 +86,7 @@ impl<'a> ParserSalavat<'a> {
                     tmp.to_string()
                 }
                 None => {
-                    warn!("{} {}", "can not find pur_num on tender", &pur_name);
+                    warn!("{} {}", "cannot find pur_num on tender", &pur_name);
                     return Ok(());
                 }
             };
@@ -100,7 +100,7 @@ impl<'a> ParserSalavat<'a> {
         let attach_s = tender
             .find(Name("td"))
             .nth(3)
-            .ok_or("can not find attachements")?
+            .ok_or("cannot find attachements")?
             .find(Name("a"));
         for at in attach_s {
             let name_att_t = at.text().trim().to_string();
@@ -111,7 +111,7 @@ impl<'a> ParserSalavat<'a> {
             };
             let url_att_t = at
                 .attr("href")
-                .ok_or("can not find href attr on attachment")?;
+                .ok_or("cannot find href attr on attachment")?;
             let url_att = url_att_t.to_string();
             let att = Attachment {
                 name_file: name_att,
@@ -122,7 +122,7 @@ impl<'a> ParserSalavat<'a> {
         let pub_date_t = tender
             .find(Name("td"))
             .nth(1)
-            .ok_or("can not find pub_date_t")?
+            .ok_or("cannot find pub_date_t")?
             .text()
             .replace("208", "2018")
             .trim()
@@ -130,15 +130,15 @@ impl<'a> ParserSalavat<'a> {
         let end_date_t = tender
             .find(Name("td"))
             .nth(2)
-            .ok_or("can not find end_date_t")?
+            .ok_or("cannot find end_date_t")?
             .text()
             .replace("208", "2018")
             .trim()
             .to_string();
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y")
-            .ok_or("can not find date_pub on tender")?;
+            .ok_or("cannot find date_pub on tender")?;
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&end_date_t, "%d.%m.%Y")
-            .ok_or("can not find date_end on tender")?;
+            .ok_or("cannot find date_end on tender")?;
         let tn: TenderSalavat = TenderSalavat {
             type_fz: 142,
             etp_name: "АО «Газпром СтройТЭК Салават»".to_string(),

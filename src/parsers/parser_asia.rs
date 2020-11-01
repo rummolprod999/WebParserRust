@@ -45,7 +45,7 @@ impl<'a> ParserAsia<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -70,7 +70,7 @@ impl<'a> ParserAsia<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find div tag pur_name on tender", href
+                "cannot find div tag pur_name on tender", href
             ))?
             .text()
             .trim()
@@ -86,19 +86,19 @@ impl<'a> ParserAsia<'a> {
             .nth(0)
             .ok_or(format!(
                 "{} {}",
-                "can not find div tag dates on tender", href
+                "cannot find div tag dates on tender", href
             ))?
             .text()
             .trim()
             .to_string();
         let date_pub_t = regextools::RegexTools::get_one_group(&dates, r"с\s*(\d{2}.\d{2}.\d{4})")
-            .ok_or(format!("{} {}", "can not find date_pub_t on tender", href))?;
+            .ok_or(format!("{} {}", "cannot find date_pub_t on tender", href))?;
         let date_end_t = regextools::RegexTools::get_one_group(&dates, r"до\s*(\d{2}.\d{2}.\d{4})")
-            .ok_or(format!("{} {}", "can not find date_end_t on tender", href))?;
+            .ok_or(format!("{} {}", "cannot find date_end_t on tender", href))?;
         let date_pub = DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_pub on tender", href))?;
+            .ok_or(format!("{} {}", "cannot find date_pub on tender", href))?;
         let date_end = DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "can not find date_end on tender", href))?;
+            .ok_or(format!("{} {}", "cannot find date_end on tender", href))?;
         let attach_url = "https://asiacement.ru/tendery-i-zakupki".to_string();
         let tn = TenderAsia {
             type_fz: 195,

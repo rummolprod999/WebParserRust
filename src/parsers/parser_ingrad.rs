@@ -44,7 +44,7 @@ impl<'a> ParserIngrad<'a> {
                 self.get_tenders_from_page(p);
             }
             None => {
-                warn!("can not get start page {}", url);
+                warn!("cannot get start page {}", url);
                 return;
             }
         }
@@ -71,35 +71,35 @@ impl<'a> ParserIngrad<'a> {
         let pur_name = tender
             .find(Name("td"))
             .nth(1)
-            .ok_or("can not find pur_name on tender")?
+            .ok_or("cannot find pur_name on tender")?
             .text()
             .trim()
             .to_string();
         let pur_num = tender
             .find(Name("td"))
             .nth(0)
-            .ok_or("can not find pur_num on tender")?
+            .ok_or("cannot find pur_num on tender")?
             .text()
             .trim()
             .to_string();
         let pub_date_t = tender
             .find(Name("td"))
             .nth(2)
-            .ok_or("can not find pub_date_t on tender")?
+            .ok_or("cannot find pub_date_t on tender")?
             .text()
             .trim()
             .to_string();
         let date_pub = datetimetools::DateTimeTools::get_date_from_string(&pub_date_t, "%d.%m.%Y")
-            .ok_or("can not find date_pub on tender")?;
+            .ok_or("cannot find date_pub on tender")?;
         let end_date_t = tender
             .find(Name("td"))
             .nth(3)
-            .ok_or("can not find end_date_t on tender")?
+            .ok_or("cannot find end_date_t on tender")?
             .text()
             .trim()
             .to_string();
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&end_date_t, "%d.%m.%Y")
-            .ok_or("can not find date_end on tender")?;
+            .ok_or("cannot find date_end on tender")?;
         let tn: TenderIngrad = TenderIngrad {
             type_fz: 247,
             etp_name: "ГК \"INGRAD\"".to_string(),

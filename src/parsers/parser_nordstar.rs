@@ -47,7 +47,7 @@ impl<'a> ParserNordstar<'a> {
                     self.get_tenders_from_page(p, url.to_string());
                 }
                 None => {
-                    warn!("can not get start page {}", url);
+                    warn!("cannot get start page {}", url);
                     return;
                 }
             }
