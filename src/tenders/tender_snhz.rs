@@ -51,7 +51,7 @@ impl<'a> WebTender for TenderSnHz<'a> {
         if let Some(_) = query_res.next() {
             return Ok((0, 0));
         };
-        let page = httptools::HttpTools::get_page_text(&self.href)
+        let page = httptools::HttpTools::get_page_text1251(&self.href)
             .ok_or(format!("can not download page {}", &self.href))?;
         let document = Document::from(&*page);
         let (cancel_status, update) =
