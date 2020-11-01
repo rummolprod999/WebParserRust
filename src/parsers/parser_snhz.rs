@@ -6,12 +6,10 @@ use self::select::node::Node;
 use self::select::predicate::{Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
-use crate::tenders::tender_nordstar::TenderNordstar;
 use crate::tenders::tender_snhz::TenderSnHz;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::datetimetools;
 use crate::toolslib::httptools;
-use crate::toolslib::regextools;
 use select::predicate::Class;
 use std::error;
 
