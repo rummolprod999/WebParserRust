@@ -20,6 +20,7 @@ pub struct TenderSnHz<'a> {
     pub pur_num: String,
     pub pur_name: String,
     pub org_name: String,
+    pub pw_name: String,
     pub date_pub: DateTime<FixedOffset>,
     pub date_end: DateTime<FixedOffset>,
     pub connect_string: &'a String,
