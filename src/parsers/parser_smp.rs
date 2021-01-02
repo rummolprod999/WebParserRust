@@ -37,7 +37,7 @@ impl<'a> ParserSmp<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://new.smpbank.ru/tenders";
+        let url = "https://smpbank.ru/tenders";
         let page = httptools::HttpTools::get_page_text(&url);
         match page {
             Some(p) => {
@@ -54,7 +54,7 @@ impl<'a> ParserSmp<'a> {
         let document = Document::from(&*page_text);
         for ten in document.find(
             Name("table")
-                .and(Class("_3Wk7m061yf"))
+                .and(Class("TableSimple-common__table__3Wk7m"))
                 .child(Name("tbody"))
                 .child(Name("tr").and(|x: &Node| {
                     if x.text().contains("Начало")
@@ -98,7 +98,7 @@ impl<'a> ParserSmp<'a> {
             .ok_or("cannot find href_t on tender")?
             .attr("href")
             .ok_or("cannot find href attr on href_t")?;
-        let href = format!("https://new.smpbank.ru{}", href_t);
+        let href = format!("https://smpbank.ru{}", href_t);
         let date_pub_t = tender
             .find(Name("td"))
             .nth(0)
