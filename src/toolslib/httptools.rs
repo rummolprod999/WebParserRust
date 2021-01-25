@@ -1,3 +1,4 @@
+use reqwest::ClientBuilder;
 use std::error::Error;
 use std::io::Read;
 use std::option::Option;
@@ -26,8 +27,37 @@ impl HttpTools {
         s
     }
 
+    pub fn get_page_text_no_ssl(url: &str) -> Option<String> {
+        let mut s: Option<String> = None;
+        let mut i = 5;
+        while i >= 0 {
+            let res = HttpTools::try_get_page_no_ssl(url);
+            match res {
+                Ok(r) => {
+                    s = Some(r);
+                    break;
+                }
+                Err(e) => {
+                    i -= 1;
+                    warn!("{} {}", e, e.to_string());
+                }
+            }
+        }
+        s
+    }
+
     pub fn try_get_page(url: &str) -> Result<String, Box<dyn Error>> {
         let mut res = reqwest::get(url)?;
+        let mut body = String::new();
+        res.read_to_string(&mut body)?;
+        Ok(body)
+    }
+
+    pub fn try_get_page_no_ssl(url: &str) -> Result<String, Box<dyn Error>> {
+        let client = ClientBuilder::new()
+            .danger_accept_invalid_certs(true)
+            .build()?;
+        let mut res = client.get(url).send()?;
         let mut body = String::new();
         res.read_to_string(&mut body)?;
         Ok(body)

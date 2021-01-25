@@ -37,8 +37,8 @@ impl<'a> ParserUds<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "http://uds-group.ru/tenders";
-        let page = httptools::HttpTools::get_page_text(url);
+        let url = "https://uds-group.ru/tenders/";
+        let page = httptools::HttpTools::get_page_text_no_ssl(url);
         match page {
             Some(p) => {
                 self.get_tenders_from_page(p);
@@ -104,13 +104,24 @@ impl<'a> ParserUds<'a> {
         let end_date_t = tender
             .find(Class("traders__td_width4"))
             .nth(0)
-            .ok_or("cannot find pur_num on tender")?
+            .ok_or("cannot find end_date_t on tender")?
             .text()
             .replace("Дата окончания подачи заявок", "")
             .trim()
             .to_string();
         let date_end = datetimetools::DateTimeTools::get_date_from_string(&end_date_t, "%d.%m.%Y")
             .ok_or("cannot find date_end on tender")?;
+        let bidding_date_t = tender
+            .find(Class("traders__td_width5"))
+            .nth(0)
+            .ok_or("cannot find bidding_date_t on tender")?
+            .text()
+            .replace("Ориентировочная дата проведения тендера", "")
+            .trim()
+            .to_string();
+        let date_bidding =
+            datetimetools::DateTimeTools::get_date_from_string(&bidding_date_t, "%d.%m.%Y")
+                .unwrap_or(datetimetools::DateTimeTools::return_min_datetime());
         let tn: TenderUds = TenderUds {
             type_fz: 134,
             etp_name: "Холдинг UDS group".to_string(),
@@ -121,6 +132,7 @@ impl<'a> ParserUds<'a> {
             pur_obj,
             date_pub,
             date_end,
+            date_bidding,
             connect_string: &self.connect_string,
         };
         let (addt, updt) = tn.parser();
