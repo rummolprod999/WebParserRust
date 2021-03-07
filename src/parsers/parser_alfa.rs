@@ -8,8 +8,8 @@ use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_alfa::TenderAlfa;
 use crate::tenders::tenders::WebTender;
-use crate::toolslib::httptools;
 use crate::toolslib::{datetimetools, toolslib};
+use crate::toolslib::{httptools, regextools};
 use std::error;
 
 pub struct ParserAlfa<'a> {
@@ -74,7 +74,6 @@ impl<'a> ParserAlfa<'a> {
             .text()
             .trim()
             .to_string();
-        let pur_num = toolslib::create_md5_str(&pur_name);
         let href_t = tender
             .find(Name("a"))
             .next()
@@ -82,6 +81,8 @@ impl<'a> ParserAlfa<'a> {
             .attr("href")
             .ok_or("cannot find href attr on href_t")?;
         let href = format!("https://alfabank.ru{}", href_t);
+        let pur_num = regextools::RegexTools::get_one_group(&href, r"(\d+)\.doc")
+            .ok_or(format!("{} {}", "cannot find pur_num on tender", href))?;
         let date_pub_t = tender
             .find(Name("div").and(Class("date")))
             .nth(0)
