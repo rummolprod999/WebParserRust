@@ -8,10 +8,10 @@ use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_ahstep::TenderAhstep;
 use crate::tenders::tenders::WebTender;
-use crate::toolslib::datetimetools;
 use crate::toolslib::datetimetools::DateTimeTools;
 use crate::toolslib::httptools;
 use crate::toolslib::regextools;
+use crate::toolslib::{datetimetools, toolslib};
 use std::error;
 
 pub struct ParserAhstep<'a> {
@@ -39,7 +39,7 @@ impl<'a> ParserAhstep<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://ahstep.ru/tender";
+        let url = "https://www.ahstep.ru/index.php/tender";
         let page = httptools::HttpTools::get_page_text(url);
         match page {
             Some(p) => {
@@ -74,7 +74,7 @@ impl<'a> ParserAhstep<'a> {
             .next()
             .ok_or("cannot find a tag on tender")?;
         let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
-        let href = format!("https://ahstep.ru/tenders{}", href_t);
+        let href = format!("https://www.ahstep.ru{}", href_t);
         let pur_name = tender
             .find(Name("p").and(Class("tender-title")).child(Name("a")))
             .next()
@@ -83,7 +83,7 @@ impl<'a> ParserAhstep<'a> {
             .trim()
             .to_string();
         let pur_num = regextools::RegexTools::get_one_group(href_t, r"tender(\d+)$")
-            .ok_or(format!("{} {}", "cannot find date_end_t on tender", href))?;
+            .unwrap_or(toolslib::create_md5_str(&pur_name));
         let date_pub = DateTimeTools::return_datetime_now();
         let mut end_date_t = tender
             .find(Name("p").and(Class("text-center")))

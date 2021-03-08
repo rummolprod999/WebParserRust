@@ -164,7 +164,7 @@ impl<'a> TenderAhstep<'a> {
         for att in attachments {
             let url_att_t = att.attr("href");
             if let Some(url_att) = url_att_t {
-                let url_at = format!("https://ahstep.ru{}", url_att);
+                let url_at = format!("https://www.ahstep.ru{}", url_att);
                 (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => "Скачать документацию", "url" => &url_at}))?;
             }
         }
