@@ -24,6 +24,7 @@ pub struct TenderTgk14<'a> {
     pub pur_num: String,
     pub pur_name: String,
     pub pw_name: String,
+    pub nmck: String,
     pub date_pub: DateTime<FixedOffset>,
     pub date_end: DateTime<FixedOffset>,
     pub status: String,
@@ -136,7 +137,7 @@ impl<'a> TenderTgk14<'a> {
         }
     }
     fn get_lot_id(&self, pool: &my::Pool, id_tender: &u64) -> Result<u64, Box<dyn error::Error>> {
-        let res_insert = (pool.prep_exec("INSERT INTO lot SET id_tender = :id_tender, lot_number = :lot_number, currency = :currency", params! {"id_tender" => id_tender, "lot_number" => 1, "currency" => ""}))?;
+        let res_insert = (pool.prep_exec("INSERT INTO lot SET id_tender = :id_tender, lot_number = :lot_number, currency = :currency, max_price = :max_price", params! {"id_tender" => id_tender, "lot_number" => 1, "currency" => "", "max_price" => &self.nmck}))?;
         return Ok(res_insert.last_insert_id());
     }
     fn insert_purchase_object(
@@ -167,8 +168,9 @@ impl<'a> TenderTgk14<'a> {
         }));
         for att in attachments {
             let url_att_t = att.attr("href").map_or("".to_string(), |x| x.to_string());
-            let url_at = format!("https://www.tgk-14.com{}", url_att_t);
+            let url_at = format!("https://zakupki.tgk-14.com{}", url_att_t);
             let att_name = att.text();
+            let att_name = att_name.trim();
             (pool.prep_exec("INSERT INTO attachment SET id_tender = :id_tender, file_name = :file_name, url = :url", params! {"id_tender" => id_tender, "file_name" => &att_name, "url" => &url_at}))?;
         }
         Ok(())

@@ -8,8 +8,8 @@ use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_tgk14::TenderTgk14;
 use crate::tenders::tenders::WebTender;
-use crate::toolslib::datetimetools;
 use crate::toolslib::httptools;
+use crate::toolslib::{datetimetools, regextools};
 use std::error;
 
 pub struct ParserTgk14<'a> {
@@ -37,10 +37,10 @@ impl<'a> ParserTgk14<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url_b = "https://old.tgk-14.com/trade/vesti.sections.php?&num_page=";
+        let url_b = "https://zakupki.tgk-14.com/control/?";
 
-        for d in (1..=3).rev() {
-            let url = format!("{}{}", url_b, d);
+        for _d in (1..=2).rev() {
+            let url = format!("{}", url_b);
             let page = httptools::HttpTools::get_page_text(&url);
             match page {
                 Some(p) => {
@@ -58,8 +58,9 @@ impl<'a> ParserTgk14<'a> {
         let document = Document::from(&*page_text);
         for ten in document.find(
             Name("table")
+                .and(Class("zp-item"))
                 .child(Name("tbody"))
-                .child(Name("tr").and(Class("line-odd").or(Class("line-even")))),
+                .child(Name("tr")),
         ) {
             match self.parser_tender(ten) {
                 Ok(_) => (),
@@ -101,32 +102,37 @@ impl<'a> ParserTgk14<'a> {
             .nth(0)
             .ok_or(format!("{} {}", "cannot find a tag a_t on tender", pur_num))?;
         let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
-        let href = format!("https://old.tgk-14.com{}", href_t);
-        let pw_name = tender
-            .find(Name("td"))
-            .nth(3)
-            .map_or("".to_string(), |x| x.text());
+        let href = format!("https://zakupki.tgk-14.com{}", href_t);
+        let pw_name = "".to_string();
         let date_pub_t = tender
             .find(Name("td"))
             .nth(4)
             .ok_or("cannot find date_pub_t on tender")?
             .text();
-        let date_pub = datetimetools::DateTimeTools::get_date_from_string(&date_pub_t, "%d.%m.%Y")
-            .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
+        let date_pub = datetimetools::DateTimeTools::get_datetime_from_string(
+            &date_pub_t,
+            "%d.%m.%Y %H:%M:%S",
+        )
+        .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let date_end_t = tender
             .find(Name("td"))
             .nth(5)
             .ok_or("cannot find date_end_t on tender")?
-            .text();
+            .text()
+            .trim()
+            .to_string();
         let date_end = datetimetools::DateTimeTools::get_datetime_from_string(
             &date_end_t,
             "%d.%m.%Y %H:%M:%S",
         )
+        .or_else(|| datetimetools::DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y"))
         .ok_or(format!("{} {}", "cannot find date_end on tender", pur_num))?;
-        let status = tender
+        let status = "".to_string();
+        let nmck = tender
             .find(Name("td"))
             .nth(6)
-            .map_or("".to_string(), |x| x.text());
+            .map_or_else(|| "".to_string(), |n| n.text());
+        let nmck = regextools::RegexTools::del_all_ws(&nmck).unwrap_or("".to_string());
         let tn = TenderTgk14 {
             type_fz: 187,
             etp_name: "ПАО «Территориальная Генерирующая Компания № 14»".to_string(),
@@ -137,6 +143,7 @@ impl<'a> ParserTgk14<'a> {
             pw_name,
             date_pub,
             date_end,
+            nmck,
             status,
             connect_string: &self.connect_string,
         };
