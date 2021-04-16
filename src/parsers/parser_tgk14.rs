@@ -37,10 +37,10 @@ impl<'a> ParserTgk14<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url_b = "https://zakupki.tgk-14.com/control/?";
+        let url_b = "https://zakupki.tgk-14.com/control/index.php?PAGEN_1=";
 
-        for _d in (1..=2).rev() {
-            let url = format!("{}", url_b);
+        for d in (1..=15).rev() {
+            let url = format!("{}{}", url_b, d);
             let page = httptools::HttpTools::get_page_text(&url);
             match page {
                 Some(p) => {
@@ -106,7 +106,7 @@ impl<'a> ParserTgk14<'a> {
         let pw_name = "".to_string();
         let date_pub_t = tender
             .find(Name("td"))
-            .nth(4)
+            .nth(3)
             .ok_or("cannot find date_pub_t on tender")?
             .text();
         let date_pub = datetimetools::DateTimeTools::get_datetime_from_string(
@@ -116,7 +116,7 @@ impl<'a> ParserTgk14<'a> {
         .ok_or(format!("{} {}", "cannot find date_pub on tender", pur_num))?;
         let date_end_t = tender
             .find(Name("td"))
-            .nth(5)
+            .nth(4)
             .ok_or("cannot find date_end_t on tender")?
             .text()
             .trim()
@@ -130,7 +130,7 @@ impl<'a> ParserTgk14<'a> {
         let status = "".to_string();
         let nmck = tender
             .find(Name("td"))
-            .nth(6)
+            .nth(5)
             .map_or_else(|| "".to_string(), |n| n.text());
         let nmck = regextools::RegexTools::del_all_ws(&nmck).unwrap_or("".to_string());
         let tn = TenderTgk14 {

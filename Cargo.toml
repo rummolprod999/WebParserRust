@@ -1,6 +1,6 @@
 [package]
 name = "web_parser_rust"
-version = "1.30.0"
+version = "1.31.0"
 authors = ["rummolprod999 <rummolprod999@gmail.com>"]
 edition = "2018"
 
