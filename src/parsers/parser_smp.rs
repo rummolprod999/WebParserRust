@@ -3,7 +3,7 @@ extern crate select;
 
 use self::select::document::Document;
 use self::select::node::Node;
-use self::select::predicate::{Class, Name, Predicate};
+use self::select::predicate::{Name, Predicate};
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_smp::TenderSmp;
