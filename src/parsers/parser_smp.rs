@@ -52,21 +52,18 @@ impl<'a> ParserSmp<'a> {
 
     fn get_tenders_from_page(&mut self, page_text: String) {
         let document = Document::from(&*page_text);
-        for ten in document.find(
-            Name("table")
-                .and(Class("TableSimple-common__table__3Wk7m"))
-                .child(Name("tbody"))
-                .child(Name("tr").and(|x: &Node| {
-                    if x.text().contains("Начало")
-                        && x.text().contains("Окончание")
-                        && x.text().contains("Название")
-                    {
-                        false
-                    } else {
-                        true
-                    }
-                })),
-        ) {
+        for ten in document.find(Name("table").child(Name("tbody")).child(Name("tr").and(
+            |x: &Node| {
+                if x.text().contains("Начало")
+                    && x.text().contains("Окончание")
+                    && x.text().contains("Название")
+                {
+                    false
+                } else {
+                    true
+                }
+            },
+        ))) {
             match self.parser_tender(ten) {
                 Ok(_) => (),
                 Err(e) => {
