@@ -40,9 +40,9 @@ impl<'a> ParserDochki<'a> {
         self.connect_string = c_s;
         let url_b = "https://www.dochkisinochki.ru/shops/tender/?PAGEN_1=";
 
-        for d in (1..=2).rev() {
+        for d in (1..=3).rev() {
             let url = format!("{}{}", url_b, d);
-            let page = httptools::HttpTools::get_page_text(&url);
+            let page = httptools::HttpTools::get_page_text_ua(&url);
             match page {
                 Some(p) => {
                     self.get_tenders_from_page(p);
