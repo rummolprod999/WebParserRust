@@ -3,7 +3,7 @@ extern crate select;
 
 use self::select::document::Document;
 use self::select::node::Node;
-use self::select::predicate::{Class, Name, Predicate};
+use self::select::predicate::Name;
 use super::parsers::WebParserTenders;
 use crate::settings::settings::FullSettingsParser;
 use crate::tenders::tender_tgk14::TenderTgk14;
@@ -36,10 +36,21 @@ impl<'a> ParserTgk14<'a> {
             self.settings.port,
             self.settings.database
         );
+        let start_age = "https://zakupki.tgk-14.com/control/?";
         self.connect_string = c_s;
+        let page = httptools::HttpTools::get_page_text(start_age);
+        match page {
+            Some(p) => {
+                self.get_tenders_from_page(p);
+            }
+            None => {
+                warn!("cannot get start page {}", start_age);
+                return;
+            }
+        }
         let url_b = "https://zakupki.tgk-14.com/control/index.php?PAGEN_1=";
 
-        for d in (1..=15).rev() {
+        for d in (1..=30).rev() {
             let url = format!("{}{}", url_b, d);
             let page = httptools::HttpTools::get_page_text(&url);
             match page {
@@ -56,12 +67,7 @@ impl<'a> ParserTgk14<'a> {
 
     fn get_tenders_from_page(&mut self, page_text: String) {
         let document = Document::from(&*page_text);
-        for ten in document.find(
-            Name("table")
-                .and(Class("zp-item"))
-                .child(Name("tbody"))
-                .child(Name("tr")),
-        ) {
+        for ten in document.find(Name("table")) {
             match self.parser_tender(ten) {
                 Ok(_) => (),
                 Err(e) => {
@@ -71,7 +77,11 @@ impl<'a> ParserTgk14<'a> {
         }
     }
 
-    fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
+    fn parser_tender(&mut self, t: Node) -> Result<(), Box<dyn error::Error>> {
+        let tender = t
+            .find(Name("tr"))
+            .nth(0)
+            .ok_or(format!("{} {}", "cannot find a tag tr on tender", ""))?;
         let pur_num = tender
             .find(Name("td"))
             .nth(0)
