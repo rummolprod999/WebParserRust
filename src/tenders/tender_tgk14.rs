@@ -53,9 +53,8 @@ impl<'a> WebTender for TenderTgk14<'a> {
             return Ok((0, 0));
         };
         let ten_millis = time::Duration::from_millis(5 * 1000);
-        let now = time::Instant::now();
-
         thread::sleep(ten_millis);
+
         let page = httptools::HttpTools::get_page_text(&self.href)
             .ok_or(format!("cannot download page {}", &self.href))?;
         let document = Document::from(&*page);
