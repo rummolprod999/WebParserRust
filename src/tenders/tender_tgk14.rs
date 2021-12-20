@@ -14,7 +14,7 @@ use crate::toolslib::datetimetools::DateTimeTools;
 use crate::toolslib::httptools;
 use chrono::prelude::*;
 use chrono::DateTime;
-use std::error;
+use std::{error, thread, time};
 
 pub struct TenderTgk14<'a> {
     pub type_fz: i32,
@@ -52,6 +52,10 @@ impl<'a> WebTender for TenderTgk14<'a> {
             //info!("this tender exist in base, pur_num {}", &self.pur_num);
             return Ok((0, 0));
         };
+        let ten_millis = time::Duration::from_millis(5 * 1000);
+        let now = time::Instant::now();
+
+        thread::sleep(ten_millis);
         let page = httptools::HttpTools::get_page_text(&self.href)
             .ok_or(format!("cannot download page {}", &self.href))?;
         let document = Document::from(&*page);
