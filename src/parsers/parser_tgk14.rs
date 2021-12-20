@@ -10,6 +10,7 @@ use crate::tenders::tender_tgk14::TenderTgk14;
 use crate::tenders::tenders::WebTender;
 use crate::toolslib::httptools;
 use crate::toolslib::{datetimetools, regextools};
+use chrono::Datelike;
 use std::error;
 
 pub struct ParserTgk14<'a> {
@@ -38,7 +39,7 @@ impl<'a> ParserTgk14<'a> {
         );
         let start_age = "https://zakupki.tgk-14.com/control/?";
         self.connect_string = c_s;
-        let page = httptools::HttpTools::get_page_text(start_age);
+        let page = httptools::HttpTools::get_page_text_ua(start_age);
         match page {
             Some(p) => {
                 self.get_tenders_from_page(p);
@@ -52,7 +53,7 @@ impl<'a> ParserTgk14<'a> {
 
         for d in (1..=30).rev() {
             let url = format!("{}{}", url_b, d);
-            let page = httptools::HttpTools::get_page_text(&url);
+            let page = httptools::HttpTools::get_page_text_ua(&url);
             match page {
                 Some(p) => {
                     self.get_tenders_from_page(p);
@@ -138,6 +139,9 @@ impl<'a> ParserTgk14<'a> {
         .or_else(|| datetimetools::DateTimeTools::get_date_from_string(&date_end_t, "%d.%m.%Y"))
         .ok_or(format!("{} {}", "cannot find date_end on tender", pur_num))?;
         let status = "".to_string();
+        if date_pub.date().year() < 2000 || date_end.date().year() < 2000 {
+            return Err("bad date")?;
+        }
         let nmck = tender
             .find(Name("td"))
             .nth(5)

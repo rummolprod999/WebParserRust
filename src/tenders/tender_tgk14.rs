@@ -55,7 +55,7 @@ impl<'a> WebTender for TenderTgk14<'a> {
         let ten_millis = time::Duration::from_millis(5 * 1000);
         thread::sleep(ten_millis);
 
-        let page = httptools::HttpTools::get_page_text(&self.href)
+        let page = httptools::HttpTools::get_page_text_ua(&self.href)
             .ok_or(format!("cannot download page {}", &self.href))?;
         let document = Document::from(&*page);
         let (cancel_status, update) =
