@@ -39,7 +39,7 @@ impl<'a> ParserQuadra<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://trade.quadra.ru/purchase/purch_nekonk.php";
+        let url = "https://trade.quadra.ru/purchase/purch_prod.php";
         let page = httptools::HttpTools::get_page_text1251(url);
         match page {
             Some(p) => {
@@ -80,12 +80,8 @@ impl<'a> ParserQuadra<'a> {
             .ok_or("cannot find pur_name on tender")?
             .text();
         let href_t = tender2
-            .find(Name("a").and(|x: &Node| {
-                if x.text().contains("Техническое задание") {
-                    true
-                } else {
-                    false
-                }
+            .find(Name("a").and(|_x: &Node| {
+                return true;
             }))
             .next()
             .ok_or("cannot find href_t on tender")?

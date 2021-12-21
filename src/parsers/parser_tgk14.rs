@@ -11,7 +11,6 @@ use crate::tenders::tenders::WebTender;
 use crate::toolslib::httptools;
 use crate::toolslib::{datetimetools, regextools};
 use chrono::Datelike;
-use select::predicate::Predicate;
 use std::error;
 
 pub struct ParserTgk14<'a> {
