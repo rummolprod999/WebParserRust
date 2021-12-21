@@ -11,6 +11,7 @@ use crate::tenders::tenders::WebTender;
 use crate::toolslib::httptools;
 use crate::toolslib::{datetimetools, regextools};
 use chrono::Datelike;
+use select::predicate::Predicate;
 use std::error;
 
 pub struct ParserTgk14<'a> {
@@ -102,6 +103,9 @@ impl<'a> ParserTgk14<'a> {
                 "cannot find a tag pur_name on tender", pur_num
             ))?
             .text();
+        if pur_name.contains("Раздел закупочных процедур") {
+            return Ok(());
+        }
         let a_t = tender
             .find(Name("td"))
             .nth(2)
