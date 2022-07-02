@@ -41,7 +41,7 @@ impl<'a> ParserNordstar<'a> {
         self.connect_string = c_s;
         let urls = ["https://nordstar.ru/partners/purchase/?SID=8"];
         for url in urls.iter() {
-            let page = httptools::HttpTools::get_page_text(url);
+            let page = httptools::HttpTools::get_page_text_no_ssl(url);
             match page {
                 Some(p) => {
                     self.get_tenders_from_page(p, url.to_string());
