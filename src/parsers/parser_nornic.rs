@@ -38,7 +38,7 @@ impl<'a> ParserNornic<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "http://www.zf.norilsknickel.ru/guest_listsets.aspx?subtype=1&category=-1";
+        let url = "https://zf.nornickel.ru/guest_listsets.aspx?category=-1&state=5";
         let page = httptools::HttpTools::get_page_text1251(url);
         match page {
             Some(p) => {
@@ -129,7 +129,7 @@ impl<'a> ParserNornic<'a> {
                 "{} {}",
                 "cannot find href_t attr on tender", pur_num
             ))?;
-        let href = format!("http://www.zf.norilsknickel.ru/{}", href_t);
+        let href = format!("https://zf.nornickel.ru/{}", href_t);
         let tn: TenderNornic = TenderNornic {
             type_fz: 181,
             etp_name: "ЗФ ПАО \"ГМК \"Норильский никель\"".to_string(),
