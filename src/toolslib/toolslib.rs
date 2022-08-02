@@ -26,7 +26,7 @@ pub fn month_to_number(inp: &str) -> String {
         return "05".to_string();
     } else if lover.contains("июн") {
         return "06".to_string();
-    } else if lover.contains("июль") {
+    } else if lover.contains("июл") {
         return "07".to_string();
     } else if lover.contains("авг") {
         return "08".to_string();
