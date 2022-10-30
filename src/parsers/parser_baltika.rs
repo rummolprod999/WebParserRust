@@ -37,7 +37,7 @@ impl<'a> ParserBaltika<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://corporate.baltika.ru/about-us/tender/";
+        let url = "https://corporate.baltika.ru/about-us/tender/tenders/";
         let page = httptools::HttpTools::get_page_text(&url);
         match page {
             Some(p) => {
