@@ -38,7 +38,7 @@ impl<'a> ParserMosobl<'a> {
         );
         self.connect_string = c_s;
         let url = "https://mosoblbank.ru/about/tenders/";
-        let page = httptools::HttpTools::get_page_text(&url);
+        let page = httptools::HttpTools::get_page_text_no_ssl(&url);
         match page {
             Some(p) => {
                 self.get_tenders_from_page(p);
