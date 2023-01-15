@@ -37,7 +37,7 @@ impl<'a> ParserPewete<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "http://tender.pewete.com/auctions/?q=&pageSize=100";
+        let url = "https://tender.pewete.ru/auctions/?q=&pageSize=100";
         let page = httptools::HttpTools::get_page_text1251(url);
         match page {
             Some(p) => {
@@ -87,7 +87,8 @@ impl<'a> ParserPewete<'a> {
             .find(Name("td"))
             .nth(2)
             .ok_or("cannot find date_pub_t on tender")?
-            .text();
+            .text()
+            .replace("0202", "2022");
         let date_end_t = tender
             .find(Name("td"))
             .nth(3)
@@ -110,7 +111,7 @@ impl<'a> ParserPewete<'a> {
             type_fz: 183,
             etp_name: "ООО «Петро Велт Технолоджис»".to_string(),
             etp_url: "http://tender.pewete.com/".to_string(),
-            href: "http://tender.pewete.com/auctions/?q=&pageSize=100".to_string(),
+            href: "http://tender.pewete.ru/auctions/?q=&pageSize=100".to_string(),
             pur_num,
             pur_name,
             date_pub,
