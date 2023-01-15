@@ -44,14 +44,14 @@ impl<'a> ParserKaprem<'a> {
         self.connect_string = c_s;
         let urls = [
             Kaprem {
-                url: "http://kapremont02.ru/purchase/external-procurement/topical/".to_string(),
+                url: "https://kapremont02.ru/purchase/external-procurement/topical/".to_string(),
             },
             Kaprem {
-                url: "http://kapremont02.ru/purchase/internal-procurement/topical/".to_string(),
+                url: "https://kapremont02.ru/purchase/internal-procurement/topical/".to_string(),
             },
         ];
         for (c, url) in urls.iter().enumerate() {
-            let page = httptools::HttpTools::get_page_text(&url.url);
+            let page = httptools::HttpTools::get_page_text_no_ssl(&url.url);
             match page {
                 Some(p) => {
                     self.get_tenders_from_page(p, url, c);
@@ -108,7 +108,7 @@ impl<'a> ParserKaprem<'a> {
             let url_att_t = at
                 .attr("href")
                 .ok_or("cannot find href attr on attachment")?;
-            let url_att = format!("http://kapremont02.ru{}", url_att_t.to_string());
+            let url_att = format!("https://kapremont02.ru{}", url_att_t.to_string());
             let att = Attachment {
                 name_file: name_att,
                 url_file: url_att,
