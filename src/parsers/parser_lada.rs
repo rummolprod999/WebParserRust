@@ -39,7 +39,7 @@ impl<'a> ParserLada<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://lada-image.ru/about/tender_committee/";
+        let url = "https://www.lada-image.ru/about/tender_committee/";
         let page = httptools::HttpTools::get_page_text1251(&url);
         match page {
             Some(p) => {
@@ -69,7 +69,7 @@ impl<'a> ParserLada<'a> {
             .nth(0)
             .ok_or(format!("{}", "cannot find td tag a_t on tender"))?;
         let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
-        let href = format!("https://lada-image.ru{}", href_t);
+        let href = format!("https://www.lada-image.ru{}", href_t);
         let pur_num = toolslib::create_md5_str(&*href);
         let pur_name = tender
             .find(Name("div").and(Class("news_item_text")))
