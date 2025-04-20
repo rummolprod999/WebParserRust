@@ -8,6 +8,41 @@ use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime, UTC};
 pub struct DateTimeTools {}
 
 impl DateTimeTools {
+    ///
+    /// Parses a date string into a `DateTime<FixedOffset>` object using the provided pattern.
+    ///
+    /// # Arguments
+    /// - `s`: A string slice representing the date to be parsed, e.g., `"2023-10-10"`.
+    /// - `pattern`: A string slice representing the date format pattern, e.g., `"%Y-%m-%d"`.
+    ///
+    /// # Returns
+    /// - `Option<DateTime<FixedOffset>>`: If the parsing is successful, returns a `DateTime` object
+    ///   with a fixed offset of 3 hours (east). Otherwise, returns `None` if parsing fails or an error occurs.
+    ///
+    /// # Remarks
+    /// - The function uses the `NaiveDate::parse_from_str` method to parse the input date string based
+    ///   on the provided pattern.
+    /// - The time part is set to `00:00:00` unless explicitly included in the input pattern.
+    /// - After creating the `DateTime<FixedOffset>` object with a fixed offset of 3 hours east,
+    ///   the function subtracts 3 hours from it to ensure the final result aligns correctly with the original input date.
+    ///
+    /// # Example
+    /// ```rust
+    /// use chrono::{DateTime, FixedOffset};
+    ///
+    /// let date_str = "2023-10-10";
+    /// let pattern = "%Y-%m-%d";
+    /// let result = get_date_from_string(date_str, pattern);
+    ///
+    /// match result {
+    ///     Some(date_time) => println!("Parsed date: {}", date_time),
+    ///     None => println!("Failed to parse date"),
+    /// }
+    /// ```
+    ///
+    /// # Errors
+    /// - Emits a warning log if the date string cannot be parsed with the given pattern.
+    ///
     pub fn get_date_from_string(s: &str, pattern: &str) -> Option<DateTime<FixedOffset>> {
         let res = NaiveDate::parse_from_str(s, pattern);
         let dt = match res {
