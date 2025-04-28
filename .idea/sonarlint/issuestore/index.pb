@@ -29,3 +29,5 @@ L
 src/tenders/tender_ingrad.rs,5/5/55e662f60977bc4a287b8f2f9677400573aa59a4
 M
 src/toolslib/datetimetools.rs,b/d/bd182c1c13bc81cb228ad69842d3af1332311003
+L
+.idea/codeStyles/Project.xml,6/e/6ecd6000a7b6f4a2884412ff19f74193ed089648

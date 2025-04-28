@@ -39,7 +39,7 @@ impl<'a> ParserAhstep<'a> {
             self.settings.database
         );
         self.connect_string = c_s;
-        let url = "https://www.ahstep.ru/index.php/tender";
+        let url = "https://ahstep.ru/tender";
         let page = httptools::HttpTools::get_page_text(url);
         match page {
             Some(p) => {
@@ -54,11 +54,7 @@ impl<'a> ParserAhstep<'a> {
 
     fn get_tenders_from_page(&mut self, page_text: String) {
         let document = Document::from(&*page_text);
-        for ten in document.find(
-            Name("div")
-                .and(Class("articles-tender"))
-                .child(Class("row")),
-        ) {
+        for ten in document.find(Name("div").and(Class("tender"))) {
             match self.parser_tender(ten) {
                 Ok(_) => (),
                 Err(e) => {
@@ -70,14 +66,14 @@ impl<'a> ParserAhstep<'a> {
 
     fn parser_tender(&mut self, tender: Node) -> Result<(), Box<dyn error::Error>> {
         let a_t = tender
-            .find(Name("p").and(Class("tender-title")).child(Name("a")))
-            .next()
+            .find(Name("div").child(Name("a")))
+            .nth(0)
             .ok_or("cannot find a tag on tender")?;
         let href_t = a_t.attr("href").ok_or("cannot find href attr on tender")?;
         let href = format!("https://www.ahstep.ru{}", href_t);
         let pur_name = tender
-            .find(Name("p").and(Class("tender-title")).child(Name("a")))
-            .next()
+            .find(Name("div").child(Name("a")))
+            .nth(0)
             .ok_or("cannot find pur_name on tender")?
             .text()
             .trim()
@@ -86,8 +82,8 @@ impl<'a> ParserAhstep<'a> {
             .unwrap_or(toolslib::create_md5_str(&pur_name));
         let date_pub = DateTimeTools::return_datetime_now();
         let mut end_date_t = tender
-            .find(Name("p").and(Class("text-center")))
-            .nth(0)
+            .find(Name("div"))
+            .nth(2)
             .ok_or("cannot find end_date_t on tender")?
             .text()
             .trim()
